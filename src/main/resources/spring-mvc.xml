@@ -13,8 +13,19 @@
     <!--映射器适配器-->
     <mvc:annotation-driven/>
 
+    <mvc:default-servlet-handler/>
+
     <!--自动扫描包,使SpringMVC扫描该包下的带有@Controller注解的类-->
     <context:component-scan base-package="com.yequan.commonweb.controller"/>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="1"/>
+        <property name="defaultViews">
+            <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </list>
+        </property>
+    </bean>
 
     <!--避免IE执行AJAX,返回JSON出现下载文件,输出对象转JSON-->
     <bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">

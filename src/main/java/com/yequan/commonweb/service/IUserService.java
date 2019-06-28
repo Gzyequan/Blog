@@ -11,4 +11,6 @@ public interface IUserService {
 
     User selectUserById(Integer id);
 
+    User insertSelective(User user);
+
 }

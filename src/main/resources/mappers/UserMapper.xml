@@ -7,7 +7,7 @@
       <arg column="nickname" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="realname" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="age" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="mobilephone" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="mobilephone" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date" />
     </constructor>
@@ -30,7 +30,7 @@
       age, mobilephone, address, 
       birthday)
     values (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
-      #{age,jdbcType=INTEGER}, #{mobilephone,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{mobilephone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
       #{birthday,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yequan.commonweb.pojo.User" >
@@ -72,7 +72,7 @@
         #{age,jdbcType=INTEGER},
       </if>
       <if test="mobilephone != null" >
-        #{mobilephone,jdbcType=INTEGER},
+        #{mobilephone,jdbcType=VARCHAR},
       </if>
       <if test="address != null" >
         #{address,jdbcType=VARCHAR},
@@ -95,7 +95,7 @@
         age = #{age,jdbcType=INTEGER},
       </if>
       <if test="mobilephone != null" >
-        mobilephone = #{mobilephone,jdbcType=INTEGER},
+        mobilephone = #{mobilephone,jdbcType=VARCHAR},
       </if>
       <if test="address != null" >
         address = #{address,jdbcType=VARCHAR},
@@ -111,7 +111,7 @@
     set nickname = #{nickname,jdbcType=VARCHAR},
       realname = #{realname,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
-      mobilephone = #{mobilephone,jdbcType=INTEGER},
+      mobilephone = #{mobilephone,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

@@ -24,4 +24,15 @@ public class UserServiceImpl implements IUserService {
         }
         return userMapper.selectByPrimaryKey(id);
     }
+
+    public User insertSelective(User user) {
+        if (null == user) {
+            return null;
+        }
+        int count = userMapper.insertSelective(user);
+        if (count > 0) {
+            return userMapper.selectByPrimaryKey(user.getId());
+        }
+        return null;
+    }
 }
