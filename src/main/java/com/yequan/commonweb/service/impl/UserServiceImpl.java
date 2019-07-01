@@ -1,10 +1,14 @@
 package com.yequan.commonweb.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yequan.commonweb.dao.UserMapper;
 import com.yequan.commonweb.pojo.User;
 import com.yequan.commonweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Auther: yq
@@ -25,14 +29,25 @@ public class UserServiceImpl implements IUserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
-    public User insertSelective(User user) {
+    public int insertSelective(User user) {
         if (null == user) {
-            return null;
+            return 0;
         }
-        int count = userMapper.insertSelective(user);
-        if (count > 0) {
-            return userMapper.selectByPrimaryKey(user.getId());
-        }
-        return null;
+        return userMapper.insertSelective(user);
+    }
+
+    public List<User> selectUserList(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> userList = userMapper.selectUserList();
+        PageInfo<User> pageInfo = new PageInfo<User>(userList);
+        return pageInfo.getList();
+    }
+
+    public int updateUser(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    public int deleteUserById(Integer id) {
+        return userMapper.deleteByPrimaryKey(id);
     }
 }
