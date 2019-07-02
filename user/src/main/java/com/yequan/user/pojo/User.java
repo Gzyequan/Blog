@@ -1,4 +1,4 @@
-package com.yequan.commonweb.pojo;
+package com.yequan.user.pojo;
 
 import java.util.Date;
 

@@ -1,10 +1,10 @@
-package com.yequan.commonweb.service.impl;
+package com.yequan.user.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yequan.commonweb.dao.UserMapper;
-import com.yequan.commonweb.pojo.User;
-import com.yequan.commonweb.service.IUserService;
+import com.yequan.user.dao.UserMapper;
+import com.yequan.user.pojo.User;
+import com.yequan.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

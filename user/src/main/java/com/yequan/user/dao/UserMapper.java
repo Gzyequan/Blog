@@ -1,6 +1,6 @@
-package com.yequan.commonweb.dao;
+package com.yequan.user.dao;
 
-import com.yequan.commonweb.pojo.User;
+import com.yequan.user.pojo.User;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.yequan.commonweb.service;
+package com.yequan.user.service;
 
-import com.yequan.commonweb.pojo.User;
+import com.yequan.user.pojo.User;
 
 import java.util.List;
 

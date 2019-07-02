@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yequan.commonweb.dao.UserMapper" >
-  <resultMap id="BaseResultMap" type="com.yequan.commonweb.pojo.User" >
+<mapper namespace="com.yequan.user.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.yequan.user.pojo.User" >
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="nickname" jdbcType="VARCHAR" javaType="java.lang.String" />
@@ -31,7 +31,7 @@
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yequan.commonweb.pojo.User" >
+  <insert id="insert" parameterType="com.yequan.user.pojo.User" >
     insert into user (id, nickname, realname, 
       age, mobilephone, address, 
       birthday)
@@ -39,7 +39,7 @@
       #{age,jdbcType=INTEGER}, #{mobilephone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
       #{birthday,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.yequan.commonweb.pojo.User" >
+  <insert id="insertSelective" parameterType="com.yequan.user.pojo.User" >
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -88,7 +88,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yequan.commonweb.pojo.User" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.yequan.user.pojo.User" >
     update user
     <set >
       <if test="nickname != null" >
@@ -112,7 +112,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yequan.commonweb.pojo.User" >
+  <update id="updateByPrimaryKey" parameterType="com.yequan.user.pojo.User" >
     update user
     set nickname = #{nickname,jdbcType=VARCHAR},
       realname = #{realname,jdbcType=VARCHAR},

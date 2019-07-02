@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--配置扫描dao的包位置-->
-    <context:component-scan base-package="com.yequan.commonweb"/>
+    <context:component-scan base-package="com.yequan.user"/>
 
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:jdbc.properties"/>
@@ -50,7 +50,7 @@
 
     <!--扫描dao接口-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.yequan.commonweb.dao"/>
+        <property name="basePackage" value="com.yequan.user.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 

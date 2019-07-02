@@ -1,7 +1,7 @@
-package com.yequan.commonweb.controller;
+package com.yequan.user.controller;
 
-import com.yequan.commonweb.pojo.User;
-import com.yequan.commonweb.service.IUserService;
+import com.yequan.user.pojo.User;
+import com.yequan.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
