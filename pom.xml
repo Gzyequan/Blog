@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>user</module>
-        <module>web</module>
         <module>common</module>
+        <module>web</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -67,6 +67,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>
@@ -211,6 +216,18 @@
             <version>${quartz.version}</version>
         </dependency>
 
+        <!--activemq集成-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>5.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -226,6 +243,39 @@
                 </configuration>
             </plugin>
         </plugins>
+
+        <resources>
+            <!-- 打包时将资源文件一起打包到jar包或者war包中 -->
+            <!--环境隔离配置Start -->
+            <!--<resource>-->
+            <!--<targetPath>config</targetPath>-->
+            <!--<directory>src/main/resources/</directory>-->
+            <!--<excludes>-->
+            <!--&lt;!&ndash;忽略（不需要）隔离的文件 &ndash;&gt;-->
+            <!--<exclude>*.jsp</exclude>-->
+            <!--<exclude>*.md</exclude>-->
+            <!--</excludes>-->
+            <!--</resource>-->
+            <!--&lt;!&ndash;环境隔离配置End &ndash;&gt;-->
+            <!--&lt;!&ndash;公共的配置 &ndash;&gt;-->
+            <!--<resource>-->
+            <!--<targetPath>config</targetPath>-->
+            <!--<directory>src/main/resources/</directory>-->
+            <!--</resource>-->
+            <!--&lt;!&ndash; 因为，maven认为src/main/java只是java的源代码路径 所以， 如果没有此项配置
+            则JAVA代码中的dao/sqlmap文件将不会被打包进项目    此外，**/为了保证各级子目录下的资源文件被打包 -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.tld</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+
+        </resources>
+
     </build>
 
 </project>

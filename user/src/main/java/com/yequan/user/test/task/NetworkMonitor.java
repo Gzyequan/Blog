@@ -13,27 +13,29 @@ public class NetworkMonitor implements AsyncJobInterface {
     private String host;
     private int pingTimes;
     private int timeout;
+    private NetworkMonitorListener listener;
 
     private final static int DEFAULT_PINGTIMES = 5;
     private final static int DEFAULT_TIMEOUT = 3000;
 
-    public NetworkMonitor(String host, int pingTimes, int timeout) {
+    public NetworkMonitor(NetworkMonitorListener listener, String host, int pingTimes, int timeout) {
+        this.listener = listener;
         this.host = host;
         this.pingTimes = pingTimes;
         this.timeout = timeout;
     }
 
-    public NetworkMonitor(String host) {
-        this(host, DEFAULT_PINGTIMES, DEFAULT_TIMEOUT);
+    public NetworkMonitor(NetworkMonitorListener listener, String host) {
+        this(listener, host, DEFAULT_PINGTIMES, DEFAULT_TIMEOUT);
     }
 
+    public void setListener(NetworkMonitorListener listener) {
+        this.listener = listener;
+    }
 
     public void execute() {
         boolean isReachable = NetworkUtil.ping(host, pingTimes, timeout);
-        if (isReachable) {
-            System.out.println("主机: " + host + "  可达");
-        } else {
-            System.out.println("主机: " + host + "  不可达");
-        }
+        listener.onMessage(isReachable);
     }
+
 }

@@ -1,7 +1,11 @@
 package com.yequan.user.controller;
 
+import com.yequan.common.quartz.SchedulerService;
+import com.yequan.common.quartz.proxy.AsyncJobProxy;
 import com.yequan.user.pojo.User;
 import com.yequan.user.service.IUserService;
+import com.yequan.user.test.task.NetworkMonitor;
+import com.yequan.user.test.task.NetworkMonitorListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,9 @@ public class UserController {
 
     @Autowired
     private IUserService iUserService;
+
+    @Autowired
+    private SchedulerService schedulerService;
 
     @RequestMapping(value = "/user/{pageNum}/{pageSize}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<User>> getUsers(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize) {
@@ -93,11 +100,11 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") Integer id) {
         try {
             User user = iUserService.selectUserById(id);
-            if (null==user){
+            if (null == user) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-            int delete=iUserService.deleteUserById(id);
-            if (delete>0){
+            int delete = iUserService.deleteUserById(id);
+            if (delete > 0) {
                 return ResponseEntity.ok(null);
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -105,6 +112,25 @@ public class UserController {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @RequestMapping(value = "/timer", method = RequestMethod.GET)
+    public ResponseEntity<Void> startQuartz() {
+        final String host = "172.16.20.73";
+        int pingTimes = 5;
+        int timeout = 3000;
+        NetworkMonitor networkMonitor = new NetworkMonitor(new NetworkMonitorListener() {
+            public void onMessage(boolean isReachable) {
+                System.out.println(isReachable ? (host + " 可达") : (host + " 不可达"));
+            }
+        }, host);
+        schedulerService.startJob(
+                "NetworkMonitor",
+                "NetworkMonitor",
+                AsyncJobProxy.class,
+                "0/5 * * * * ?",
+                networkMonitor);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -1,40 +1,19 @@
 package com.yequan.common.quartz;
 
 import com.yequan.common.quartz.proxy.taskInterface.JobInterface;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @Auther: yq
  * @Date: 2019/4/25 10:12
  * @Description:
  */
+@Component
 public class SchedulerService {
 
+    @Autowired
     private SchedulerManager schedulerManager;
-
-    volatile private static SchedulerService instance = null;
-
-    private static ApplicationContext applicationContext;
-
-    static {
-        applicationContext = new ClassPathXmlApplicationContext("spring-quartz.xml");
-    }
-
-    private SchedulerService() {
-        schedulerManager = ((SchedulerManager) applicationContext.getBean("schedulerManager"));
-    }
-
-    public static SchedulerService getInstance() {
-        if (null == instance) {
-            synchronized (SchedulerService.class) {
-                if (null == instance) {
-                    instance = new SchedulerService();
-                }
-            }
-        }
-        return instance;
-    }
 
     /**
      * 启动定时任务
@@ -42,8 +21,8 @@ public class SchedulerService {
      * @param cron
      * @param quartzJob
      */
-    public void startJob(String jobName, Class jobProxy, String cron, JobInterface quartzJob) {
-        schedulerManager.addJob(jobName, jobName, jobName, jobName, jobProxy, cron, quartzJob);
+    public void startJob(String jobName,String jobGroup, Class jobProxy, String cron, JobInterface quartzJob) {
+        schedulerManager.addJob(jobName, jobGroup, jobName, jobName, jobProxy, cron, quartzJob);
     }
 
     /**

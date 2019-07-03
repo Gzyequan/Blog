@@ -27,7 +27,7 @@ public class NetworkUtil {
                 //linux格式的命令
                 pingCommand = "ping " + host + " -c " + pingTimes + " -w" + timeout;
             }
-            System.out.println(pingCommand);
+//            System.out.println(pingCommand);
             Process p = r.exec(pingCommand);
             if (p == null) {
                 return false;

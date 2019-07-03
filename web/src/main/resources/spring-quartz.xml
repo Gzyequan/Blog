@@ -4,8 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!--<import resource="spring-mybatis.xml"/>-->
-
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <!--<property name="dataSource" ref="dataSource"/>-->
         <!--<property name="quartzProperties">-->
@@ -45,7 +43,7 @@
     </bean>
 
     <!--用于设置触发时间,startJobs方法启动调度容器-->
-    <bean id="schedulerManager" class="com.yequan.user.quartz.SchedulerManager" lazy-init="false"
+    <bean id="schedulerManager" class="com.yequan.common.quartz.SchedulerManager" lazy-init="false"
           init-method="startJobs">
         <property name="scheduler" ref="scheduler"/>
     </bean>
