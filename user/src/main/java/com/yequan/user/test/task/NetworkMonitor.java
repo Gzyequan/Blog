@@ -1,6 +1,6 @@
 package com.yequan.user.test.task;
 
-import com.yequan.common.network.NetworkUtil;
+import com.yequan.common.util.NetworkUtil;
 import com.yequan.common.quartz.proxy.taskInterface.AsyncJobInterface;
 
 /**
@@ -19,10 +19,10 @@ public class NetworkMonitor implements AsyncJobInterface {
     private final static int DEFAULT_TIMEOUT = 3000;
 
     public NetworkMonitor(NetworkMonitorListener listener, String host, int pingTimes, int timeout) {
-        this.listener = listener;
         this.host = host;
         this.pingTimes = pingTimes;
         this.timeout = timeout;
+        this.listener = listener;
     }
 
     public NetworkMonitor(NetworkMonitorListener listener, String host) {
@@ -35,7 +35,11 @@ public class NetworkMonitor implements AsyncJobInterface {
 
     public void execute() {
         boolean isReachable = NetworkUtil.ping(host, pingTimes, timeout);
-        listener.onMessage(isReachable);
+        if (null != listener) {
+            listener.onMessage(isReachable);
+        } else {
+            throw new NullPointerException("NetworkMonitorListener 不能为空");
+        }
     }
 
 }

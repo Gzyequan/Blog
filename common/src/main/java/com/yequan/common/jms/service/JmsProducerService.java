@@ -1,6 +1,7 @@
 package com.yequan.common.jms.service;
 
 import javax.jms.Destination;
+import java.util.Map;
 
 /**
  * @Auther: yq
@@ -11,4 +12,7 @@ public interface JmsProducerService {
 
     void sendMessage(Destination destination,String message);
 
+    void sendMessage(Destination destination,Object objMessage);
+
+    void sendMessage(Destination destination, Map<?,?> mapMessage);
 }

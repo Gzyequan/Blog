@@ -6,10 +6,9 @@ import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.Session;
+import javax.jms.*;
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @Auther: yq
@@ -26,6 +25,22 @@ public class JmsProducerServiceImpl implements JmsProducerService {
         jmsTemplate.send(destination, new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
                 return session.createTextMessage(message);
+            }
+        });
+    }
+
+    public void sendMessage(Destination destination, final Object objMessage) {
+        jmsTemplate.send(destination, new MessageCreator() {
+            public Message createMessage(Session session) throws JMSException {
+                return session.createObjectMessage((Serializable) objMessage);
+            }
+        });
+    }
+
+    public void sendMessage(Destination destination, Map<?, ?> mapMessage) {
+        jmsTemplate.send(destination, new MessageCreator() {
+            public Message createMessage(Session session) throws JMSException {
+                return session.createMapMessage();
             }
         });
     }

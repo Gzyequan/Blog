@@ -1,4 +1,4 @@
-package com.yequan.common.os;
+package com.yequan.common.util;
 
 /**
  * @Auther: yq

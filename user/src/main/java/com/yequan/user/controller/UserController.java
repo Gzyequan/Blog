@@ -1,5 +1,7 @@
 package com.yequan.user.controller;
 
+import com.yequan.common.annotation.AccessLimit;
+import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
 import com.yequan.user.pojo.User;
@@ -7,10 +9,12 @@ import com.yequan.user.service.IUserService;
 import com.yequan.user.test.task.NetworkMonitor;
 import com.yequan.user.test.task.NetworkMonitorListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jms.Destination;
 import java.util.List;
 
 /**
@@ -26,6 +30,13 @@ public class UserController {
 
     @Autowired
     private SchedulerService schedulerService;
+
+    @Autowired
+    private JmsProducerService jmsProducerService;
+
+    @Autowired
+    @Qualifier("queueDestination")
+    private Destination destination;
 
     @RequestMapping(value = "/user/{pageNum}/{pageSize}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<User>> getUsers(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize) {
@@ -133,4 +144,10 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @AccessLimit(limit = 4, sec = 4)
+    @RequestMapping(value = "/message", method = RequestMethod.GET)
+    public ResponseEntity<Void> sendMessage() {
+        jmsProducerService.sendMessage(destination, "这是一条消息");
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,6 +1,4 @@
-package com.yequan.common.network;
-
-import com.yequan.common.os.OSUtil;
+package com.yequan.common.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +25,6 @@ public class NetworkUtil {
                 //linux格式的命令
                 pingCommand = "ping " + host + " -c " + pingTimes + " -w" + timeout;
             }
-//            System.out.println(pingCommand);
             Process p = r.exec(pingCommand);
             if (p == null) {
                 return false;
