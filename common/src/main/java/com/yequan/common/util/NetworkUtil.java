@@ -64,9 +64,4 @@ public class NetworkUtil {
         return 0;
     }
 
-    public static void main(String[] args) {
-        String ipAddress = "www.baidu.com";
-        System.out.println(ping(ipAddress, 5, 5000));
-    }
-
 }
