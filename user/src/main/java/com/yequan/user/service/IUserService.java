@@ -1,6 +1,7 @@
 package com.yequan.user.service;
 
-import com.yequan.user.pojo.User;
+import com.yequan.user.pojo.UserDO;
+import com.yequan.user.pojo.UserDTO;
 
 import java.util.List;
 
@@ -11,13 +12,15 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User selectUserById(Integer id);
+    UserDO selectUserById(Integer id);
 
-    int insertSelective(User user);
+    int insertSelective(UserDO userDO);
 
-    List<User> selectUserList(int pageNum, int pageSize);
+    List<UserDO> selectUserList(int pageNum, int pageSize);
 
-    int updateUser(User user);
+    int updateUser(UserDO userDO);
 
     int deleteUserById(Integer id);
+
+    UserDO loginCheck(UserDTO userDTO);
 }

@@ -2,7 +2,7 @@ package com.yequan.user.pojo;
 
 import java.util.Date;
 
-public class User {
+public class UserDO {
     private Integer id;
 
     private String nickname;
@@ -17,7 +17,11 @@ public class User {
 
     private Date birthday;
 
-    public User(Integer id, String nickname, String realname, Integer age, String mobilephone, String address, Date birthday) {
+    private String password;
+
+    private Integer status;
+
+    public UserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address, Date birthday, String password, Integer status) {
         this.id = id;
         this.nickname = nickname;
         this.realname = realname;
@@ -25,9 +29,11 @@ public class User {
         this.mobilephone = mobilephone;
         this.address = address;
         this.birthday = birthday;
+        this.password = password;
+        this.status = status;
     }
 
-    public User() {
+    public UserDO() {
         super();
     }
 
@@ -85,5 +91,21 @@ public class User {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

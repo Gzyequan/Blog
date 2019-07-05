@@ -4,7 +4,7 @@ import com.yequan.common.annotation.AccessLimit;
 import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
-import com.yequan.user.pojo.User;
+import com.yequan.user.pojo.UserDO;
 import com.yequan.user.service.IUserService;
 import com.yequan.user.test.task.NetworkMonitor;
 import com.yequan.user.test.task.NetworkMonitorListener;
@@ -39,11 +39,11 @@ public class UserController {
     private Destination destination;
 
     @RequestMapping(value = "/user/{pageNum}/{pageSize}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public ResponseEntity<List<User>> getUsers(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize) {
+    public ResponseEntity<List<UserDO>> getUsers(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize) {
         try {
-            List<User> users = iUserService.selectUserList(pageNum, pageSize);
-            if (users != null && users.size() > 0) {
-                return ResponseEntity.ok(users);
+            List<UserDO> userDOS = iUserService.selectUserList(pageNum, pageSize);
+            if (userDOS != null && userDOS.size() > 0) {
+                return ResponseEntity.ok(userDOS);
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
@@ -53,15 +53,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
+    public ResponseEntity<UserDO> getUserById(@PathVariable("id") Integer id) {
         try {
-            User user = iUserService.selectUserById(id);
-            if (null == user) {
+            UserDO userDO = iUserService.selectUserById(id);
+            if (null == userDO) {
                 //资源不存在,响应404
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             //响应200
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(userDO);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,9 +69,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
-    public ResponseEntity<Void> saveUser(@RequestBody User user) {
+    public ResponseEntity<Void> saveUser(@RequestBody UserDO userDO) {
         try {
-            int count = iUserService.insertSelective(user);
+            int count = iUserService.insertSelective(userDO);
             if (count > 0) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             }
@@ -83,19 +83,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
+    public ResponseEntity<UserDO> updateUser(@PathVariable("id") Integer id, @RequestBody UserDO userDO) {
         try {
-            User currentUser = iUserService.selectUserById(id);
-            if (null == currentUser) {
+            UserDO currentUserDO = iUserService.selectUserById(id);
+            if (null == currentUserDO) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            if (null != user) {
-                user.setId(id);
-                int update = iUserService.updateUser(user);
+            if (null != userDO) {
+                userDO.setId(id);
+                int update = iUserService.updateUser(userDO);
                 if (update > 0) {
-                    User updatedUser = iUserService.selectUserById(id);
-                    if (null != updatedUser) {
-                        return ResponseEntity.ok(updatedUser);
+                    UserDO updatedUserDO = iUserService.selectUserById(id);
+                    if (null != updatedUserDO) {
+                        return ResponseEntity.ok(updatedUserDO);
                     }
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
                 }
@@ -110,8 +110,8 @@ public class UserController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
     public ResponseEntity<Void> deleteUserById(@PathVariable("id") Integer id) {
         try {
-            User user = iUserService.selectUserById(id);
-            if (null == user) {
+            UserDO userDO = iUserService.selectUserById(id);
+            if (null == userDO) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             int delete = iUserService.deleteUserById(id);

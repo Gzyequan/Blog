@@ -61,9 +61,15 @@
 
     <!--自定义拦截器-->
     <mvc:interceptors>
+        <!--限流拦截-->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yequan.common.interceptor.AccessLimitInterceptor"/>
+        </mvc:interceptor>
+        <!--登录拦截-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.yequan.user.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

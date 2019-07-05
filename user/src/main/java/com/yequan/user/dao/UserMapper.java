@@ -1,21 +1,26 @@
 package com.yequan.user.dao;
 
-import com.yequan.user.pojo.User;
+import com.yequan.user.pojo.UserDO;
+import com.yequan.user.pojo.UserDTO;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface UserMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(User record);
+    int insert(UserDO record);
 
-    int insertSelective(User record);
+    int insertSelective(UserDO record);
 
-    User selectByPrimaryKey(Integer id);
+    UserDO selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(User record);
+    int updateByPrimaryKeySelective(UserDO record);
 
-    int updateByPrimaryKey(User record);
+    int updateByPrimaryKey(UserDO record);
 
-    List<User> selectUserList();
+    List<UserDO> selectUserList();
+
+    UserDO selectByMobilephone(UserDTO userDTO);
 }

@@ -1,6 +1,8 @@
 package com.yequan.common.interceptor;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -22,6 +24,16 @@ public class BaseInterceptor {
         } finally {
             outputStream.flush();
             outputStream.close();
+        }
+    }
+
+    protected void renderPage(HttpServletRequest request,HttpServletResponse response,String page){
+        try {
+            request.getRequestDispatcher(page).forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
