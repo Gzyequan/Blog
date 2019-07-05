@@ -1,6 +1,8 @@
 package com.yequan.common.util;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -16,7 +18,7 @@ public class IPUtil {
         //X-Forwarded-For存储了真实ip和中间代理服务器IP,中间以','分割,第一个ip为真实ip
         String xfor = request.getHeader("X-Forwarded-For");
 
-        if (!"".equals(xfor) && "unKnow".equals(xfor)) {
+        if (StringUtils.isNotEmpty(xfor) && !"unKnown".equalsIgnoreCase(xfor)) {
             int index = xfor.indexOf(",");
             if (index != -1) {
                 //取出第一个ip即是真实ip
@@ -28,22 +30,22 @@ public class IPUtil {
         }
 
         xfor = xip;
-        if (!"".equals(xfor) && !"unKnown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isNotEmpty(xfor) && !"unKnown".equalsIgnoreCase(xfor)) {
             return xfor;
         }
-        if ("".equals(xfor) || "unknown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isBlank(xfor) || "unKnown".equalsIgnoreCase(xfor)) {
             xfor = request.getHeader("Proxy-Client-IP");
         }
-        if ("".equals(xfor) || "unknown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isBlank(xfor) || "unKnown".equalsIgnoreCase(xfor)) {
             xfor = request.getHeader("WL-Proxy-Client-IP");
         }
-        if ("".equals(xfor) || "unknown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isBlank(xfor) || "unKnown".equalsIgnoreCase(xfor)) {
             xfor = request.getHeader("HTTP_CLIENT_IP");
         }
-        if ("".equals(xfor) || "unknown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isBlank(xfor) || "unKnown".equalsIgnoreCase(xfor)) {
             xfor = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if ("".equals(xfor) || "unknown".equalsIgnoreCase(xfor)) {
+        if (StringUtils.isBlank(xfor) || "unKnown".equalsIgnoreCase(xfor)) {
             xfor = request.getRemoteAddr();
         }
         return xfor;

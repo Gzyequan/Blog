@@ -8,18 +8,16 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
  * @Auther: yq
  * @Date: 2019/7/4 15:49
- * @Description:
+ * @Description: 限流拦截器:redis,注解,拦截器
  */
-public class AccessLimitInterceptor implements HandlerInterceptor {
+public class AccessLimitInterceptor extends BaseInterceptor implements HandlerInterceptor {
 
     @Autowired
     private RedisService redisService;
@@ -43,25 +41,11 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             } else if (maxLimit < limit) {
                 redisService.set(key, maxLimit + 1, sec);
             } else {
-                output(response, "请求太频繁");
+                render(response, "请求太频繁");
                 return false;
             }
         }
         return true;
-    }
-
-    public void output(HttpServletResponse response, String msg) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        ServletOutputStream outputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-            outputStream.write(msg.getBytes("UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            outputStream.flush();
-            outputStream.close();
-        }
     }
 
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
