@@ -25,7 +25,16 @@ public class LoginController {
     @Autowired
     private IUserService iUserService;
 
-    @PostMapping(value = "/login",produces = "application/json;charset=UTF-8")
+    /**
+     * 登录说明:从前台传过来的密码是经过一次不加盐值的MD5摘要password-A,
+     * 而存入数据库的密码是将password-A经过一次加盐值"caffea"的MD5摘要password-B,
+     * 所以在登录密码校验时需要将password-A进行带盐值"caffea"的MD5摘要
+     *
+     * @param session
+     * @param userDTO
+     * @return
+     */
+    @PostMapping(value = "/login", produces = "application/json;charset=UTF-8")
     public AppResult<String> login(HttpSession session, @RequestBody UserDTO userDTO) {
         try {
             if (null != userDTO && userDTO.getMobilephone() != null) {

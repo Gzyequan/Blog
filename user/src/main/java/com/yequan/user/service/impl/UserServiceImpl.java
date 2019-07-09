@@ -2,6 +2,7 @@ package com.yequan.user.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yequan.common.util.MD5Util;
 import com.yequan.user.dao.UserMapper;
 import com.yequan.user.pojo.UserDO;
 import com.yequan.user.pojo.UserDTO;
@@ -30,10 +31,20 @@ public class UserServiceImpl implements IUserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 新增用户
+     * 对用户密码进行md5摘要
+     *
+     * @param userDO
+     * @return
+     */
     public int insertSelective(UserDO userDO) {
         if (null == userDO) {
             return 0;
         }
+        String password = userDO.getPassword();
+        String md5Password = MD5Util.encrypt(password);
+        userDO.setPassword(md5Password);
         return userMapper.insertSelective(userDO);
     }
 
@@ -61,8 +72,24 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     public UserDO loginCheck(UserDTO userDTO) {
-        return userMapper.selectByMobilephone(userDTO);
+        String password = userDTO.getPassword();
+        String md5Password = MD5Util.encrypt(password);
+        userDTO.setPassword(md5Password);
+        return userMapper.loginCheck(userDTO);
     }
 
+    /**
+     * 根据手机号查询用户
+     *
+     * @param userDTO
+     * @return
+     */
+    public UserDO selectByMobilephone(UserDTO userDTO) {
+        UserDO userDO = null;
+        if (null != userDTO) {
+            userDO = userMapper.selectByMobilephone(userDTO);
+        }
+        return userDO;
+    }
 
 }

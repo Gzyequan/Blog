@@ -23,7 +23,14 @@
         from user
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectByMobilephone" resultMap="BaseResultMap" parameterType="com.yequan.user.pojo.UserDTO">
+    <select id="selectByMobilephone" parameterType="com.yequan.user.pojo.UserDTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where
+        mobilephone = #{mobilephone,jdbcType=VARCHAR}
+    </select>
+    <select id="loginCheck" resultMap="BaseResultMap" parameterType="com.yequan.user.pojo.UserDTO">
         select
         <include refid="Base_Column_List"/>
         from user
@@ -126,10 +133,10 @@
                 birthday = #{birthday,jdbcType=TIMESTAMP},
             </if>
             <if test="password != null">
-                #{password,jdbcType=VARCHAR},
+                password = #{password,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                #{status,jdbcType=INTEGER}
+                status = #{status,jdbcType=INTEGER}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

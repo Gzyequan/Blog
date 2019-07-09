@@ -23,4 +23,6 @@ public interface UserMapper {
     List<UserDO> selectUserList();
 
     UserDO selectByMobilephone(UserDTO userDTO);
+
+    UserDO loginCheck(UserDTO userDTO);
 }

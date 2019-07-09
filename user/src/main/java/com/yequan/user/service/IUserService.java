@@ -23,4 +23,12 @@ public interface IUserService {
     int deleteUserById(Integer id);
 
     UserDO loginCheck(UserDTO userDTO);
+
+    /**
+     * 根据手机号查询用户
+     *
+     * @param userDTO
+     * @return
+     */
+    public UserDO selectByMobilephone(UserDTO userDTO);
 }

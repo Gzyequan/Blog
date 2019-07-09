@@ -20,10 +20,28 @@
             <param-name>encoding</param-name>   <!--参数名称-->
             <param-value>UTF-8</param-value> <!--参数值-->
         </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </filter>
     <filter-mapping><!--用来定义filter所对应的URL-->
         <filter-name>encodingFilter</filter-name>     <!--指定对应filter的名字-->
         <url-pattern>/*</url-pattern>       <!--指定filter所对应的URL-->
+    </filter-mapping>
+
+    <!--自定义请求返回值拦截器-->
+    <filter>
+        <filter-name>responseFilter</filter-name>
+        <filter-class>com.yequan.common.filter.ResponseFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>responseFilter</filter-name>
+        <url-pattern>/user/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>responseFilter</filter-name>
+        <url-pattern>/register/*</url-pattern>
     </filter-mapping>
 
     <!-- -监听器配置 -->
