@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.yequan.common.application.AppConstant;
 import com.yequan.common.filter.component.FilterHandleContext;
 import com.yequan.common.filter.component.FilterRule;
+import com.yequan.common.filter.component.RegexFilterHandle;
+import com.yequan.common.filter.component.SimpleFilterHandle;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,11 @@ public class ResponseFilter extends BaseFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {
         filterHandleContext = new FilterHandleContext();
+        /**
+         * 添加过滤处理器
+         */
+        filterHandleContext.addFilter(new SimpleFilterHandle());
+        filterHandleContext.addFilter(new RegexFilterHandle());
 
         /**
          * 过滤password
@@ -50,6 +57,7 @@ public class ResponseFilter extends BaseFilter implements Filter {
         ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) servletResponse);
         //只拦截返回值,请求放行
         filterChain.doFilter(servletRequest, responseWrapper);
+        //过滤返回值
         responseFilterHandle(servletResponse, responseWrapper);
     }
 

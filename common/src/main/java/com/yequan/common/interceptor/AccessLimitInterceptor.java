@@ -41,7 +41,7 @@ public class AccessLimitInterceptor extends BaseInterceptor implements HandlerIn
             } else if (maxLimit < limit) {
                 redisService.set(key, maxLimit + 1, sec);
             } else {
-                render(response, "请求太频繁");
+                renderMsg(response, "请求太频繁");
                 return false;
             }
         }

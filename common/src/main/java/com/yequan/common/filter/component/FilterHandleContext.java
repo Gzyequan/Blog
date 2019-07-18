@@ -16,18 +16,22 @@ public class FilterHandleContext {
 
     public FilterHandleContext() {
         filterServiceList = new ArrayList<>();
-        filterServiceList.add(new SimpleFilterHandle());
-        filterServiceList.add(new RegexFilterHandle());
-        filterServiceList.add(new EncryptFilterHandle());
     }
 
     public void filterData(JSONObject data, FilterRule filterRule) {
-        for (FilterService filterService : filterServiceList) {
-            if (filterService.isMatch(filterRule)) {
-                filterService.handle(data, filterRule);
-                break;
+        if (filterServiceList.size() > 0) {
+            for (FilterService filterService : filterServiceList) {
+                if (filterService.isMatch(filterRule)) {
+                    filterService.handle(data, filterRule);
+                    break;
+                }
             }
         }
+    }
+
+    public void addFilter(FilterService filter) {
+        if (null != filter)
+            filterServiceList.add(filter);
     }
 
 }

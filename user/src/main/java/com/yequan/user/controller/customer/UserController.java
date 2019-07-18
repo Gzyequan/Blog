@@ -111,6 +111,7 @@ public class UserController {
             if (null == userDO || null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
             }
+            //TODO 替换成token,实现自能当前登录用户更新自己用户信息
             UserDO user = (UserDO) session.getAttribute(AppConstant.SessionConstant.SESSION_USER_KEY);
             if (!user.getId().equals(id)) {
                 return AppResultBuilder.failure(ResultCode.PERMISSION_NO_ACCESS);

@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class BaseInterceptor {
 
-    protected void render(HttpServletResponse response, String msg) throws IOException {
+    protected void renderMsg(HttpServletResponse response, String msg) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream outputStream = null;
         try {

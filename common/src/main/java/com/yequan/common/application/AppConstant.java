@@ -11,7 +11,7 @@ public interface AppConstant {
         String SESSION_USER_KEY = "user";
     }
 
-    interface SecurityCodeConstant {
+    interface SecurityConstant {
 
         /**
          * MD5摘要默认盐值
@@ -22,6 +22,30 @@ public interface AppConstant {
          * md5加密类型
          */
         String ENCRYPT_MD5 = "md5";
+
+        /**
+         * 秘钥大小
+         */
+        int AES_KEY_SIZE = 128;
+
+        /**
+         * 签名秘钥
+         */
+        String BASE64_SECRET = "ZW]4l5JH[m6Lm)LaQEjpb!4E0lRaG(";
+
+        /**
+         * 超时毫秒数（默认30分钟）
+         */
+        int EXPIRE_SECOND = 15 * 60 * 1000;
+
+        /**
+         * 用于JWT加密的密匙
+         */
+        String AES_KEY = "u^3y6SPER41jm*fn";
+    }
+
+    interface RedisPrefixKey{
+        String REDIS_TOKEN="token:";
     }
 
     enum UserConstant {
