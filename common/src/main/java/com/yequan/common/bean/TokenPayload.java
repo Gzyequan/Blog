@@ -14,11 +14,11 @@ public class TokenPayload {
     private String userAgent;
 
     public String getMobilephone() {
-        return mobilephone;
+        return mobilephone.trim();
     }
 
     public void setMobilephone(String mobilephone) {
-        this.mobilephone = mobilephone;
+        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
     }
 
     public Integer getUserId() {
@@ -30,10 +30,10 @@ public class TokenPayload {
     }
 
     public String getUserAgent() {
-        return userAgent;
+        return userAgent.trim();
     }
 
     public void setUserAgent(String userAgent) {
-        this.userAgent = userAgent;
+        this.userAgent = userAgent == null ? null : userAgent.trim();
     }
 }

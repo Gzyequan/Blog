@@ -34,9 +34,9 @@ public interface AppConstant {
         String BASE64_SECRET = "ZW]4l5JH[m6Lm)LaQEjpb!4E0lRaG(";
 
         /**
-         * 超时毫秒数（默认30分钟）
+         * 超时时间:秒
          */
-        int EXPIRE_SECOND = 15 * 60 * 1000;
+        int EXPIRE_SECOND = 15 * 60;
 
         /**
          * 用于JWT加密的密匙
@@ -44,13 +44,14 @@ public interface AppConstant {
         String AES_KEY = "u^3y6SPER41jm*fn";
     }
 
-    interface RedisPrefixKey{
-        String REDIS_TOKEN="token:";
+    interface RedisPrefixKey {
+        String REDIS_TOKEN = "token:";
+        String REDIS_CURRENT_USER = "current-user:";
     }
 
     enum UserConstant {
 
-        USER_NORMAL(1, "正常"), USER_ILLEGAL(0, "非法"), USER_DELETED(-1, "注销");
+        USER_DELETED(0, "注销"), USER_NORMAL(1, "正常"), USER_ILLEGAL(2, "禁用");
 
         private int status;
 
@@ -85,6 +86,14 @@ public interface AppConstant {
          * 加密
          */
         String FILTER_ENCRYPT = "encrypt";
+    }
+
+    interface DateConstant {
+
+        String DATE_FORMAT_YMD = "yyyy-MM-dd";
+
+        String DATE_FORMAT_YMDHMS = "yyyy-MM-dd HH:mm:ss";
+
     }
 
 }

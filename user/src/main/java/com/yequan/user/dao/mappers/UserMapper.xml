@@ -12,10 +12,12 @@
             <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
             <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="modify_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-    id, nickname, realname, age, mobilephone, address, birthday,password,status
+    id, nickname, realname, age, mobilephone, address, birthday,password,status,create_time,modify_time
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -50,11 +52,13 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.yequan.user.pojo.UserDO">
-    insert into user (id, nickname, realname,
-      age, mobilephone, address, birthday,password)
-    values (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
+    insert into user
+    (id, nickname, realname,age, mobilephone, address, birthday,password,create_time,modify_time)
+    values
+    (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR},
       #{age,jdbcType=INTEGER}, #{mobilephone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
-      #{birthday,jdbcType=TIMESTAMP},#{password,jdbcType=VARCHAR})
+      #{birthday,jdbcType=TIMESTAMP},#{password,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
+      #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
     <insert id="insertSelective" parameterType="com.yequan.user.pojo.UserDO">
         insert into user
@@ -83,6 +87,12 @@
             <if test="password != null">
                 password,
             </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modify_time != null">
+                modify_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -108,6 +118,12 @@
             </if>
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{create_time,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                #{modify_time,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -136,7 +152,13 @@
                 password = #{password,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                status = #{status,jdbcType=INTEGER}
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP}
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -150,7 +172,9 @@
       address = #{address,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=TIMESTAMP},
       password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

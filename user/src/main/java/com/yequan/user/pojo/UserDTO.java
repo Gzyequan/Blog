@@ -22,18 +22,18 @@ public class UserDTO {
     }
 
     public String getMobilephone() {
-        return mobilephone;
+        return mobilephone.trim();
     }
 
     public void setMobilephone(String mobilephone) {
-        this.mobilephone = mobilephone;
+        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
     }
 
     public String getPassword() {
-        return password;
+        return password.trim();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 }

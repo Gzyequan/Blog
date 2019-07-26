@@ -9,6 +9,7 @@ public enum ResultCode {
 
     /* 成功状态码 */
     SUCCESS(0, "成功"),
+    ERROR(-1, "内部错误"),
 
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
@@ -20,14 +21,16 @@ public enum ResultCode {
     USER_NOT_LOGGED_IN(20001, "用户未登录"),
     USER_LOGIN_INFO_ERROR(20002, "账号不存在或密码错误"),
     USER_LOGIN_ERROR(20003, "登录错误"),
-    USER_LOGIN_ILLEGAL(20004,"非法登录"),
-    USER_ACCOUNT_FORBIDDEN(20005, "账号已被禁用"),
-    USER_NOT_EXIST(20006, "用户不存在"),
-    USER_HAS_EXISTED(20007, "用户已存在"),
-    USER_MOBILE_EXISTED(20008, "手机号已被注册"),
-    USER_CREATE_ERROR(20009, "新增用户失败"),
-    USER_UPDATE_ERROR(20010, "更新用户失败"),
-    USER_DELETE_ERROR(20011, "删除用户失败"),
+    USER_LOGIN_ILLEGAL(20004, "非法登录"),
+    USER_LOGIN_Expired(20005, "登录过期"),
+    USER_ACCOUNT_FORBIDDEN(20006, "账号已被禁用"),
+    USER_NOT_EXIST(20007, "用户不存在"),
+    USER_HAS_EXISTED(20008, "用户已存在"),
+    USER_MOBILE_EXISTED(20009, "手机号已被注册"),
+    USER_CREATE_ERROR(20010, "新增用户失败"),
+    USER_UPDATE_ERROR(20011, "更新用户失败"),
+    USER_DELETE_ERROR(20012, "删除用户失败"),
+    USER_UNREGISTER_ERROR(20013, "注销用户失败"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),

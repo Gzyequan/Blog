@@ -9,6 +9,7 @@ import com.yequan.common.interceptor.BaseInterceptor;
 import com.yequan.common.redis.RedisService;
 import com.yequan.common.util.AESUtil;
 import com.yequan.common.util.JwtUtil;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @Auther: yq
@@ -42,9 +44,6 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //获取客户端传入的token
         String accessToken = request.getHeader("access-token");
 
-        //从redis中获取token信息
-        redisService.get(AppConstant.RedisPrefixKey.REDIS_TOKEN);
-
         if (StringUtils.isNotEmpty(accessToken)) {
             //获取加密的自定义载荷信息
             String infoEncrypt = JwtUtil.verify(accessToken);
@@ -54,13 +53,25 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
                 if (StringUtils.isNotEmpty(infoDecrypt)) {
                     //获取有效载荷
                     TokenPayload tokenPayload = JSON.parseObject(infoDecrypt, TokenPayload.class);
-                    //获取客户端信息
-                    String userAgent = request.getHeader("User-Agent");
-                    if (tokenPayload.getUserAgent().equals(userAgent)) {
-                        return true;
+                    //开始校验与redis中的用户信息是否一致
+                    //从redis中获取token信息
+                    Map redisUserInfoMap = redisService.getMap(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + tokenPayload.getUserId());
+                    if (MapUtils.isNotEmpty(redisUserInfoMap)) {
+                        //获取客户端信息
+                        String userAgent = request.getHeader("User-Agent");
+                        if (tokenPayload.getUserAgent().equals(userAgent)) {
+                            //登录成功后重置过期时间
+                            redisService.setExpire(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + tokenPayload.getUserId(),
+                                    AppConstant.SecurityConstant.EXPIRE_SECOND);
+                            return true;
+                        } else {
+                            responseInfo.setCode(ResultCode.USER_LOGIN_ILLEGAL.getCode());
+                            responseInfo.setMsg(ResultCode.USER_LOGIN_ILLEGAL.getMsg());
+                            result = JSON.toJSONString(responseInfo);
+                        }
                     } else {
-                        responseInfo.setCode(ResultCode.USER_LOGIN_ILLEGAL.getCode());
-                        responseInfo.setMsg(ResultCode.USER_LOGIN_ILLEGAL.getMsg());
+                        responseInfo.setCode(ResultCode.USER_LOGIN_Expired.getCode());
+                        responseInfo.setMsg(ResultCode.USER_LOGIN_Expired.getMsg());
                         result = JSON.toJSONString(responseInfo);
                     }
                 } else {
@@ -69,8 +80,8 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
                     result = JSON.toJSONString(responseInfo);
                 }
             } else {
-                responseInfo.setCode(ResultCode.USER_LOGIN_ERROR.getCode());
-                responseInfo.setMsg(ResultCode.USER_LOGIN_ERROR.getMsg());
+                responseInfo.setCode(ResultCode.USER_LOGIN_Expired.getCode());
+                responseInfo.setMsg(ResultCode.USER_LOGIN_Expired.getMsg());
                 result = JSON.toJSONString(responseInfo);
             }
         } else {

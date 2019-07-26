@@ -46,7 +46,7 @@ public class JwtUtil {
     public static String sign(String jsonInfo) {
         try {
             //过期时间,当前时间+过期时长
-            Date expireTime = new Date(System.currentTimeMillis() + EXPIRE_TIME_1);
+            Date expireTime = new Date(System.currentTimeMillis() + EXPIRE_TIME_15);
             //私钥及加密
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_PRIVATE_KEY);
             //设置头部信息
@@ -71,17 +71,18 @@ public class JwtUtil {
      * @return 返回值为自定义的载荷信息
      */
     public static String verify(String token) {
+        String tokenPayload = null;
         try {
             Algorithm algorithm = Algorithm.HMAC256(TOKEN_PRIVATE_KEY);
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
             DecodedJWT verify = jwtVerifier.verify(token);
             Map<String, Claim> claims = verify.getClaims();
             Claim claim = claims.get("info");
-            return claim.asString();
-        } catch (UnsupportedEncodingException e) {
+            tokenPayload = claim.asString();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return tokenPayload;
     }
 
     public static void main(String[] args) {

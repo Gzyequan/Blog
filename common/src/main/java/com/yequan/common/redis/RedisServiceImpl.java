@@ -21,20 +21,20 @@ import java.util.concurrent.TimeUnit;
 @Service("redisService")
 public class RedisServiceImpl implements RedisService {
 
-    private  final Logger LOG = LoggerFactory.getLogger(RedisServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(RedisServiceImpl.class);
 
     @Autowired
-    private  RedisTemplate<String, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
 //    @Autowired
 //    private  StringRedisTemplate stringRedisTemplate;
 
-    private  String CACHE_PREFIX;
+    private String CACHE_PREFIX;
 
-    private  boolean CACHE_CLOSED;
+    private boolean CACHE_CLOSED;
 
     @SuppressWarnings("rawtypes")
-    private  boolean isEmpty(Object obj) {
+    private boolean isEmpty(Object obj) {
         if (obj == null) {
             return true;
         }
@@ -82,7 +82,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return
      */
-    private  String buildKey(String key) {
+    private String buildKey(String key) {
         if (CACHE_PREFIX == null || "".equals(CACHE_PREFIX)) {
             return key;
         }
@@ -94,7 +94,7 @@ public class RedisServiceImpl implements RedisService {
      *
      * @return CACHE_PREFIX_FLAG
      */
-    public  String getCachePrefix() {
+    public String getCachePrefix() {
         return CACHE_PREFIX;
     }
 
@@ -103,7 +103,7 @@ public class RedisServiceImpl implements RedisService {
      *
      * @param cachePrefix
      */
-    public  void setCachePrefix(String cachePrefix) {
+    public void setCachePrefix(String cachePrefix) {
         if (cachePrefix != null && !"".equals(cachePrefix.trim())) {
             CACHE_PREFIX = cachePrefix.trim();
         }
@@ -114,7 +114,7 @@ public class RedisServiceImpl implements RedisService {
      *
      * @return true:成功 false:失败
      */
-    public  boolean close() {
+    public boolean close() {
         LOG.debug(" cache closed ! ");
         CACHE_CLOSED = true;
         return true;
@@ -125,7 +125,7 @@ public class RedisServiceImpl implements RedisService {
      *
      * @return true:存在 false:不存在
      */
-    public  boolean openCache() {
+    public boolean openCache() {
         CACHE_CLOSED = false;
         return true;
     }
@@ -135,7 +135,7 @@ public class RedisServiceImpl implements RedisService {
      *
      * @return true:已关闭 false:已开启
      */
-    public  boolean isClose() {
+    public boolean isClose() {
         return CACHE_CLOSED;
     }
 
@@ -145,7 +145,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存的key
      * @return true:存在 false:不存在
      */
-    public  boolean hasKey(String key) {
+    public boolean hasKey(String key) {
         LOG.debug(" hasKey key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -165,7 +165,7 @@ public class RedisServiceImpl implements RedisService {
      * @param patternKey
      * @return key的集合
      */
-    public  Set<String> keys(String patternKey) {
+    public Set<String> keys(String patternKey) {
         LOG.debug(" keys key :{}", patternKey);
         try {
             if (isClose() || isEmpty(patternKey)) {
@@ -184,7 +184,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key
      * @return true:成功 false:失败
      */
-    public  boolean del(String... key) {
+    public boolean del(String... key) {
         LOG.debug(" delete key :{}", key.toString());
         try {
             if (isClose() || isEmpty(key)) {
@@ -208,7 +208,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key
      * @return true:成功 false:失败
      */
-    public  boolean delPattern(String key) {
+    public boolean delPattern(String key) {
         LOG.debug(" delete Pattern keys :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -229,7 +229,7 @@ public class RedisServiceImpl implements RedisService {
      * @param keys
      * @return true:成功 false:失败
      */
-    public  boolean del(Set<String> keys) {
+    public boolean del(Set<String> keys) {
         LOG.debug(" delete keys :{}", keys.toString());
         try {
             if (isClose() || isEmpty(keys)) {
@@ -254,10 +254,10 @@ public class RedisServiceImpl implements RedisService {
      * @param seconds 过期秒数
      * @return true:成功 false:失败
      */
-    public  boolean setExp(String key, long seconds) {
-        LOG.debug(" setExp key :{}, seconds: {}", key, seconds);
+    public boolean setExpire(String key, long seconds) {
+        LOG.debug(" setExpire key :{}, seconds: {}", key, seconds);
         try {
-            if (isClose() || isEmpty(key) || seconds > 0) {
+            if (isClose() || isEmpty(key) || seconds < 0) {
                 return false;
             }
             key = buildKey(key);
@@ -274,7 +274,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return 秒数
      */
-    public  Long getExpire(String key) {
+    public Long getExpire(String key) {
         LOG.debug(" getExpire key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -295,7 +295,7 @@ public class RedisServiceImpl implements RedisService {
      * @param value 缓存值
      * @return true:成功 false:失败
      */
-    public  boolean setString(String key, String value) {
+    public boolean setString(String key, String value) {
         LOG.debug(" setString key :{}, value: {}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -318,7 +318,7 @@ public class RedisServiceImpl implements RedisService {
      * @param seconds 秒数
      * @return true:成功 false:失败
      */
-    public  boolean set(String key, Object value, long seconds) {
+    public boolean set(String key, Object value, long seconds) {
         LOG.debug(" setString key :{}, value: {}, timeout:{}", key, value, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -339,7 +339,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key值
      * @return String    缓存的String
      */
-    public  Object get(String key) {
+    public Object get(String key) {
         LOG.debug(" getString key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -359,7 +359,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key值
      * @return long    缓存中的最大值+1
      */
-    public  long incr(String key) {
+    public long incr(String key) {
         LOG.debug(" incr key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -380,7 +380,7 @@ public class RedisServiceImpl implements RedisService {
      * @param obj 存入的序列化对象
      * @return true:成功 false:失败
      */
-    public  boolean set(String key, Object obj) {
+    public boolean set(String key, Object obj) {
         LOG.debug(" set key :{}, value:{}", key, obj);
         try {
             if (isClose() || isEmpty(key) || isEmpty(obj)) {
@@ -401,7 +401,7 @@ public class RedisServiceImpl implements RedisService {
      * @param obj 存入的序列化对象
      * @return true:成功 false:失败
      */
-    public  boolean setObj(String key, Object obj, long seconds) {
+    public boolean setObj(String key, Object obj, long seconds) {
         LOG.debug(" set key :{}, value:{}, seconds:{}", key, obj, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(obj)) {
@@ -426,7 +426,7 @@ public class RedisServiceImpl implements RedisService {
      * @param clazz 对象类
      * @return <T>	序列化对象
      */
-    public  <T> T getObj(String key, Class<T> clazz) {
+    public <T> T getObj(String key, Class<T> clazz) {
         LOG.debug(" get key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -448,7 +448,7 @@ public class RedisServiceImpl implements RedisService {
      * @param map 缓存map
      * @return true:成功 false:失败
      */
-    public  <T> boolean setMap(String key, Map<String, T> map) {
+    public <T> boolean setMap(String key, Map<String, T> map) {
         try {
             if (isClose() || isEmpty(key) || isEmpty(map)) {
                 return false;
@@ -469,7 +469,7 @@ public class RedisServiceImpl implements RedisService {
      * @return map    缓存的map
      */
     @SuppressWarnings("rawtypes")
-    public  Map getMap(String key) {
+    public Map getMap(String key) {
         LOG.debug(" getMap key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -489,7 +489,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return int    缓存map的集合大小
      */
-    public  long getMapSize(String key) {
+    public long getMapSize(String key) {
         LOG.debug(" getMap key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -511,7 +511,7 @@ public class RedisServiceImpl implements RedisService {
      * @param hashKey 对应map的key
      * @return object    map中的对象
      */
-    public  Object getMapKey(String key, String hashKey) {
+    public Object getMapKey(String key, String hashKey) {
         LOG.debug(" getMapkey :{}, hashKey:{}", key, hashKey);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey)) {
@@ -531,7 +531,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return Set<String> map的key值合集
      */
-    public  Set<Object> getMapKeys(String key) {
+    public Set<Object> getMapKeys(String key) {
         LOG.debug(" getMapKeys key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -552,7 +552,7 @@ public class RedisServiceImpl implements RedisService {
      * @param hashKey map中指定的hashKey
      * @return true:成功 false:失败
      */
-    public  boolean delMapKey(String key, String hashKey) {
+    public boolean delMapKey(String key, String hashKey) {
         LOG.debug(" delMapKey key :{}, hashKey:{}", key, hashKey);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey)) {
@@ -576,10 +576,10 @@ public class RedisServiceImpl implements RedisService {
      * @param seconds 秒数
      * @return true:成功 false:失败
      */
-    public  <T> boolean setMapExp(String key, Map<String, T> map, long seconds) {
-        LOG.debug(" setMapExp key :{}, value: {}, seconds:{}", key, map, seconds);
+    public <T> boolean setMap(String key, Map<String, T> map, long seconds) {
+        LOG.debug(" setMap key :{}, value: {}, seconds:{}", key, map, seconds);
         try {
-            if (isClose() || isEmpty(key) || isEmpty(map)) {
+            if (isClose() || isEmpty(key) || isEmpty(map) || seconds < 0) {
                 return false;
             }
             key = buildKey(key);
@@ -601,7 +601,7 @@ public class RedisServiceImpl implements RedisService {
      * @param value   map的value值
      * @return true:成功 false:失败
      */
-    public  <T> boolean addMap(String key, String hashKey, T value) {
+    public <T> boolean addMap(String key, String hashKey, T value) {
         LOG.debug(" addMap key :{}, hashKey: {}, value:{}", key, hashKey, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey) || isEmpty(value)) {
@@ -624,7 +624,7 @@ public class RedisServiceImpl implements RedisService {
      * @param list 缓存List
      * @return true:成功 false:失败
      */
-    public  <T> boolean setList(String key, List<T> list) {
+    public <T> boolean setList(String key, List<T> list) {
         LOG.debug(" setList key :{}, list: {}", key, list);
         try {
             if (isClose() || isEmpty(key) || isEmpty(list)) {
@@ -644,7 +644,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return List<Object> 缓存中对应的list合集
      */
-    public  <V> List<V> getList(String key) {
+    public <V> List<V> getList(String key) {
         LOG.debug(" getList key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -666,7 +666,7 @@ public class RedisServiceImpl implements RedisService {
      * @param end   结束位置
      * @return
      */
-    public  void trimList(String key, int start, int end) {
+    public void trimList(String key, int start, int end) {
         LOG.debug(" trimList key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -686,7 +686,7 @@ public class RedisServiceImpl implements RedisService {
      * @param index 索引位置
      * @return Object    list指定索引位置的对象
      */
-    public  Object getIndexList(String key, int index) {
+    public Object getIndexList(String key, int index) {
         LOG.debug(" getIndexList key :{}, index:{}", key, index);
         try {
             if (isClose() || isEmpty(key) || index < 0) {
@@ -707,7 +707,7 @@ public class RedisServiceImpl implements RedisService {
      * @param value List中的值
      * @return true:成功 false:失败
      */
-    public  boolean addList(String key, Object value) {
+    public boolean addList(String key, Object value) {
         LOG.debug(" addList key :{}, value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -731,7 +731,7 @@ public class RedisServiceImpl implements RedisService {
      * @param seconds 秒数
      * @return true:成功 false:失败
      */
-    public  <T> boolean setList(String key, List<T> list, long seconds) {
+    public <T> boolean setList(String key, List<T> list, long seconds) {
         LOG.debug(" setList key :{}, value:{}, seconds:{}", key, list, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(list)) {
@@ -757,7 +757,7 @@ public class RedisServiceImpl implements RedisService {
      * @param set 缓存set集合
      * @return true:成功 false:失败
      */
-    public  <T> boolean setSet(String key, Set<T> set) {
+    public <T> boolean setSet(String key, Set<T> set) {
         LOG.debug(" setSet key :{}, value:{}", key, set);
         try {
             if (isClose() || isEmpty(key) || isEmpty(set)) {
@@ -779,7 +779,7 @@ public class RedisServiceImpl implements RedisService {
      * @param value 增加的value
      * @return true:成功 false:失败
      */
-    public  boolean addSet(String key, Object value) {
+    public boolean addSet(String key, Object value) {
         LOG.debug(" addSet key :{}, value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -803,7 +803,7 @@ public class RedisServiceImpl implements RedisService {
      * @param seconds 秒数
      * @return true:成功 false:失败
      */
-    public  <T> boolean setSet(String key, Set<T> set, long seconds) {
+    public <T> boolean setSet(String key, Set<T> set, long seconds) {
         LOG.debug(" setSet key :{}, value:{}, seconds:{}", key, set, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(set)) {
@@ -828,7 +828,7 @@ public class RedisServiceImpl implements RedisService {
      * @param key 缓存key
      * @return Set<Object> 缓存中的set合集
      */
-    public  <T> Set<T> getSet(String key) {
+    public <T> Set<T> getSet(String key) {
         LOG.debug(" getSet key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
@@ -850,7 +850,7 @@ public class RedisServiceImpl implements RedisService {
      * @param score 评分
      * @return
      */
-    public  boolean addZSet(String key, Object value, double score) {
+    public boolean addZSet(String key, Object value, double score) {
         LOG.debug(" addZSet key :{},value:{}, score:{}", key, value, score);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -871,7 +871,7 @@ public class RedisServiceImpl implements RedisService {
      * @param value 缓存value
      * @return
      */
-    public  boolean removeZSet(String key, Object value) {
+    public boolean removeZSet(String key, Object value) {
         LOG.debug(" removeZSet key :{},value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
@@ -894,7 +894,7 @@ public class RedisServiceImpl implements RedisService {
      * @param end   结束为止
      * @return
      */
-    public  boolean removeZSet(String key, long start, long end) {
+    public boolean removeZSet(String key, long start, long end) {
         LOG.debug(" removeZSet key :{},start:{}, end:{}", key, start, end);
         try {
             if (isClose() || isEmpty(key)) {
@@ -917,7 +917,7 @@ public class RedisServiceImpl implements RedisService {
      * @param end   结束为止
      * @return
      */
-    public  <T> Set<T> getZSet(String key, long start, long end) {
+    public <T> Set<T> getZSet(String key, long start, long end) {
         LOG.debug(" getZSet key :{},start:{}, end:{}", key, start, end);
         try {
             if (isClose() || isEmpty(key)) {

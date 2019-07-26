@@ -30,7 +30,7 @@ public interface RedisService {
 
     boolean del(Set<String> keys);
 
-    boolean setExp(String key, long seconds);
+    boolean setExpire(String key, long seconds);
 
     Long getExpire(String key);
 
@@ -61,7 +61,7 @@ public interface RedisService {
 
     boolean delMapKey(String key, String hashKey);
 
-    <T> boolean setMapExp(String key, Map<String, T> map, long seconds);
+    <T> boolean setMap(String key, Map<String, T> map, long seconds);
 
     <T> boolean addMap(String key, String hashKey, T value);
 

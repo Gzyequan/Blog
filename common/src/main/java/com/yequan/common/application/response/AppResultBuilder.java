@@ -14,7 +14,7 @@ public class AppResultBuilder {
      * @param <T>
      * @return
      */
-    public static <T> AppResult<T> successNoData(ResultCode code) {
+    public static <T> AppResult<T> success(ResultCode code) {
         AppResult<T> result = new AppResult<T>();
         result.setCode(code.getCode());
         result.setMsg(code.getMsg());
@@ -48,6 +48,22 @@ public class AppResultBuilder {
         AppResult<T> result = new AppResult<T>();
         result.setCode(code.getCode());
         result.setMsg(code.getMsg());
+        return result;
+    }
+
+    /**
+     * 失败，返回失败信息与错误数据
+     *
+     * @param t
+     * @param code
+     * @param <T>
+     * @return
+     */
+    public static <T> AppResult<T> failure(T t, ResultCode code) {
+        AppResult<T> result = new AppResult<T>();
+        result.setCode(code.getCode());
+        result.setMsg(code.getMsg());
+        result.setData(t);
         return result;
     }
 }

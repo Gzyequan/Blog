@@ -21,7 +21,12 @@ public class UserDO {
 
     private Integer status;
 
-    public UserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address, Date birthday, String password, Integer status) {
+    private Date createTime;
+
+    private Date modifyTime;
+
+    public UserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address,
+                  Date birthday, String password, Integer status, Date createTime, Date modifyTime) {
         this.id = id;
         this.nickname = nickname;
         this.realname = realname;
@@ -31,6 +36,8 @@ public class UserDO {
         this.birthday = birthday;
         this.password = password;
         this.status = status;
+        this.createTime = createTime;
+        this.modifyTime = modifyTime;
     }
 
     public UserDO() {
@@ -46,7 +53,7 @@ public class UserDO {
     }
 
     public String getNickname() {
-        return nickname;
+        return nickname == null ? null : nickname.trim();
     }
 
     public void setNickname(String nickname) {
@@ -54,7 +61,7 @@ public class UserDO {
     }
 
     public String getRealname() {
-        return realname;
+        return realname == null ? null : realname.trim();
     }
 
     public void setRealname(String realname) {
@@ -70,15 +77,15 @@ public class UserDO {
     }
 
     public String getMobilephone() {
-        return mobilephone;
+        return mobilephone == null ? null : mobilephone.trim();
     }
 
     public void setMobilephone(String mobilephone) {
-        this.mobilephone = mobilephone;
+        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
     }
 
     public String getAddress() {
-        return address;
+        return address == null ? null : address.trim();
     }
 
     public void setAddress(String address) {
@@ -94,11 +101,11 @@ public class UserDO {
     }
 
     public String getPassword() {
-        return password;
+        return password == null ? null : password.trim();
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
     public Integer getStatus() {
@@ -107,5 +114,21 @@ public class UserDO {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 }
