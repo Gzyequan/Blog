@@ -1,11 +1,10 @@
-package com.yequan.user.interceptor;
+package com.yequan.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.yequan.common.application.AppConstant;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
-import com.yequan.common.interceptor.BaseInterceptor;
 import com.yequan.common.redis.RedisService;
 import com.yequan.common.util.AESUtil;
 import com.yequan.common.util.JwtUtil;
@@ -70,8 +69,8 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
                             result = JSON.toJSONString(responseInfo);
                         }
                     } else {
-                        responseInfo.setCode(ResultCode.USER_LOGIN_Expired.getCode());
-                        responseInfo.setMsg(ResultCode.USER_LOGIN_Expired.getMsg());
+                        responseInfo.setCode(ResultCode.USER_LOGIN_EXPIRED.getCode());
+                        responseInfo.setMsg(ResultCode.USER_LOGIN_EXPIRED.getMsg());
                         result = JSON.toJSONString(responseInfo);
                     }
                 } else {
@@ -80,8 +79,8 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
                     result = JSON.toJSONString(responseInfo);
                 }
             } else {
-                responseInfo.setCode(ResultCode.USER_LOGIN_Expired.getCode());
-                responseInfo.setMsg(ResultCode.USER_LOGIN_Expired.getMsg());
+                responseInfo.setCode(ResultCode.USER_LOGIN_EXPIRED.getCode());
+                responseInfo.setMsg(ResultCode.USER_LOGIN_EXPIRED.getMsg());
                 result = JSON.toJSONString(responseInfo);
             }
         } else {

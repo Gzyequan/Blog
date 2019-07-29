@@ -69,7 +69,7 @@
         <!--登录拦截-->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <bean class="com.yequan.user.interceptor.LoginInterceptor"/>
+            <bean class="com.yequan.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

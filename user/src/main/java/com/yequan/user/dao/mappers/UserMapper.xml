@@ -2,19 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yequan.user.dao.UserMapper">
     <resultMap id="BaseResultMap" type="com.yequan.user.pojo.UserDO">
-        <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="nickname" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="realname" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="age" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="mobilephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="modify_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-        </constructor>
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="realname" property="realname" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, nickname, realname, age, mobilephone, address, birthday,password,status,create_time,modify_time
@@ -90,7 +88,7 @@
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="modify_time != null">
+            <if test="modifyTime != null">
                 modify_time,
             </if>
         </trim>
@@ -120,10 +118,10 @@
                 #{password,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{create_time,jdbcType=TIMESTAMP},
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                #{modify_time,jdbcType=TIMESTAMP},
+                #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>

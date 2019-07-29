@@ -22,7 +22,7 @@ public enum ResultCode {
     USER_LOGIN_INFO_ERROR(20002, "账号不存在或密码错误"),
     USER_LOGIN_ERROR(20003, "登录错误"),
     USER_LOGIN_ILLEGAL(20004, "非法登录"),
-    USER_LOGIN_Expired(20005, "登录过期"),
+    USER_LOGIN_EXPIRED(20005, "登录过期"),
     USER_ACCOUNT_FORBIDDEN(20006, "账号已被禁用"),
     USER_NOT_EXIST(20007, "用户不存在"),
     USER_HAS_EXISTED(20008, "用户已存在"),
