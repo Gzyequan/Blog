@@ -7,19 +7,12 @@ package com.yequan.common.bean;
  */
 public class TokenPayload {
 
-    private String mobilephone;
-
     private Integer userId;
 
     private String userAgent;
 
-    public String getMobilephone() {
-        return mobilephone.trim();
-    }
+    private String ip;
 
-    public void setMobilephone(String mobilephone) {
-        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
-    }
 
     public Integer getUserId() {
         return userId;
@@ -35,5 +28,13 @@ public class TokenPayload {
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent == null ? null : userAgent.trim();
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 }

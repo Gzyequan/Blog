@@ -1,7 +1,7 @@
 package com.yequan.user.service;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.UserDO;
+import com.yequan.user.pojo.dbo.SysUserDO;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
  */
 public interface IAdminUserService {
 
-    AppResult<List<UserDO>> listUsers(Integer pageNum, Integer pageSize);
+    AppResult<List<SysUserDO>> listUsers(Integer pageNum, Integer pageSize);
 
-    AppResult<UserDO> getUserById(Integer id);
+    AppResult<SysUserDO> getUserById(Integer id);
 
-    AppResult<UserDO> updateUser(Integer id,UserDO userDO);
+    AppResult<SysUserDO> updateUser(Integer id, SysUserDO sysUserDO);
 
     AppResult deleteUserById(Integer id);
 

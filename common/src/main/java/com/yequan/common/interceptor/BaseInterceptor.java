@@ -1,10 +1,10 @@
 package com.yequan.common.interceptor;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Auther: yq
@@ -18,21 +18,22 @@ public class BaseInterceptor {
         ServletOutputStream outputStream = null;
         try {
             outputStream = response.getOutputStream();
-            outputStream.write(msg.getBytes("UTF-8"));
+            if (null != outputStream)
+                outputStream.write(msg.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            outputStream.flush();
-            outputStream.close();
+            if (null != outputStream) {
+                outputStream.flush();
+                outputStream.close();
+            }
         }
     }
 
-    protected void renderPage(HttpServletRequest request,HttpServletResponse response,String page){
+    protected void renderPage(HttpServletRequest request, HttpServletResponse response, String page) {
         try {
-            request.getRequestDispatcher(page).forward(request,response);
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            request.getRequestDispatcher(page).forward(request, response);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

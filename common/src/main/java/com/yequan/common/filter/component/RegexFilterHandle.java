@@ -1,7 +1,7 @@
 package com.yequan.common.filter.component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yequan.common.application.AppConstant;
+import com.yequan.common.application.constant.FilterConsts;
 
 /**
  * @Auther: yq
@@ -12,7 +12,7 @@ public class RegexFilterHandle implements FilterService {
 
     @Override
     public boolean isMatch(FilterRule filterRule) {
-        return AppConstant.FilterConstant.FILTER_REGEX.equals(filterRule.getType());
+        return FilterConsts.FILTER_REGEX.equals(filterRule.getType());
     }
 
     @Override

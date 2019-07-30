@@ -1,7 +1,7 @@
 package com.yequan.user.controller.manager;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.UserDO;
+import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.service.IAdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,19 +14,19 @@ import java.util.List;
  * @Description: 管理员角色
  */
 @RestController
-@RequestMapping("system/admin/")
+@RequestMapping("admin/user/")
 public class AdminUserController {
 
     @Autowired
     private IAdminUserService iAdminUserService;
 
-    @RequestMapping(value = "{pageNum}/{pageSize}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public AppResult<List<UserDO>> listUsers(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+    @GetMapping(value = "list/{pageNum}/{pageSize}", produces = "application/json;charset=UTF-8")
+    public AppResult<List<SysUserDO>> listUsers(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
         return iAdminUserService.listUsers(pageNum, pageSize);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public AppResult<UserDO> getUserById(@PathVariable("id") Integer id) {
+    @GetMapping(value = "{id}", produces = "application/json;charset=UTF-8")
+    public AppResult<SysUserDO> getUserById(@PathVariable("id") Integer id) {
         return iAdminUserService.getUserById(id);
     }
 
@@ -34,18 +34,19 @@ public class AdminUserController {
      * 更新用户信息
      *
      * @param id
-     * @param userDO
+     * @param sysUserDO
      * @return
      */
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-    public AppResult<UserDO> updateUser(@PathVariable("id") Integer id, @RequestBody UserDO userDO) {
-        return iAdminUserService.updateUser(id, userDO);
+    @PutMapping(value = "{id}", produces = "application/json;charset=UTF-8")
+    public AppResult<SysUserDO> updateUser(@PathVariable("id") Integer id, @RequestBody SysUserDO sysUserDO) {
+        return iAdminUserService.updateUser(id, sysUserDO);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "{id}", produces = "application/json;charset=UTF-8")
     public AppResult deleteUserById(@PathVariable("id") Integer id) {
         return iAdminUserService.deleteUserById(id);
     }
+
 
     @GetMapping(value = "online", produces = "application/json;charset=UTF-8")
     public AppResult<Void> listOnlineUsers() {

@@ -8,7 +8,7 @@ import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
 import com.yequan.common.redis.RedisService;
-import com.yequan.user.pojo.UserDO;
+import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.service.IOrdinaryUserService;
 import com.yequan.user.test.task.NetworkMonitor;
 import com.yequan.user.test.task.NetworkMonitorListener;
@@ -50,8 +50,8 @@ public class OrdinaryUserController {
      * @return
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public AppResult<UserDO> getCurrentUserById(@PathVariable("id") Integer id) {
-        return iOrdinaryUserService.selectUserById(id);
+    public AppResult<SysUserDO> getCurrentUserById(@PathVariable("id") Integer id) {
+        return iOrdinaryUserService.getUserById(id);
     }
 
     /**
@@ -69,12 +69,12 @@ public class OrdinaryUserController {
      * 更新用户信息:只能更新当前登录用户自己的信息
      *
      * @param id
-     * @param userDO
+     * @param sysUserDO
      * @return
      */
-    @RequestMapping(value = "{id}", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
-    public AppResult<UserDO> updateCurrentUser(@PathVariable("id") Integer id, @RequestBody UserDO userDO) {
-        return iOrdinaryUserService.updateUser(id, userDO);
+    @PutMapping(value = "{id}", produces = "application/json;charset=UTF-8")
+    public AppResult<SysUserDO> updateCurrentUser(@PathVariable("id") Integer id, @RequestBody SysUserDO sysUserDO) {
+        return iOrdinaryUserService.updateUser(id, sysUserDO);
     }
 
     @RequestMapping(value = "/timer", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")

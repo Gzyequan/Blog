@@ -1,4 +1,4 @@
-package com.yequan.user.pojo;
+package com.yequan.user.pojo.dto;
 
 /**
  * @Auther: yq
@@ -12,6 +12,8 @@ public class UserDTO {
     private String mobilephone;
 
     private String password;
+
+    private Boolean keepAlive;
 
     public Integer getId() {
         return id;
@@ -35,5 +37,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public Boolean isKeepAlive() {
+        return keepAlive;
+    }
+
+    public void setKeepAlive(Boolean keepAlive) {
+        this.keepAlive = keepAlive;
     }
 }

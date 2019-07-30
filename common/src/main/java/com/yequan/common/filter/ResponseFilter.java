@@ -4,7 +4,7 @@ package com.yequan.common.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yequan.common.application.AppConstant;
+import com.yequan.common.application.constant.FilterConsts;
 import com.yequan.common.filter.component.FilterHandleContext;
 import com.yequan.common.filter.component.FilterRule;
 import com.yequan.common.filter.component.RegexFilterHandle;
@@ -39,7 +39,7 @@ public class ResponseFilter extends BaseFilter implements Filter {
          */
         passwordFilter = new FilterRule();
         passwordFilter.setKey("password");
-        passwordFilter.setType(AppConstant.FilterConstant.FILTER_SIMPLE);
+        passwordFilter.setType(FilterConsts.FILTER_SIMPLE);
         passwordFilter.setReplacement("");
 
         /**
@@ -47,7 +47,7 @@ public class ResponseFilter extends BaseFilter implements Filter {
          */
         mobilephoneFilter = new FilterRule();
         mobilephoneFilter.setKey("mobilephone");
-        mobilephoneFilter.setType(AppConstant.FilterConstant.FILTER_REGEX);
+        mobilephoneFilter.setType(FilterConsts.FILTER_REGEX);
         mobilephoneFilter.setRegex("(\\d{3})\\d{4}(\\d{4})");
         mobilephoneFilter.setReplacement("$1****$2");
     }

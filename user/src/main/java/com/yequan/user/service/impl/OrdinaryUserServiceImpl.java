@@ -1,6 +1,7 @@
 package com.yequan.user.service.impl;
 
-import com.yequan.common.application.AppConstant;
+import com.yequan.common.application.constant.RedisConsts;
+import com.yequan.common.application.constant.UserConsts;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -8,9 +9,9 @@ import com.yequan.common.redis.RedisService;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.MD5Util;
 import com.yequan.common.util.MapUtil;
-import com.yequan.user.dao.UserMapper;
-import com.yequan.user.pojo.UserDO;
-import com.yequan.user.pojo.UserDTO;
+import com.yequan.user.dao.SysUserMapper;
+import com.yequan.user.pojo.dbo.SysUserDO;
+import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.IOrdinaryUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     private RedisService redisService;
@@ -40,23 +41,23 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
      * @param id
      * @return
      */
-    public AppResult<UserDO> selectUserById(Integer id) {
+    public AppResult<SysUserDO> getUserById(Integer id) {
         try {
-            UserDO currentUser = null;
+            SysUserDO currentUser = null;
             if (null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
             //从redis中获取当前用户信息
-            Map<String, Object> currentUserMap = redisService.getMap(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + id);
+            Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
             if (null == currentUserMap) {
                 AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN);
             }
             //将当前用户map集合转换成对象
-            currentUser = (UserDO) MapUtil.mapToObject(currentUserMap, UserDO.class);
+            currentUser = (SysUserDO) MapUtil.mapToObject(currentUserMap, SysUserDO.class);
             if (null != currentUser) {
                 AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
             }
-            currentUser = userMapper.selectByPrimaryKey(id);
+            currentUser = sysUserMapper.selectByPrimaryKey(id);
             if (null != currentUser) {
                 return AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
             }
@@ -70,17 +71,17 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
      * 新增用户
      * 对用户密码进行md5摘要
      *
-     * @param userDO
+     * @param sysUserDO
      * @return
      */
-    public int insertSelective(UserDO userDO) {
-        if (null == userDO) {
+    public int insertSelective(SysUserDO sysUserDO) {
+        if (null == sysUserDO) {
             return 0;
         }
-        String password = userDO.getPassword();
+        String password = sysUserDO.getPassword();
         String md5Password = MD5Util.encrypt(password);
-        userDO.setPassword(md5Password);
-        return userMapper.insertSelective(userDO);
+        sysUserDO.setPassword(md5Password);
+        return sysUserMapper.insertSelective(sysUserDO);
     }
 
     /**
@@ -90,37 +91,37 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
      * 3.更新redis中当前用户的信息
      *
      * @param id
-     * @param userDO
+     * @param sysUserDO
      * @return
      */
-    public AppResult<UserDO> updateUser(Integer id, UserDO userDO) {
+    public AppResult<SysUserDO> updateUser(Integer id, SysUserDO sysUserDO) {
         try {
-            if (null == userDO || null == id) {
+            if (null == sysUserDO || null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
             }
             //从redis中获取当前用户信息
-            Map<String, Object> currentUserMap = redisService.getMap(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + id);
+            Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
             if (null == currentUserMap) {
                 AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN);
             }
             //数据库中查询用户
-            UserDO currentUser = userMapper.selectByPrimaryKey(id);
+            SysUserDO currentUser = sysUserMapper.selectByPrimaryKey(id);
             if (null == currentUser) {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
-            userDO.setId(id);
+            sysUserDO.setId(id);
             //排除用户密码
-            userDO.setPassword(null);
+            sysUserDO.setPassword(null);
             //排除用户手机号
-            userDO.setMobilephone(null);
-            userDO.setModifyTime(DateUtil.getCurrentDate());
-            int update = userMapper.updateByPrimaryKeySelective(userDO);
+            sysUserDO.setMobilephone(null);
+            sysUserDO.setModifyTime(DateUtil.getCurrentDate());
+            int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
-                UserDO updatedUserDO = userMapper.selectByPrimaryKey(id);
+                SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);
                 //更新redis中当前用户的信息
-                Map<String, Object> updateUserMap = MapUtil.objectToMap(updatedUserDO);
-                redisService.setMap(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + id, updateUserMap);
-                return AppResultBuilder.success(updatedUserDO, ResultCode.SUCCESS);
+                Map<String, Object> updateUserMap = MapUtil.objectToMap(updatedSysUserDO);
+                redisService.setMap(RedisConsts.REDIS_CURRENT_USER + id, updateUserMap);
+                return AppResultBuilder.success(updatedSysUserDO, ResultCode.SUCCESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,12 +135,12 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
      * @param userDTO
      * @return
      */
-    public UserDO selectByMobilephone(UserDTO userDTO) {
-        UserDO userDO = null;
+    public SysUserDO selectByMobilephone(UserDTO userDTO) {
+        SysUserDO sysUserDO = null;
         if (null != userDTO) {
-            userDO = userMapper.selectByMobilephone(userDTO);
+            sysUserDO = sysUserMapper.selectByMobilephone(userDTO);
         }
-        return userDO;
+        return sysUserDO;
     }
 
     /**
@@ -153,17 +154,17 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             if (null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            UserDO user = userMapper.selectByPrimaryKey(id);
+            SysUserDO user = sysUserMapper.selectByPrimaryKey(id);
             if (null == user) {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
-            UserDO userDO = new UserDO();
-            userDO.setId(id);
-            userDO.setStatus(AppConstant.UserConstant.USER_DELETED.getStatus());
-            int update = userMapper.updateByPrimaryKeySelective(userDO);
+            SysUserDO sysUserDO = new SysUserDO();
+            sysUserDO.setId(id);
+            sysUserDO.setStatus(UserConsts.USER_DELETED.getStatus());
+            int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 //注销用户后将该用户信息从redis中清除
-                redisService.del(AppConstant.RedisPrefixKey.REDIS_CURRENT_USER + id);
+                redisService.del(RedisConsts.REDIS_CURRENT_USER + id);
                 return AppResultBuilder.success(ResultCode.SUCCESS);
             }
         } catch (Exception e) {

@@ -17,20 +17,22 @@ public enum ResultCode {
     PARAM_TYPE_BIND_ERROR(10003, "参数类型错误"),
     PARAM_NOT_COMPLETE(10004, "参数缺失"),
 
-    /* 用户错误：20001-29999*/
+    /* 用户,角色,权限错误：20001-29999*/
     USER_NOT_LOGGED_IN(20001, "用户未登录"),
     USER_LOGIN_INFO_ERROR(20002, "账号不存在或密码错误"),
     USER_LOGIN_ERROR(20003, "登录错误"),
     USER_LOGIN_ILLEGAL(20004, "非法登录"),
-    USER_LOGIN_Expired(20005, "登录过期"),
-    USER_ACCOUNT_FORBIDDEN(20006, "账号已被禁用"),
-    USER_NOT_EXIST(20007, "用户不存在"),
-    USER_HAS_EXISTED(20008, "用户已存在"),
-    USER_MOBILE_EXISTED(20009, "手机号已被注册"),
-    USER_CREATE_ERROR(20010, "新增用户失败"),
-    USER_UPDATE_ERROR(20011, "更新用户失败"),
-    USER_DELETE_ERROR(20012, "删除用户失败"),
-    USER_UNREGISTER_ERROR(20013, "注销用户失败"),
+    USER_LOGIN_REMOTE(20005, "异地登录"),
+    USER_LOGIN_EXPIRED(20006, "登录过期"),
+    USER_ACCOUNT_FORBIDDEN(20007, "账号已被禁用"),
+    USER_NOT_EXIST(20008, "用户不存在"),
+    USER_HAS_EXISTED(20009, "用户已存在"),
+    USER_MOBILE_EXISTED(20010, "手机号已被注册"),
+    USER_CREATE_ERROR(20011, "新增用户失败"),
+    USER_UPDATE_ERROR(20012, "更新用户失败"),
+    USER_DELETE_ERROR(20013, "删除用户失败"),
+    USER_UNREGISTER_ERROR(20014, "注销用户失败"),
+    PERMISSION_CREATE_ERROR(20020, "新增权限失败"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),

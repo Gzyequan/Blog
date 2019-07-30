@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yequan.user.dao.SysURolePermissionDOMapper" >
+  <resultMap id="BaseResultMap" type="com.yequan.user.pojo.dbo.SysURolePermissionDO" >
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="pmn_id" property="pmnId" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insert" parameterType="com.yequan.user.pojo.dbo.SysURolePermissionDO" >
+    insert into sys_role_permission (role_id, pmn_id)
+    values (#{roleId,jdbcType=INTEGER}, #{pmnId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yequan.user.pojo.dbo.SysURolePermissionDO" >
+    insert into sys_role_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="pmnId != null" >
+        pmn_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="pmnId != null" >
+        #{pmnId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>

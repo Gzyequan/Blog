@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.yequan.user.dao.UserMapper">
-    <resultMap id="BaseResultMap" type="com.yequan.user.pojo.UserDO">
-        <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="nickname" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="realname" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="age" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="mobilephone" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="address" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="birthday" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="password" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="modify_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-        </constructor>
+<mapper namespace="com.yequan.user.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.yequan.user.pojo.dbo.SysUserDO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="realname" property="realname" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="mobilephone" property="mobilephone" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="birthday" property="birthday" jdbcType="TIMESTAMP"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, nickname, realname, age, mobilephone, address, birthday,password,status,create_time,modify_time
@@ -22,20 +20,20 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from user
+        from sys_user
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectByMobilephone" parameterType="com.yequan.user.pojo.UserDTO" resultMap="BaseResultMap">
+    <select id="selectByMobilephone" parameterType="com.yequan.user.pojo.dto.UserDTO" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from user
+        from sys_user
         where
         mobilephone = #{mobilephone,jdbcType=VARCHAR}
     </select>
-    <select id="loginCheck" resultMap="BaseResultMap" parameterType="com.yequan.user.pojo.UserDTO">
+    <select id="loginCheck" resultMap="BaseResultMap" parameterType="com.yequan.user.pojo.dto.UserDTO">
         select
         <include refid="Base_Column_List"/>
-        from user
+        from sys_user
         where
         mobilephone = #{mobilephone,jdbcType=VARCHAR}
         and
@@ -44,15 +42,15 @@
     <select id="selectUserList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from user
+        from sys_user
         order by id asc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from user
+    delete from sys_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.yequan.user.pojo.UserDO">
-    insert into user
+    <insert id="insert" parameterType="com.yequan.user.pojo.dbo.SysUserDO">
+    insert into sys_user
     (id, nickname, realname,age, mobilephone, address, birthday,password,create_time,modify_time)
     values
     (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR},
@@ -60,8 +58,8 @@
       #{birthday,jdbcType=TIMESTAMP},#{password,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" parameterType="com.yequan.user.pojo.UserDO">
-        insert into user
+    <insert id="insertSelective" parameterType="com.yequan.user.pojo.dbo.SysUserDO">
+        insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -90,7 +88,7 @@
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="modify_time != null">
+            <if test="modifyTime != null">
                 modify_time,
             </if>
         </trim>
@@ -120,15 +118,15 @@
                 #{password,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{create_time,jdbcType=TIMESTAMP},
+                #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="modifyTime != null">
-                #{modify_time,jdbcType=TIMESTAMP},
+                #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.user.pojo.UserDO">
-        update user
+    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.user.pojo.dbo.SysUserDO">
+        update sys_user
         <set>
             <if test="nickname != null">
                 nickname = #{nickname,jdbcType=VARCHAR},
@@ -163,8 +161,8 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.yequan.user.pojo.UserDO">
-    update user
+    <update id="updateByPrimaryKey" parameterType="com.yequan.user.pojo.dbo.SysUserDO">
+    update sys_user
     set nickname = #{nickname,jdbcType=VARCHAR},
       realname = #{realname,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},

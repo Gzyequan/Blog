@@ -1,8 +1,8 @@
-package com.yequan.user.pojo;
+package com.yequan.user.pojo.dbo;
 
 import java.util.Date;
 
-public class UserDO {
+public class SysUserDO {
     private Integer id;
 
     private String nickname;
@@ -25,8 +25,8 @@ public class UserDO {
 
     private Date modifyTime;
 
-    public UserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address,
-                  Date birthday, String password, Integer status, Date createTime, Date modifyTime) {
+    public SysUserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address,
+                     Date birthday, String password, Integer status, Date createTime, Date modifyTime) {
         this.id = id;
         this.nickname = nickname;
         this.realname = realname;
@@ -40,7 +40,7 @@ public class UserDO {
         this.modifyTime = modifyTime;
     }
 
-    public UserDO() {
+    public SysUserDO() {
         super();
     }
 
