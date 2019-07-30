@@ -1,5 +1,6 @@
 package com.yequan.common.util;
 
+import com.yequan.common.application.constant.SecurityConsts;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,9 +10,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-
-import static com.yequan.common.application.AppConstant.SecurityConstant.AES_KEY;
-import static com.yequan.common.application.AppConstant.SecurityConstant.AES_KEY_SIZE;
 
 /**
  * @Auther: yq
@@ -36,7 +34,7 @@ public class AESUtil {
             //选择一种算法
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
             secureRandom.setSeed(key.getBytes());
-            keyGenerator.init(AES_KEY_SIZE, secureRandom);
+            keyGenerator.init(SecurityConsts.AES_KEY_SIZE, secureRandom);
             SecretKey secretKey = keyGenerator.generateKey();
             byte[] encoded = secretKey.getEncoded();
             SecretKeySpec secretKeySpec = new SecretKeySpec(encoded, "AES");
@@ -77,7 +75,7 @@ public class AESUtil {
             //选择一种固定算法，为了避免不同java实现的不同算法，生成不同的密钥，而导致解密失败
             SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
             random.setSeed(key.getBytes());
-            keyGenerator.init(AES_KEY_SIZE, random);
+            keyGenerator.init(SecurityConsts.AES_KEY_SIZE, random);
             SecretKey secretKey = keyGenerator.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec secretKeySpec = new SecretKeySpec(enCodeFormat, "AES");
@@ -103,9 +101,9 @@ public class AESUtil {
 
     public static void main(String[] args) {
         String a = "hello";
-        String encryptToStr = encryptToStr(a, AES_KEY);
+        String encryptToStr = encryptToStr(a, SecurityConsts.AES_KEY);
         System.out.println(encryptToStr);
-        String decryptToStr = decryptToStr(encryptToStr, AES_KEY);
+        String decryptToStr = decryptToStr(encryptToStr, SecurityConsts.AES_KEY);
         System.out.println(decryptToStr);
     }
 

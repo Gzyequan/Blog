@@ -1,8 +1,8 @@
 package com.yequan.user.service;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.UserDO;
-import com.yequan.user.pojo.UserDTO;
+import com.yequan.user.pojo.dbo.SysUserDO;
+import com.yequan.user.pojo.dto.UserDTO;
 
 /**
  * @Auther: yq
@@ -11,11 +11,11 @@ import com.yequan.user.pojo.UserDTO;
  */
 public interface IOrdinaryUserService {
 
-    AppResult<UserDO> selectUserById(Integer id);
+    AppResult<SysUserDO> getUserById(Integer id);
 
-    int insertSelective(UserDO userDO);
+    int insertSelective(SysUserDO sysUserDO);
 
-    AppResult<UserDO> updateUser(Integer id,UserDO userDO);
+    AppResult<SysUserDO> updateUser(Integer id, SysUserDO sysUserDO);
 
     /**
      * 根据手机号查询用户
@@ -23,7 +23,7 @@ public interface IOrdinaryUserService {
      * @param userDTO
      * @return
      */
-    UserDO selectByMobilephone(UserDTO userDTO);
+    SysUserDO selectByMobilephone(UserDTO userDTO);
 
     /**
      * 注销用户

@@ -7,8 +7,8 @@ import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.redis.RedisService;
 import com.yequan.common.util.DateUtil;
-import com.yequan.user.dao.UserMapper;
-import com.yequan.user.pojo.UserDO;
+import com.yequan.user.dao.SysUserMapper;
+import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.service.IAdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.List;
 public class AdminUserServiceImpl implements IAdminUserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     private RedisService redisService;
@@ -37,14 +37,18 @@ public class AdminUserServiceImpl implements IAdminUserService {
      * @return
      */
     @Override
-    public AppResult<List<UserDO>> listUsers(Integer pageNum, Integer pageSize) {
+    public AppResult<List<SysUserDO>> listUsers(Integer pageNum, Integer pageSize) {
         try {
             if (null == pageNum || null == pageSize) {
                 return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
             }
-            List<UserDO> userDOS = selectUserList(pageNum, pageSize);
-            if (userDOS != null && userDOS.size() > 0) {
-                return AppResultBuilder.success(userDOS, ResultCode.SUCCESS);
+            //列表分页
+            PageHelper.startPage(pageNum, pageSize);
+            List<SysUserDO> sysUserDOList = sysUserMapper.selectUserList();
+            PageInfo<SysUserDO> pageInfo = new PageInfo<SysUserDO>(sysUserDOList);
+            List<SysUserDO> sysUserDOS = pageInfo.getList();
+            if (sysUserDOS != null && sysUserDOS.size() > 0) {
+                return AppResultBuilder.success(sysUserDOS, ResultCode.SUCCESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,14 +62,14 @@ public class AdminUserServiceImpl implements IAdminUserService {
      * @param id
      * @return
      */
-    public AppResult<UserDO> getUserById(Integer id) {
+    public AppResult<SysUserDO> getUserById(Integer id) {
         try {
             if (null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            UserDO userDO = userMapper.selectByPrimaryKey(id);
-            if (null != userDO) {
-                return AppResultBuilder.success(userDO, ResultCode.SUCCESS);
+            SysUserDO sysUserDO = sysUserMapper.selectByPrimaryKey(id);
+            if (null != sysUserDO) {
+                return AppResultBuilder.success(sysUserDO, ResultCode.SUCCESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,25 +82,25 @@ public class AdminUserServiceImpl implements IAdminUserService {
      * 在线用户不能修改
      *
      * @param id
-     * @param userDO
+     * @param sysUserDO
      * @return
      */
-    public AppResult<UserDO> updateUser(Integer id, UserDO userDO) {
+    public AppResult<SysUserDO> updateUser(Integer id, SysUserDO sysUserDO) {
         try {
-            if (null == userDO || null == id) {
+            if (null == sysUserDO || null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
             }
 
-            UserDO currentUserDO = userMapper.selectByPrimaryKey(id);
-            if (null == currentUserDO) {
+            SysUserDO currentSysUserDO = sysUserMapper.selectByPrimaryKey(id);
+            if (null == currentSysUserDO) {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
-            userDO.setId(id);
-            userDO.setModifyTime(DateUtil.getCurrentDate());
-            int update = userMapper.updateByPrimaryKeySelective(userDO);
+            sysUserDO.setId(id);
+            sysUserDO.setModifyTime(DateUtil.getCurrentDate());
+            int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
-                UserDO updatedUserDO = userMapper.selectByPrimaryKey(id);
-                return AppResultBuilder.success(updatedUserDO, ResultCode.SUCCESS);
+                SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);
+                return AppResultBuilder.success(updatedSysUserDO, ResultCode.SUCCESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,11 +119,11 @@ public class AdminUserServiceImpl implements IAdminUserService {
             if (null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            UserDO userDO = userMapper.selectByPrimaryKey(id);
-            if (null == userDO) {
+            SysUserDO sysUserDO = sysUserMapper.selectByPrimaryKey(id);
+            if (null == sysUserDO) {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
-            int delete = userMapper.deleteByPrimaryKey(id);
+            int delete = sysUserMapper.deleteByPrimaryKey(id);
             if (delete > 0) {
                 return AppResultBuilder.success(ResultCode.SUCCESS);
             }
@@ -129,10 +133,4 @@ public class AdminUserServiceImpl implements IAdminUserService {
         return AppResultBuilder.failure(ResultCode.USER_DELETE_ERROR);
     }
 
-    private List<UserDO> selectUserList(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<UserDO> userDOList = userMapper.selectUserList();
-        PageInfo<UserDO> pageInfo = new PageInfo<UserDO>(userDOList);
-        return pageInfo.getList();
-    }
 }

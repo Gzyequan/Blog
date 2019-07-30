@@ -1,6 +1,6 @@
 package com.yequan.common.util;
 
-import com.yequan.common.application.AppConstant;
+import com.yequan.common.application.constant.SecurityConsts;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**
@@ -28,7 +28,7 @@ public class MD5Util {
      * @return
      */
     public static String encrypt(String text) {
-        return encrypt(text, AppConstant.SecurityConstant.DEFAULT_MD5_SALT);
+        return encrypt(text, SecurityConsts.DEFAULT_MD5_SALT);
     }
 
     /**
@@ -52,7 +52,7 @@ public class MD5Util {
      * @return
      */
     public static boolean verify(String text, String md5) {
-        return verify(text, AppConstant.SecurityConstant.DEFAULT_MD5_SALT, md5);
+        return verify(text, SecurityConsts.DEFAULT_MD5_SALT, md5);
     }
 
     public static void main(String[] args) {

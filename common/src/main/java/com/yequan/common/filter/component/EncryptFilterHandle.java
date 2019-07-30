@@ -1,7 +1,7 @@
 package com.yequan.common.filter.component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yequan.common.application.AppConstant;
+import com.yequan.common.application.constant.FilterConsts;
 import com.yequan.common.util.MD5Util;
 
 /**
@@ -12,7 +12,7 @@ import com.yequan.common.util.MD5Util;
 public class EncryptFilterHandle implements FilterService {
     @Override
     public boolean isMatch(FilterRule filterRule) {
-        return AppConstant.FilterConstant.FILTER_ENCRYPT.equals(filterRule.getType());
+        return FilterConsts.FILTER_ENCRYPT.equals(filterRule.getType());
     }
 
     @Override

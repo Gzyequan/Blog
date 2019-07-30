@@ -1,8 +1,8 @@
 package com.yequan.user.controller.manager;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.UserDO;
-import com.yequan.user.pojo.UserDTO;
+import com.yequan.user.pojo.dbo.SysUserDO;
+import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.ISystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +26,9 @@ public class SystemController {
         return iSystemService.login(request, response, userDTO);
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public AppResult<UserDO> register(@RequestBody UserDO userDO) {
-        return iSystemService.register(userDO);
+    @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
+    public AppResult<SysUserDO> register(@RequestBody SysUserDO sysUserDO) {
+        return iSystemService.register(sysUserDO);
     }
 
 }
