@@ -15,11 +15,9 @@ public interface SysPermissionDOMapper {
 
     SysPermissionDO selectByPrimaryKey(Integer id);
 
-    SysPermissionDO selectByPmnCode(Integer pmnCode);
-
     int updateByPrimaryKeySelective(SysPermissionDO record);
 
     int updateByPrimaryKey(SysPermissionDO record);
 
-    List<SysPermissionDO> selectChildrenParallelPermission(Integer parentCode);
+    List<SysPermissionDO> selectChildrenParallelPermission(Integer parentId);
 }

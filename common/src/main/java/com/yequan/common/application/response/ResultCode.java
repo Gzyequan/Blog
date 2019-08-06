@@ -33,6 +33,7 @@ public enum ResultCode {
     USER_DELETE_ERROR(20013, "删除用户失败"),
     USER_UNREGISTER_ERROR(20014, "注销用户失败"),
     PERMISSION_CREATE_ERROR(20020, "新增权限失败"),
+    PERMISSION_TYPE_ERROR(20021,"权限类型错误"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),

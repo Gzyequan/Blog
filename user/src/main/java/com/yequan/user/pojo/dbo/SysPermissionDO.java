@@ -5,9 +5,7 @@ import java.util.Date;
 public class SysPermissionDO {
     private Integer id;
 
-    private Integer pmnCode;
-
-    private Integer parentCode;
+    private Integer parentId;
 
     private String pmnName;
 
@@ -33,20 +31,12 @@ public class SysPermissionDO {
         this.id = id;
     }
 
-    public Integer getPmnCode() {
-        return pmnCode;
+    public Integer getParentId() {
+        return parentId;
     }
 
-    public void setPmnCode(Integer pmnCode) {
-        this.pmnCode = pmnCode;
-    }
-
-    public Integer getParentCode() {
-        return parentCode;
-    }
-
-    public void setParentCode(Integer parentCode) {
-        this.parentCode = parentCode;
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 
     public String getPmnName() {

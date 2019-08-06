@@ -306,23 +306,23 @@
         </plugins>
 
         <resources>
-            <!-- 打包时将资源文件一起打包到jar包或者war包中 -->
-            <!--环境隔离配置Start -->
-            <!--<resource>-->
-            <!--<targetPath>config</targetPath>-->
-            <!--<directory>src/main/resources/</directory>-->
-            <!--<excludes>-->
-            <!--&lt;!&ndash;忽略（不需要）隔离的文件 &ndash;&gt;-->
-            <!--<exclude>*.jsp</exclude>-->
-            <!--<exclude>*.md</exclude>-->
-            <!--</excludes>-->
-            <!--</resource>-->
-            <!--&lt;!&ndash;环境隔离配置End &ndash;&gt;-->
-            <!--&lt;!&ndash;公共的配置 &ndash;&gt;-->
-            <!--<resource>-->
-            <!--<targetPath>config</targetPath>-->
-            <!--<directory>src/main/resources/</directory>-->
-            <!--</resource>-->
+<!--            打包时将资源文件一起打包到jar包或者war包中-->
+<!--            环境隔离配置Start-->
+            <resource>
+<!--                <targetPath></targetPath>-->
+                <directory>src/main/resources/</directory>
+                <excludes>
+                    <!--忽略（不需要）隔离的文件 -->
+                    <exclude>*.jsp</exclude>
+                    <exclude>*.md</exclude>
+                </excludes>
+            </resource>
+            <!--环境隔离配置End -->
+            <!--公共的配置 -->
+            <resource>
+                <targetPath>config</targetPath>
+                <directory>src/main/resources/</directory>
+            </resource>
             <!--&lt;!&ndash; 因为，maven认为src/main/java只是java的源代码路径 所以， 如果没有此项配置
             则JAVA代码中的dao/sqlmap文件将不会被打包进项目    此外，**/为了保证各级子目录下的资源文件被打包 -->
             <resource>
