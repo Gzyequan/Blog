@@ -79,10 +79,12 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
 
-        //校验parentId有效性
-        SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
-        if (null == sysPermissionDB) {
-            return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+        //parentId为0表示添加的是根节点,校验parentId有效性
+        if (parentId != 0) {
+            SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
+            if (null == sysPermissionDB) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+            }
         }
         //校验type有效性
         if (!PermissionConsts.PERMISSION_TYPE_MODULE.equals(type)

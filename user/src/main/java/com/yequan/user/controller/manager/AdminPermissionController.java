@@ -36,7 +36,7 @@ public class AdminPermissionController {
      * @param pmnId
      * @return
      */
-    @GetMapping(value = "listdeep/{pmnId}")
+    @GetMapping(value = "listdeep/{pmnId}",produces = "application/json;charset=UTF-8")
     public AppResult<List<SysPermissionDO>> listDeepSysPermissions(@PathVariable("pmnId") Integer pmnId) {
         return iAdminPermissionService.listDeepSysPermissions(pmnId);
     }
