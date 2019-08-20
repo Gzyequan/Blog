@@ -3,7 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--配置扫描dao的包位置-->
     <context:component-scan base-package="com.yequan.*.dao"/>
@@ -11,8 +13,8 @@
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:jdbc.properties</value>
-                <value>classpath:redis.properties</value>
+                <value>classpath:local/jdbc.properties</value>
+                <value>classpath:local/redis.properties</value>
             </list>
         </property>
     </bean>
@@ -37,7 +39,6 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <!--自动扫描的文件-->
-        <!--<property name="mapperLocations" value="classpath:mappers/*.xml"/>-->
         <property name="mapperLocations" value="classpath*:com/yequan/*/dao/mappers/*.xml"/>
         <!-- 分页插件 -->
         <property name="plugins">

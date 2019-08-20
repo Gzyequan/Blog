@@ -12,7 +12,13 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Spring Mybatis" removed="false">
+          <dependency>web SpringMVC servlet context</dependency>
+          <file>file://$MODULE_DIR$/src/main/resources/local/spring-mybatis.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/local/spring-redis.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">

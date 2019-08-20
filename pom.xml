@@ -282,6 +282,27 @@
 
     </dependencies>
 
+
+    <profiles>
+        <!--        本地环境-->
+        <profile>
+            <id>local</id>
+            <properties>
+                <environment>local</environment>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--        测试环境-->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <environment>dev</environment>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <!--mybatis生成插件-->
@@ -306,22 +327,22 @@
         </plugins>
 
         <resources>
-<!--            打包时将资源文件一起打包到jar包或者war包中-->
-<!--            环境隔离配置Start-->
+            <!--            打包时将资源文件一起打包到jar包或者war包中-->
+            <!--            环境隔离配置Start-->
             <resource>
-<!--                <targetPath></targetPath>-->
+                <!--                <targetPath></targetPath>-->
                 <directory>src/main/resources/</directory>
                 <excludes>
                     <!--忽略（不需要）隔离的文件 -->
                     <exclude>*.jsp</exclude>
                     <exclude>*.md</exclude>
+                    <exclude>dev/*</exclude><!--打包时排除src/main/resources/dev下所有-->
+<!--                    <exclude>local/*</exclude> &lt;!&ndash;打包时排除src/main/resources/local下所有&ndash;&gt;-->
                 </excludes>
             </resource>
-            <!--环境隔离配置End -->
-            <!--公共的配置 -->
             <resource>
-                <targetPath>config</targetPath>
-                <directory>src/main/resources/</directory>
+                <directory>src/main/resources/${environment}</directory>
+                <targetPath>${environment}</targetPath>
             </resource>
             <!--&lt;!&ndash; 因为，maven认为src/main/java只是java的源代码路径 所以， 如果没有此项配置
             则JAVA代码中的dao/sqlmap文件将不会被打包进项目    此外，**/为了保证各级子目录下的资源文件被打包 -->
@@ -331,12 +352,12 @@
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>
                     <include>**/*.tld</include>
+                    <include>**/*.sql</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
-
         </resources>
-
     </build>
+
 
 </project>
