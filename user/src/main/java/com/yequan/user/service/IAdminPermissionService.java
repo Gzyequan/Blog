@@ -12,9 +12,9 @@ import java.util.List;
  */
 public interface IAdminPermissionService {
 
-    AppResult<List<SysPermissionDO>> listChildrenParallelPermissions(Integer pmnCode);
+    AppResult<List<SysPermissionDO>> listChildrenParallelPermissions(Integer pmnId);
 
-    AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnCode);
+    AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnId);
 
     AppResult<Void> insertOneSysPermission(SysPermissionDO sysPermissionDO);
 }

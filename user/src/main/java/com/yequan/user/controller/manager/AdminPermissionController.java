@@ -25,20 +25,20 @@ public class AdminPermissionController {
      *
      * @return
      */
-    @GetMapping(value = "list/{pmnCode}", produces = "application/json;charset=UTF-8")
-    public AppResult<List<SysPermissionDO>> listParallelSysPermissions(@PathVariable("pmnCode") Integer pmnCode) {
-        return iAdminPermissionService.listChildrenParallelPermissions(pmnCode);
+    @GetMapping(value = "list/{pmnId}", produces = "application/json;charset=UTF-8")
+    public AppResult<List<SysPermissionDO>> listParallelSysPermissions(@PathVariable("pmnId") Integer pmnId) {
+        return iAdminPermissionService.listChildrenParallelPermissions(pmnId);
     }
 
     /**
      * 递归获取parentCode下及其子权限中的所有权限
      *
-     * @param pmnCode
+     * @param pmnId
      * @return
      */
-    @GetMapping(value = "listdeep/{pmnCode}")
-    public AppResult<List<SysPermissionDO>> listDeepSysPermissions(@PathVariable("pmnCode") Integer pmnCode) {
-        return iAdminPermissionService.listDeepSysPermissions(pmnCode);
+    @GetMapping(value = "listdeep/{pmnId}",produces = "application/json;charset=UTF-8")
+    public AppResult<List<SysPermissionDO>> listDeepSysPermissions(@PathVariable("pmnId") Integer pmnId) {
+        return iAdminPermissionService.listDeepSysPermissions(pmnId);
     }
 
     @PostMapping(produces = "application/json;charset=UTF-8")

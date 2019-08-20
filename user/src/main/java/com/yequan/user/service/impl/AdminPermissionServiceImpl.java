@@ -2,6 +2,7 @@ package com.yequan.user.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.yequan.common.application.constant.PermissionConsts;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -36,11 +37,11 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
      * @return
      */
     @Override
-    public AppResult<List<SysPermissionDO>> listChildrenParallelPermissions(Integer pmnCode) {
-        if (null == pmnCode) {
+    public AppResult<List<SysPermissionDO>> listChildrenParallelPermissions(Integer pmnId) {
+        if (null == pmnId) {
             return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
         }
-        List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnCode);
+        List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
         if (CollectionUtils.isEmpty(sysPermissionDOList)) {
             return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
         }
@@ -50,16 +51,16 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
     /**
      * 递归获取pmnCode下一级及其子权限中的所有权限
      *
-     * @param pmnCode
+     * @param pmnId
      * @return
      */
     @Override
-    public AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnCode) {
-        if (null == pmnCode) {
+    public AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnId) {
+        if (null == pmnId) {
             return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
         }
         HashSet<SysPermissionDO> sysPermissionSet = Sets.newHashSet();
-        listDeepChildrenPermission(sysPermissionSet, pmnCode);
+        listDeepChildrenPermission(sysPermissionSet, pmnId);
         ArrayList<SysPermissionDO> sysPermissionDOList = Lists.newArrayList();
         if (!CollectionUtils.isEmpty(sysPermissionSet)) {
             sysPermissionDOList.addAll(sysPermissionSet);
@@ -72,15 +73,25 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         if (null == sysPermissionDO) {
             return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
         }
-        if (StringUtils.isEmpty(sysPermissionDO.getPmnName())
-                || null == sysPermissionDO.getParentCode()
-                || StringUtils.isEmpty(sysPermissionDO.getType())) {
+        Integer parentId = sysPermissionDO.getParentId();
+        String type = sysPermissionDO.getType();
+        if (null == parentId || StringUtils.isEmpty(type) || StringUtils.isEmpty(sysPermissionDO.getPmnName())) {
             return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
         }
-        //pmnCode生成器
 
-        //设置pmnCode
-        sysPermissionDO.setPmnCode(1);
+        //parentId为0表示添加的是根节点,校验parentId有效性
+        if (parentId != 0) {
+            SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
+            if (null == sysPermissionDB) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+            }
+        }
+        //校验type有效性
+        if (!PermissionConsts.PERMISSION_TYPE_MODULE.equals(type)
+                && !PermissionConsts.PERMISSION_TYPE_PAGE.equals(type)) {
+            return AppResultBuilder.failure(ResultCode.PERMISSION_TYPE_ERROR);
+        }
+
         //获取当前创建人
         Integer currentUserId = CurrentUserLocal.getUserId();
         sysPermissionDO.setCreatorId(currentUserId);
@@ -97,18 +108,18 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
      * 递归查询出pmnCode所有子权限
      *
      * @param sysPermissionSet
-     * @param pmnCode
+     * @param pmnId
      */
-    private void listDeepChildrenPermission(HashSet<SysPermissionDO> sysPermissionSet, Integer pmnCode) {
-        SysPermissionDO sysPermissionDO = sysPermissionDOMapper.selectByPmnCode(pmnCode);
+    private void listDeepChildrenPermission(HashSet<SysPermissionDO> sysPermissionSet, Integer pmnId) {
+        SysPermissionDO sysPermissionDO = sysPermissionDOMapper.selectByPrimaryKey(pmnId);
         if (null != sysPermissionDO) {
             sysPermissionSet.add(sysPermissionDO);
         }
         //查询子节点
-        List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnCode);
+        List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
         //mybatis返回的集合不会为空，如果返回的集合没有数据则无法进入循环，结束递归，查询结束
         for (SysPermissionDO permissionDO : sysPermissionDOList) {
-            listDeepChildrenPermission(sysPermissionSet, permissionDO.getPmnCode());
+            listDeepChildrenPermission(sysPermissionSet, permissionDO.getId());
         }
     }
 }
