@@ -6,6 +6,7 @@ import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.redis.RedisService;
+import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.MD5Util;
 import com.yequan.common.util.MapUtil;
@@ -33,10 +34,11 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
     private RedisService redisService;
 
     /**
-     * 根据用户主键id查询用户信息
-     * 1.从redis中获取用户信息
-     * 2.如果redis中有用户信息则返回
-     * 3.如果没有则从数据库中获取
+     * 根据用户主键id查询用户信息,只能获取当前登录用户的信息
+     * 1.获取当前登录人信息,与传入用户id校核,相同则下一步,不通过则返回错误
+     * 2.从redis中获取用户信息
+     * 3.如果redis中有用户信息则返回
+     * 4.如果没有则从数据库中获取
      *
      * @param id
      * @return
@@ -47,9 +49,21 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             if (null == id) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
+
+            //获取当前用户id
+            Integer currentUserId = CurrentUserLocal.getUserId();
+            if (currentUserId == null) {
+                return AppResultBuilder.failure(ResultCode.ERROR);
+            }
+
+            //校验传入用户id是否是当前登录用户id
+            if (!currentUserId.equals(id)) {
+                return AppResultBuilder.failure(ResultCode.PERMISSION_NO_ACCESS);
+            }
+
             //从redis中获取当前用户信息
             Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
-            if (null == currentUserMap) {
+            if (null == currentUserMap || currentUserMap.size() == 0) {
                 AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN);
             }
             //将当前用户map集合转换成对象
@@ -59,6 +73,9 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             }
             currentUser = sysUserMapper.selectByPrimaryKey(id);
             if (null != currentUser) {
+                //将当前用户信息写入redis中
+                Map<String, Object> currentUserInfoMap = MapUtil.objectToMap(currentUser);
+                redisService.setMap(RedisConsts.REDIS_CURRENT_USER + id, currentUserInfoMap, RedisConsts.REDIS_EXPIRE_SECOND);
                 return AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
             }
         } catch (Exception e) {

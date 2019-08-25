@@ -21,7 +21,7 @@ public enum ResultCode {
     USER_NOT_LOGGED_IN(20001, "用户未登录"),
     USER_LOGIN_INFO_ERROR(20002, "账号不存在或密码错误"),
     USER_LOGIN_ERROR(20003, "登录错误"),
-    USER_LOGIN_ILLEGAL(20004, "非法登录"),
+    USER_LOGIN_ILLEGAL(20004, "重复登录"),
     USER_LOGIN_REMOTE(20005, "异地登录"),
     USER_LOGIN_EXPIRED(20006, "登录过期"),
     USER_ACCOUNT_FORBIDDEN(20007, "账号已被禁用"),

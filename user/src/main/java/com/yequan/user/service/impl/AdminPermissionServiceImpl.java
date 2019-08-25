@@ -94,6 +94,9 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
 
         //获取当前创建人
         Integer currentUserId = CurrentUserLocal.getUserId();
+        if (currentUserId==null){
+            return AppResultBuilder.failure(ResultCode.ERROR);
+        }
         sysPermissionDO.setCreatorId(currentUserId);
         //设置创建时间
         sysPermissionDO.setCreateTime(DateUtil.getCurrentDate());

@@ -61,6 +61,14 @@ public class SystemServiceImpl implements ISystemService {
     @Override
     public AppResult<String> login(HttpServletRequest request, HttpServletResponse response, UserDTO userDTO) {
         try {
+            //校验重复登录
+            Integer currentUserId = CurrentUserLocal.getUserId();
+            if (currentUserId != null) {
+                Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + currentUserId);
+                if (currentUserMap != null && currentUserMap.size() > 0) {
+                    return AppResultBuilder.failure(ResultCode.USER_LOGIN_ILLEGAL);
+                }
+            }
             if (null == userDTO || null == userDTO.getMobilephone()) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
