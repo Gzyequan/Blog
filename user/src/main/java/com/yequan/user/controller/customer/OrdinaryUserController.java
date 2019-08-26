@@ -1,6 +1,7 @@
 package com.yequan.user.controller.customer;
 
 import com.yequan.common.annotation.AccessLimit;
+import com.yequan.common.annotation.CrossPermission;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.jms.service.JmsProducerService;
@@ -49,6 +50,7 @@ public class OrdinaryUserController {
      * @return
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @CrossPermission(key = "id")
     public AppResult<SysUserDO> getCurrentUserById(@PathVariable("id") Integer id) {
         return iOrdinaryUserService.getUserById(id);
     }

@@ -26,4 +26,4 @@ hs_err_pid*
 
 target/
 .idea/
-web/src/main/resources/local/
+web/src/main/resources/local
