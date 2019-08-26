@@ -43,9 +43,9 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         }
         List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
         if (CollectionUtils.isEmpty(sysPermissionDOList)) {
-            return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+            return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
         }
-        return AppResultBuilder.success(sysPermissionDOList, ResultCode.SUCCESS);
+        return AppResultBuilder.success(sysPermissionDOList);
     }
 
     /**
@@ -65,7 +65,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         if (!CollectionUtils.isEmpty(sysPermissionSet)) {
             sysPermissionDOList.addAll(sysPermissionSet);
         }
-        return AppResultBuilder.success(sysPermissionDOList, ResultCode.SUCCESS);
+        return AppResultBuilder.success(sysPermissionDOList);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         sysPermissionDO.setCreateTime(DateUtil.getCurrentDate());
         int insert = sysPermissionDOMapper.insertSelective(sysPermissionDO);
         if (insert > 0) {
-            return AppResultBuilder.success(ResultCode.SUCCESS);
+            return AppResultBuilder.success();
         }
         return AppResultBuilder.failure(ResultCode.PERMISSION_CREATE_ERROR);
     }

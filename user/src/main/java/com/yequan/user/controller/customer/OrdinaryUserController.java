@@ -3,7 +3,6 @@ package com.yequan.user.controller.customer;
 import com.yequan.common.annotation.AccessLimit;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
-import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
@@ -93,13 +92,13 @@ public class OrdinaryUserController {
                 AsyncJobProxy.class,
                 "0/5 * * * * ?",
                 networkMonitor);
-        return AppResultBuilder.success(ResultCode.SUCCESS);
+        return AppResultBuilder.success();
     }
 
     @AccessLimit(limit = 4, sec = 4)
     @RequestMapping(value = "/message", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public AppResult<Void> sendMessage() {
         jmsProducerService.sendMessage(destination, "这是一条消息");
-        return AppResultBuilder.success(ResultCode.SUCCESS);
+        return AppResultBuilder.success();
     }
 }

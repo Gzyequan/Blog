@@ -10,6 +10,11 @@
         <param-value>classpath:local/spring-*.xml</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>classpath:local/log4j.properties</param-value>
+    </context-param>
+
     <!--  -过滤器配置 -->
     <!--例:编码过滤器-->
     <filter>      <!-- 用来声明filter的相关设定,过滤器可以截取和修改一个Servlet或JSP页面的请求或从一个Servlet或JSP页面发出的响应-->
@@ -45,19 +50,19 @@
     </filter-mapping>
 
     <!--shiro过滤器-->
-<!--    <filter>-->
-<!--        <filter-name>shiroFilter</filter-name>-->
-<!--        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-<!--        &lt;!&ndash;设置url由servlet容器控制filter生命周期&ndash;&gt;-->
-<!--        <init-param>-->
-<!--            <param-name>transformWsdlLocations</param-name>-->
-<!--            <param-value>true</param-value>-->
-<!--        </init-param>-->
-<!--    </filter>-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>shiroFilter</filter-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <!--    <filter>-->
+    <!--        <filter-name>shiroFilter</filter-name>-->
+    <!--        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+    <!--        &lt;!&ndash;设置url由servlet容器控制filter生命周期&ndash;&gt;-->
+    <!--        <init-param>-->
+    <!--            <param-name>transformWsdlLocations</param-name>-->
+    <!--            <param-value>true</param-value>-->
+    <!--        </init-param>-->
+    <!--    </filter>-->
+    <!--    <filter-mapping>-->
+    <!--        <filter-name>shiroFilter</filter-name>-->
+    <!--        <url-pattern>/*</url-pattern>-->
+    <!--    </filter-mapping>-->
 
     <!-- -监听器配置 -->
     <!--例:spring监听器-->
@@ -67,6 +72,10 @@
     <!-- 防止Spring内存溢出监听器  -->
     <listener>
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
 
     <!--servlet配置 -->

@@ -1,6 +1,8 @@
 package com.yequan.common.interceptor;
 
 import com.yequan.common.annotation.AccessLimit;
+import com.yequan.common.application.response.AppResultBuilder;
+import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.redis.RedisService;
 import com.yequan.common.util.IPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class AccessLimitInterceptor extends BaseInterceptor implements HandlerIn
             } else if (maxLimit < limit) {
                 redisService.set(key, maxLimit + 1, sec);
             } else {
-                renderMsg(response, "请求太频繁");
+                renderMsg(response, AppResultBuilder.failure(ResultCode.INTERFACE_REQUEST_FREQUENT));
                 return false;
             }
         }

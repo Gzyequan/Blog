@@ -102,7 +102,7 @@ public class SystemServiceImpl implements ISystemService {
                 redisService.setMap(RedisConsts.REDIS_CURRENT_USER + user.getId(), redisUserInfoMap,
                         RedisConsts.REDIS_EXPIRE_SECOND);
                 response.setHeader("access-token", token);
-                return AppResultBuilder.success(ResultCode.SUCCESS);
+                return AppResultBuilder.success();
             } else if (status == UserConsts.USER_ILLEGAL.getStatus()) {
                 return AppResultBuilder.failure(ResultCode.USER_ACCOUNT_FORBIDDEN);
             } else {
@@ -147,7 +147,7 @@ public class SystemServiceImpl implements ISystemService {
             int insert = sysUserMapper.insertSelective(sysUserDO);
             if (insert > 0) {
                 SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO);
-                return AppResultBuilder.success(newUser, ResultCode.SUCCESS);
+                return AppResultBuilder.success(newUser);
             }
         } catch (Exception e) {
             e.printStackTrace();

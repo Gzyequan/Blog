@@ -6,7 +6,6 @@ import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.redis.RedisService;
-import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.MD5Util;
 import com.yequan.common.util.MapUtil;
@@ -63,25 +62,22 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
 
             //从redis中获取当前用户信息
             Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
-            if (null == currentUserMap || currentUserMap.size() == 0) {
+            if (null == currentUserMap) {
                 AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN);
             }
             //将当前用户map集合转换成对象
             currentUser = (SysUserDO) MapUtil.mapToObject(currentUserMap, SysUserDO.class);
             if (null != currentUser) {
-                AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
+                return AppResultBuilder.success(currentUser);
             }
             currentUser = sysUserMapper.selectByPrimaryKey(id);
             if (null != currentUser) {
-                //将当前用户信息写入redis中
-                Map<String, Object> currentUserInfoMap = MapUtil.objectToMap(currentUser);
-                redisService.setMap(RedisConsts.REDIS_CURRENT_USER + id, currentUserInfoMap, RedisConsts.REDIS_EXPIRE_SECOND);
                 return AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     /**
@@ -138,7 +134,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 //更新redis中当前用户的信息
                 Map<String, Object> updateUserMap = MapUtil.objectToMap(updatedSysUserDO);
                 redisService.setMap(RedisConsts.REDIS_CURRENT_USER + id, updateUserMap);
-                return AppResultBuilder.success(updatedSysUserDO, ResultCode.SUCCESS);
+                return AppResultBuilder.success(updatedSysUserDO);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +178,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             if (update > 0) {
                 //注销用户后将该用户信息从redis中清除
                 redisService.del(RedisConsts.REDIS_CURRENT_USER + id);
-                return AppResultBuilder.success(ResultCode.SUCCESS);
+                return AppResultBuilder.success();
             }
         } catch (Exception e) {
             e.printStackTrace();
