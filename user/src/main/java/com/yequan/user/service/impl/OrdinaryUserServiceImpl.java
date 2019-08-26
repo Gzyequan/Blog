@@ -53,7 +53,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.failure(ResultCode.ERROR);
             }
             if (!currentUserId.equals(id)){
-                return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+                return AppResultBuilder.failure(ResultCode.PERMISSION_NO_ACCESS);
             }
             //从redis中获取当前用户信息
             Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
@@ -72,7 +72,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yequan.common.application.constant.TokenConsts;
+import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -22,7 +23,7 @@ import java.util.Map;
  */
 public class JwtUtil {
 
-
+    private static Logger logger = Logger.getLogger(JwtUtil.class);
 
     /**
      * 生成签名
@@ -31,7 +32,7 @@ public class JwtUtil {
      * @param timeInterval 过期时间间隔
      * @return
      */
-    public static String sign(String jsonInfo,long timeInterval) {
+    public static String sign(String jsonInfo, long timeInterval) {
         try {
             //过期时间,当前时间+过期时长
             Date expireTime = new Date(System.currentTimeMillis() + timeInterval);
@@ -47,7 +48,7 @@ public class JwtUtil {
                     .withExpiresAt(expireTime)
                     .sign(algorithm);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return null;
     }
@@ -68,7 +69,7 @@ public class JwtUtil {
             Claim claim = claims.get("info");
             tokenPayload = claim.asString();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return tokenPayload;
     }
@@ -79,7 +80,7 @@ public class JwtUtil {
         infoObject.put("userId", 1);
         infoObject.put("userAgent", "111");
         String jsonInfo = JSON.toJSONString(infoObject);
-        String token = sign(jsonInfo,TokenConsts.TOKEN_EXPIRE_TIME_15MINUTE);
+        String token = sign(jsonInfo, TokenConsts.TOKEN_EXPIRE_TIME_15MINUTE);
         System.out.println(token);
         String verify = verify(token);
         System.out.println(verify);

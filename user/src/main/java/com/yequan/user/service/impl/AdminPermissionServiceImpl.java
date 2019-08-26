@@ -43,7 +43,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         }
         List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
         if (CollectionUtils.isEmpty(sysPermissionDOList)) {
-            return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+            return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
         }
         return AppResultBuilder.success(sysPermissionDOList);
     }

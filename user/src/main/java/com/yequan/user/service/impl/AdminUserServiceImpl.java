@@ -53,7 +53,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     /**
@@ -74,7 +74,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return AppResultBuilder.failure(ResultCode.RESULE_DATA_NONE);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     /**

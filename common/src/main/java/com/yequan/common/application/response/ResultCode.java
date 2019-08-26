@@ -9,6 +9,7 @@ public enum ResultCode {
 
     /* 成功状态码 */
     SUCCESS(0, "成功"),
+    /* 内部错误 */
     ERROR(-1, "内部错误"),
 
     /* 参数错误：10001-19999 */
@@ -34,6 +35,7 @@ public enum ResultCode {
     USER_UNREGISTER_ERROR(20014, "注销用户失败"),
     PERMISSION_CREATE_ERROR(20020, "新增权限失败"),
     PERMISSION_TYPE_ERROR(20021,"权限类型错误"),
+    PERMISSION_NO_ACCESS(20022, "无访问权限"),
 
     /* 业务错误：30001-39999 */
     SPECIFIED_QUESTIONED_USER_NOT_EXIST(30001, "某业务出现问题"),
@@ -42,7 +44,7 @@ public enum ResultCode {
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),
 
     /* 数据错误：50001-599999 */
-    RESULE_DATA_NONE(50001, "数据未找到"),
+    RESULT_DATA_NONE(50001, "数据未找到"),
     DATA_IS_WRONG(50002, "数据有误"),
     DATA_ALREADY_EXISTED(50003, "数据已存在"),
 
@@ -53,9 +55,10 @@ public enum ResultCode {
     INTERFACE_ADDRESS_INVALID(60004, "接口地址无效"),
     INTERFACE_REQUEST_TIMEOUT(60005, "接口请求超时"),
     INTERFACE_EXCEED_LOAD(60006, "接口负载过高"),
+    INTERFACE_REQUEST_FREQUENT(60007, "请求频繁");
 
     /* 权限错误：70001-79999 */
-    PERMISSION_NO_ACCESS(70001, "无访问权限");
+//    PERMISSION_NO_ACCESS(70001, "无访问权限");
 
     private Integer code;
     private String msg;
