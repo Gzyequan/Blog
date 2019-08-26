@@ -6,6 +6,7 @@ import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.redis.RedisService;
+import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.MD5Util;
 import com.yequan.common.util.MapUtil;
@@ -72,7 +73,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             }
             currentUser = sysUserMapper.selectByPrimaryKey(id);
             if (null != currentUser) {
-                return AppResultBuilder.success(currentUser, ResultCode.SUCCESS);
+                return AppResultBuilder.success(currentUser);
             }
         } catch (Exception e) {
             e.printStackTrace();
