@@ -10,14 +10,13 @@ public class AppResultBuilder {
     /**
      * 成功不返回数据
      *
-     * @param code
      * @param <T>
      * @return
      */
-    public static <T> AppResult<T> success(ResultCode code) {
+    public static <T> AppResult<T> success() {
         AppResult<T> result = new AppResult<T>();
-        result.setCode(code.getCode());
-        result.setMsg(code.getMsg());
+        result.setCode(ResultCode.SUCCESS.getCode());
+        result.setMsg(ResultCode.SUCCESS.getMsg());
         return result;
     }
 
@@ -25,17 +24,17 @@ public class AppResultBuilder {
      * 成功，返回数据l
      *
      * @param t
-     * @param code
      * @param <T>
      * @return
      */
-    public static <T> AppResult<T> success(T t, ResultCode code) {
+    public static <T> AppResult<T> success(T t) {
         AppResult<T> result = new AppResult<T>();
-        result.setCode(code.getCode());
-        result.setMsg(code.getMsg());
+        result.setCode(ResultCode.SUCCESS.getCode());
+        result.setMsg(ResultCode.SUCCESS.getMsg());
         result.setData(t);
         return result;
     }
+
 
     /**
      * 失败，返回失败信息

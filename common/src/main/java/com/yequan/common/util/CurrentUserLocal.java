@@ -5,7 +5,7 @@ package com.yequan.common.util;
  * @Date: 2019/7/30 15:08
  * @Description:
  */
-public class CurrentUserLocal {
+public final class CurrentUserLocal {
 
     private static ThreadLocal<Integer> local = new ThreadLocal<>();
 

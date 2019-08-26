@@ -46,9 +46,9 @@ public class AdminUserServiceImpl implements IAdminUserService {
             PageHelper.startPage(pageNum, pageSize);
             List<SysUserDO> sysUserDOList = sysUserMapper.selectUserList();
             PageInfo<SysUserDO> pageInfo = new PageInfo<SysUserDO>(sysUserDOList);
-            List<SysUserDO> sysUserDOS = pageInfo.getList();
-            if (sysUserDOS != null && sysUserDOS.size() > 0) {
-                return AppResultBuilder.success(sysUserDOS, ResultCode.SUCCESS);
+            List<SysUserDO> sysUserDOs = pageInfo.getList();
+            if (sysUserDOs != null && sysUserDOs.size() > 0) {
+                return AppResultBuilder.success(sysUserDOs);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,7 +69,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
             }
             SysUserDO sysUserDO = sysUserMapper.selectByPrimaryKey(id);
             if (null != sysUserDO) {
-                return AppResultBuilder.success(sysUserDO, ResultCode.SUCCESS);
+                return AppResultBuilder.success(sysUserDO);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);
-                return AppResultBuilder.success(updatedSysUserDO, ResultCode.SUCCESS);
+                return AppResultBuilder.success(updatedSysUserDO);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,7 +125,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
             }
             int delete = sysUserMapper.deleteByPrimaryKey(id);
             if (delete > 0) {
-                return AppResultBuilder.success(ResultCode.SUCCESS);
+                return AppResultBuilder.success();
             }
         } catch (Exception e) {
             e.printStackTrace();
