@@ -62,7 +62,8 @@ public class OrdinaryUserController {
      * @return
      */
     @GetMapping(value = "unregister/{id}", produces = "application/json;charset=UTF-8")
-    public AppResult<String> unregisterCurrentUser(@PathVariable Integer id) {
+    @CrossPermission(key = "id")
+    public AppResult<String> unregisterCurrentUser(@PathVariable("id") Integer id) {
         return iOrdinaryUserService.unregisterUser(id);
     }
 
@@ -74,6 +75,7 @@ public class OrdinaryUserController {
      * @return
      */
     @PutMapping(value = "{id}", produces = "application/json;charset=UTF-8")
+    @CrossPermission(key = "id")
     public AppResult<SysUserDO> updateCurrentUser(@PathVariable("id") Integer id, @RequestBody SysUserDO sysUserDO) {
         return iOrdinaryUserService.updateUser(id, sysUserDO);
     }

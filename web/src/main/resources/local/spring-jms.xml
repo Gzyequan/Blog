@@ -6,7 +6,7 @@
 
     <!--产生connection连接对象的ConnectionFactory,由对应的JMS产商提供-->
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="brokerURL" value="tcp://127.0.0.1:61616"/>
     </bean>
 
     <!--spring管理ConnectionFactory的对象-->
