@@ -9,13 +9,6 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface FilterService {
 
-    /**
-     * 是否匹配正确的过滤方式
-     *
-     * @param filterRule
-     * @return
-     */
-    public boolean isMatch(FilterRule filterRule);
 
     /**
      * 过滤处理

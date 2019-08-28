@@ -4,11 +4,10 @@ package com.yequan.common.filter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.yequan.common.application.constant.FilterConsts;
-import com.yequan.common.filter.component.FilterHandleContext;
+import com.yequan.common.filter.component.FilterHandlerContext;
 import com.yequan.common.filter.component.FilterRule;
-import com.yequan.common.filter.component.RegexFilterHandle;
-import com.yequan.common.filter.component.SimpleFilterHandle;
+import com.yequan.common.filter.component.RegexFilterHandler;
+import com.yequan.common.filter.component.SimpleFilterHandler;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
@@ -22,32 +21,33 @@ import java.nio.charset.StandardCharsets;
  */
 public class ResponseFilter extends BaseFilter implements Filter {
 
-    private FilterHandleContext filterHandleContext;
+    private FilterHandlerContext filterHandlerContext;
     private FilterRule passwordFilter;
     private FilterRule mobilephoneFilter;
+    private final String[] filterType = {"simple", "regex", "encrypt"};
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        filterHandleContext = new FilterHandleContext();
+        filterHandlerContext = new FilterHandlerContext();
         /**
          * 添加过滤处理器
          */
-        filterHandleContext.addFilter(new SimpleFilterHandle());
-        filterHandleContext.addFilter(new RegexFilterHandle());
+        filterHandlerContext.addFilterHandler(filterType[0], new SimpleFilterHandler());
+        filterHandlerContext.addFilterHandler(filterType[1], new RegexFilterHandler());
 
         /**
-         * 过滤password
+         * password过滤规则:SimpleFilterHandler
          */
         passwordFilter = new FilterRule();
         passwordFilter.setKey("password");
-        passwordFilter.setType(FilterConsts.FILTER_SIMPLE);
+        passwordFilter.setType(filterType[0]);
         passwordFilter.setReplacement("");
 
         /**
-         * 过滤mobilephone
+         * mobilephone过滤规则:RegexFilterHandler
          */
         mobilephoneFilter = new FilterRule();
         mobilephoneFilter.setKey("mobilephone");
-        mobilephoneFilter.setType(FilterConsts.FILTER_REGEX);
+        mobilephoneFilter.setType(filterType[1]);
         mobilephoneFilter.setRegex("(\\d{3})\\d{4}(\\d{4})");
         mobilephoneFilter.setReplacement("$1****$2");
     }
@@ -78,14 +78,14 @@ public class ResponseFilter extends BaseFilter implements Filter {
             if (null != data) {
                 if (data instanceof JSONObject) {
                     JSONObject jsonObject = (JSONObject) data;
-                    filterHandleContext.filterData(jsonObject, passwordFilter);
-                    filterHandleContext.filterData(jsonObject, mobilephoneFilter);
+                    filterHandlerContext.filterData(jsonObject, passwordFilter);
+                    filterHandlerContext.filterData(jsonObject, mobilephoneFilter);
                 } else if (data instanceof JSONArray) {
                     JSONArray jsonArray = (JSONArray) data;
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        filterHandleContext.filterData(jsonObject, passwordFilter);
-                        filterHandleContext.filterData(jsonObject, mobilephoneFilter);
+                        filterHandlerContext.filterData(jsonObject, passwordFilter);
+                        filterHandlerContext.filterData(jsonObject, mobilephoneFilter);
                     }
                 }
             }

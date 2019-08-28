@@ -1,22 +1,17 @@
 package com.yequan.common.filter.component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yequan.common.application.constant.FilterConsts;
 
 /**
  * @Auther: yq
  * @Date: 2019/7/9 13:56
  * @Description: 简单替换:对指定key的值直接替换成新值
  */
-public class SimpleFilterHandle implements FilterService {
-    @Override
-    public boolean isMatch(FilterRule filterRule) {
-        return FilterConsts.FILTER_SIMPLE.equals(filterRule.getType());
-    }
+public class SimpleFilterHandler implements FilterService {
 
     @Override
     public void handle(JSONObject data, FilterRule filterRule) {
-        if (null != data) {
+        if (null != data && null != filterRule) {
             String key = filterRule.getKey();
             if (data.containsKey(key)) {
                 String newValue = filterRule.getReplacement();

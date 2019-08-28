@@ -15,6 +15,7 @@ import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.ISystemService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,8 @@ import java.util.Map;
  */
 @Service("iSystemService")
 public class SystemServiceImpl implements ISystemService {
+
+    private Logger logger = Logger.getLogger(SystemServiceImpl.class);
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -110,6 +113,7 @@ public class SystemServiceImpl implements ISystemService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("");
         }
         return AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR);
     }
