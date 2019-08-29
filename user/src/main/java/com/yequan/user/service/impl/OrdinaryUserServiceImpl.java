@@ -56,11 +56,6 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.failure(ResultCode.ERROR);
             }
 
-            //校验传入用户id是否是当前登录用户id
-            if (!currentUserId.equals(id)) {
-                return AppResultBuilder.failure(ResultCode.PERMISSION_NO_ACCESS);
-            }
-
             //从redis中获取当前用户信息
             Map<String, Object> currentUserMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + id);
             if (null == currentUserMap) {

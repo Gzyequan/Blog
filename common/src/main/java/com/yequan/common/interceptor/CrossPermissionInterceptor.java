@@ -5,8 +5,8 @@ import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
+import com.yequan.common.util.LogUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -24,15 +24,13 @@ import java.util.Map;
  */
 public class CrossPermissionInterceptor extends BaseInterceptor implements HandlerInterceptor {
 
-    private static Logger logger = Logger.getLogger(CrossPermissionInterceptor.class);
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         AppResult<Object> responseInfo;
         //获取当前登录用户
         Integer userId = CurrentUserLocal.getUserId();
         if (null == userId) {
-            logger.error("CrossPermissionInterceptor: 获取当前用户id为空");
+            LogUtil.error("CrossPermissionInterceptor: 获取当前用户id为空");
             responseInfo = AppResultBuilder.failure(ResultCode.ERROR);
             renderMsg(response, responseInfo);
             return false;
@@ -54,14 +52,14 @@ public class CrossPermissionInterceptor extends BaseInterceptor implements Handl
                 Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
                 //不存在@PathVariable注解
                 if (pathVariables.size() == 0 || !pathVariables.containsKey(key)) {
-                    logger.error("CrossPermissionInterceptor: 横向越权拦截内部错误,不存在@PathVariable注解");
+                    LogUtil.error("CrossPermissionInterceptor: 横向越权拦截内部错误,不存在@PathVariable注解");
                     responseInfo = AppResultBuilder.failure(ResultCode.ERROR);
                     renderMsg(response, responseInfo);
                     return false;
                 }
                 Object pathValueObj = pathVariables.get(key);
                 if (null == pathValueObj) {
-                    logger.error("CrossPermissionInterceptor: PathVariable路径参数为空");
+                    LogUtil.error("CrossPermissionInterceptor: PathVariable路径参数为空");
                     responseInfo = AppResultBuilder.failure(ResultCode.ERROR);
                     renderMsg(response, responseInfo);
                     return false;
@@ -75,14 +73,14 @@ public class CrossPermissionInterceptor extends BaseInterceptor implements Handl
             } else {
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (parameterMap == null || parameterMap.size() == 0 || !parameterMap.containsKey(key)) {
-                    logger.error("CrossPermissionInterceptor: 横向越权拦截错误,路径传参错误");
+                    LogUtil.error("CrossPermissionInterceptor: 横向越权拦截错误,路径传参错误");
                     responseInfo = AppResultBuilder.failure(ResultCode.ERROR);
                     renderMsg(response, responseInfo);
                     return false;
                 }
                 String parameterId = request.getParameter(key);
                 if (StringUtils.isEmpty(parameterId)) {
-                    logger.error("CrossPermissionInterceptor: 横向越权拦截错误,路径传参错误,传入用户id为空");
+                    LogUtil.error("CrossPermissionInterceptor: 横向越权拦截错误,路径传参错误,传入用户id为空");
                     responseInfo = AppResultBuilder.failure(ResultCode.ERROR);
                     renderMsg(response, responseInfo);
                     return false;
