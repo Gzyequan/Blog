@@ -3,15 +3,11 @@ package com.yequan.common.interceptor;
 import com.alibaba.fastjson.JSON;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.constant.SecurityConsts;
-import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
 import com.yequan.common.redis.RedisService;
-import com.yequan.common.util.AESUtil;
-import com.yequan.common.util.CurrentUserLocal;
-import com.yequan.common.util.IPUtil;
-import com.yequan.common.util.JwtUtil;
+import com.yequan.common.util.*;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,32 +35,27 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
             return true;
         }
 
-        AppResult<Object> responseInfo;
-        /**
-         * 校验token
-         */
+        // 校验token
+
         //获取客户端传入的token
         String accessToken = request.getHeader("access-token");
 
         if (StringUtils.isEmpty(accessToken)) {
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN));
             return false;
         }
 
         //获取加密的自定义载荷信息
         String infoEncrypt = JwtUtil.verify(accessToken);
         if (StringUtils.isEmpty(infoEncrypt)) {
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED));
             return false;
         }
 
         //解密自定义载荷信息
         String infoDecrypt = AESUtil.decryptToStr(infoEncrypt, SecurityConsts.AES_KEY);
         if (StringUtils.isEmpty(infoDecrypt)) {
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR));
             return false;
         }
 
@@ -74,16 +65,14 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //校验载荷信息中用户id是否为空
         Integer userId = tokenPayload.getUserId();
         if (null == userId) {
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR));
             return false;
         }
         //开始校验与redis中的用户信息是否一致
         //从redis中获取当前token携带的用户id锁所对应的用户信息
         Map redisUserInfoMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + userId);
         if (MapUtils.isEmpty(redisUserInfoMap)) {
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED));
             return false;
         }
 
@@ -93,14 +82,18 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         if (!tokenPayload.getUserAgent().equals(userAgent)
                 || !tokenPayload.getIp().equals(ipAddress)) {
             //TODO 远程登录逻辑有误
-            responseInfo = AppResultBuilder.failure(ResultCode.USER_LOGIN_REMOTE);
-            renderMsg(response, responseInfo);
+            renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_REMOTE));
             return false;
         }
 
-        //登录成功后重置过期时间
-        redisService.setExpire(RedisConsts.REDIS_CURRENT_USER + userId,
+        //校验通过,重置过期时间
+        boolean redisSuccess = redisService.setExpire(RedisConsts.REDIS_CURRENT_USER + userId,
                 RedisConsts.REDIS_EXPIRE_SECOND);
+        if (!redisSuccess) {
+            renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
+            return false;
+        }
+        LogUtil.error("redis错误");
         CurrentUserLocal.setUserId(userId);
         return true;
     }
