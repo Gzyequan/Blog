@@ -90,11 +90,10 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         boolean redisSuccess = redisService.setExpire(RedisConsts.REDIS_CURRENT_USER + userId,
                 RedisConsts.REDIS_EXPIRE_SECOND);
         if (!redisSuccess) {
+            GlobalLogHandler.getInstance().setLoggerClass(LoginInterceptor.class).error("redis错误");
             renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
             return false;
         }
-        
-        LogUtil.error("redis错误");
         CurrentUserLocal.setUserId(userId);
         return true;
     }
