@@ -93,6 +93,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
             renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
             return false;
         }
+        
         LogUtil.error("redis错误");
         CurrentUserLocal.setUserId(userId);
         return true;
