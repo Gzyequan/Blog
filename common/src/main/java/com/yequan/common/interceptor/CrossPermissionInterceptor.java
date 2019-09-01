@@ -4,7 +4,7 @@ import com.yequan.common.annotation.CrossPermission;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
-import com.yequan.common.util.GlobalLogHandler;
+import com.yequan.common.util.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -36,7 +36,7 @@ public class CrossPermissionInterceptor extends BaseInterceptor implements Handl
             //获取当前登录用户
             Integer userId = CurrentUserLocal.getUserId();
             if (null == userId) {
-                GlobalLogHandler.getInstance().setLoggerClass(CrossPermissionInterceptor.class).error("获取当前用户id为空");
+                Logger.error("获取当前用户id为空");
                 renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
                 return false;
             }
@@ -49,13 +49,13 @@ public class CrossPermissionInterceptor extends BaseInterceptor implements Handl
                 Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
                 //不存在@PathVariable注解
                 if (pathVariables.size() == 0 || !pathVariables.containsKey(key)) {
-                    GlobalLogHandler.getInstance().setLoggerClass(CrossPermissionInterceptor.class).error("横向越权拦截内部错误,不存在@PathVariable注解");
+                    Logger.error("横向越权拦截内部错误,不存在@PathVariable注解");
                     renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
                     return false;
                 }
                 Object pathValueObj = pathVariables.get(key);
                 if (null == pathValueObj) {
-                    GlobalLogHandler.getInstance().setLoggerClass(CrossPermissionInterceptor.class).error("PathVariable路径参数为空");
+                    Logger.error("PathVariable路径参数为空");
                     renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
                     return false;
                 }
@@ -67,13 +67,13 @@ public class CrossPermissionInterceptor extends BaseInterceptor implements Handl
             } else {
                 Map<String, String[]> parameterMap = request.getParameterMap();
                 if (parameterMap == null || parameterMap.size() == 0 || !parameterMap.containsKey(key)) {
-                    GlobalLogHandler.getInstance().setLoggerClass(CrossPermissionInterceptor.class).error("横向越权拦截错误,路径传参错误");
+                    Logger.error("横向越权拦截错误,路径传参错误");
                     renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
                     return false;
                 }
                 String parameterId = request.getParameter(key);
                 if (StringUtils.isEmpty(parameterId)) {
-                    GlobalLogHandler.getInstance().setLoggerClass(CrossPermissionInterceptor.class).error("横向越权拦截错误,路径传参错误,传入用户id为空");
+                    Logger.error("横向越权拦截错误,路径传参错误,传入用户id为空");
                     renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
                     return false;
                 }

@@ -26,8 +26,9 @@ public class AESUtil {
      * @return
      */
     public static byte[] encrypt(String data, String key) {
+        Logger.debug("encrypt data :{}, key :{}", data, key);
         try {
-            if (StringUtils.isEmpty(data)) {
+            if (StringUtils.isEmpty(data) || StringUtils.isEmpty(key)) {
                 return null;
             }
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
@@ -43,7 +44,7 @@ public class AESUtil {
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
             return cipher.doFinal(bytes);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -67,7 +68,8 @@ public class AESUtil {
      * @return
      */
     public static byte[] decrypt(byte[] data, String key) {
-        if (ArrayUtils.isEmpty(data)) {
+        Logger.debug("decrypt data is null :{}, key :{}", ArrayUtils.isEmpty(data), key);
+        if (ArrayUtils.isEmpty(data) || StringUtils.isEmpty(key)) {
             return null;
         }
         try {
@@ -83,7 +85,7 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);// 初始化
             return cipher.doFinal(data);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }

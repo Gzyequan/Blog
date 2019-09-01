@@ -8,9 +8,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yequan.common.application.constant.TokenConsts;
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,16 +22,15 @@ import java.util.Map;
  */
 public class JwtUtil {
 
-    private static Logger logger = Logger.getLogger(JwtUtil.class);
-
     /**
      * 生成签名
      *
-     * @param jsonInfo
+     * @param payload      载荷信息
      * @param timeInterval 过期时间间隔
      * @return
      */
-    public static String sign(String jsonInfo, long timeInterval) {
+    public static String sign(String payload, long timeInterval) {
+        Logger.debug("sign payload :{}, timeInterval :{}", payload, timeInterval);
         try {
             //过期时间,当前时间+过期时长
             Date expireTime = new Date(System.currentTimeMillis() + timeInterval);
@@ -42,13 +40,15 @@ public class JwtUtil {
             Map<String, Object> header = new HashMap<>();
             header.put("typ", "JWT");
             header.put("alg", "HS256");
-            return JWT.create()
+            String token = JWT.create()
                     .withHeader(header)
-                    .withClaim("info", jsonInfo)
+                    .withClaim("info", payload)
                     .withExpiresAt(expireTime)
                     .sign(algorithm);
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
+            Logger.debug("sign token :{}", token);
+            return token;
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -60,7 +60,11 @@ public class JwtUtil {
      * @return 返回值为自定义的载荷信息
      */
     public static String verify(String token) {
+        Logger.debug(" verify token :{}", token);
         String tokenPayload = null;
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
         try {
             Algorithm algorithm = Algorithm.HMAC256(TokenConsts.TOKEN_PRIVATE_KEY);
             JWTVerifier jwtVerifier = JWT.require(algorithm).build();
@@ -68,8 +72,9 @@ public class JwtUtil {
             Map<String, Claim> claims = verify.getClaims();
             Claim claim = claims.get("info");
             tokenPayload = claim.asString();
+            Logger.debug("verify tokenPayload :{}", tokenPayload);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            Logger.error(e.getMessage(), e);
         }
         return tokenPayload;
     }
@@ -80,7 +85,7 @@ public class JwtUtil {
         infoObject.put("userId", 1);
         infoObject.put("userAgent", "111");
         String jsonInfo = JSON.toJSONString(infoObject);
-        String token = sign(jsonInfo, TokenConsts.TOKEN_EXPIRE_TIME_15MINUTE);
+        String token = sign(jsonInfo, TokenConsts.TOKEN_EXPIRE_TIME_15_MINUTE);
         System.out.println(token);
         String verify = verify(token);
         System.out.println(verify);

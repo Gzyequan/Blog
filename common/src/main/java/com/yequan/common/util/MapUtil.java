@@ -18,10 +18,15 @@ public class MapUtil {
      * @return
      */
     public static Map<String, Object> objectToMap(Object object) {
-        Map<String, Object> map = new HashMap<>();
+        Logger.debug(" objectToMap object :{}", object);
+        Map<String, Object> map = null;
         try {
+            if (null == object) {
+                return null;
+            }
             Field[] fields = object.getClass().getDeclaredFields();
             if (fields.length > 0) {
+                map = new HashMap<>();
                 for (Field field : fields) {
                     String fieldName = field.getName();
                     boolean accessible = field.isAccessible();
@@ -32,7 +37,7 @@ public class MapUtil {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return map;
     }
@@ -49,9 +54,10 @@ public class MapUtil {
      * @return
      */
     public static <T> T mapToObject(Map<String, Object> map, Class<?> clazz) {
+        Logger.debug("mapToObject");
         Object targetObject = null;
         try {
-            if (null == map || map.isEmpty()) {
+            if ((null == map || map.size() < 1) || null == clazz) {
                 return null;
             }
             targetObject = clazz.newInstance();
@@ -63,7 +69,7 @@ public class MapUtil {
                 //对象中的set方法
                 String setMethod = "set" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
                 //根据属性名获取对应的field,通过field能确定属性的类型
-                Field field = getClassField(clazz, propertyName);
+                Field field = ReflectionUtil.getClassField(clazz, propertyName, true);
                 if (null == field) {
                     continue;
                 }
@@ -74,38 +80,9 @@ public class MapUtil {
                 clazz.getMethod(setMethod, fieldType).invoke(targetObject, propertyValue);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return (T) targetObject;
-    }
-
-    /**
-     * 根据fieldName获取clazz对象中的field
-     *
-     * @param clazz
-     * @param fieldName
-     * @return
-     */
-    private static Field getClassField(Class<?> clazz, String fieldName) {
-        //排除Object
-        if (Object.class.getName().equals(clazz.getName())) {
-            return null;
-        }
-        //获取所有的filed
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
-            //根据fieldName匹配对应的field
-            if (field.getName().equals(fieldName)) {
-                return field;
-            }
-        }
-        //如果在没有取到,则判断是否存在父类,如果存在父类也将父类中的field也取出
-        Class<?> superclass = clazz.getSuperclass();
-        if (null != superclass) {
-            //递归获取
-            return getClassField(superclass, fieldName);
-        }
-        return null;
     }
 
     /**
@@ -116,21 +93,28 @@ public class MapUtil {
      * @return
      */
     private static Object convertValueType(Object propertyValue, Class<?> fieldTypeClass) {
+        if (null == propertyValue || null == fieldTypeClass) {
+            return null;
+        }
         Object targetValue = null;
-        if (Long.class.getName().equals(fieldTypeClass.getName())
-                || long.class.getName().equals(fieldTypeClass.getName())) {
-            targetValue = Long.parseLong(propertyValue.toString());
-        } else if (Integer.class.getName().equals(fieldTypeClass.getName())
-                || int.class.getName().equals(fieldTypeClass.getName())) {
-            targetValue = Integer.parseInt(propertyValue.toString());
-        } else if (Float.class.getName().equals(fieldTypeClass.getName())
-                || float.class.getName().equals(fieldTypeClass.getName())) {
-            targetValue = Float.parseFloat(propertyValue.toString());
-        } else if (Double.class.getName().equals(fieldTypeClass.getName())
-                || double.class.getName().equals(fieldTypeClass.getName())) {
-            targetValue = Double.parseDouble(propertyValue.toString());
-        } else {
-            targetValue = propertyValue;
+        try {
+            if (Long.class.getName().equals(fieldTypeClass.getName())
+                    || long.class.getName().equals(fieldTypeClass.getName())) {
+                targetValue = Long.parseLong(propertyValue.toString());
+            } else if (Integer.class.getName().equals(fieldTypeClass.getName())
+                    || int.class.getName().equals(fieldTypeClass.getName())) {
+                targetValue = Integer.parseInt(propertyValue.toString());
+            } else if (Float.class.getName().equals(fieldTypeClass.getName())
+                    || float.class.getName().equals(fieldTypeClass.getName())) {
+                targetValue = Float.parseFloat(propertyValue.toString());
+            } else if (Double.class.getName().equals(fieldTypeClass.getName())
+                    || double.class.getName().equals(fieldTypeClass.getName())) {
+                targetValue = Double.parseDouble(propertyValue.toString());
+            } else {
+                targetValue = propertyValue;
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
         return targetValue;
     }

@@ -3,7 +3,7 @@ package com.yequan.common.interceptor;
 import com.yequan.common.annotation.AccessLimit;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
-import com.yequan.common.redis.RedisService;
+import com.yequan.common.service.RedisService;
 import com.yequan.common.util.IPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;

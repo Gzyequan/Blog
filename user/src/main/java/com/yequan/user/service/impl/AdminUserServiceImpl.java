@@ -5,8 +5,9 @@ import com.github.pagehelper.PageInfo;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
-import com.yequan.common.redis.RedisService;
+import com.yequan.common.service.RedisService;
 import com.yequan.common.util.DateUtil;
+import com.yequan.common.util.Logger;
 import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.service.IAdminUserService;
@@ -51,7 +52,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.success(sysUserDOs);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
@@ -72,7 +73,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.success(sysUserDO);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
@@ -103,7 +104,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.success(updatedSysUserDO);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_UPDATE_ERROR);
     }
@@ -128,7 +129,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.success();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_DELETE_ERROR);
     }

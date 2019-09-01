@@ -4,18 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.constant.SecurityConsts;
 import com.yequan.common.application.constant.TokenConsts;
-import com.yequan.common.application.constant.UserConsts;
+import com.yequan.common.application.constant.UserEnum;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
-import com.yequan.common.redis.RedisService;
+import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
 import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.ISystemService;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,6 @@ import java.util.Map;
  */
 @Service("iSystemService")
 public class SystemServiceImpl implements ISystemService {
-
-    private Logger logger = Logger.getLogger(SystemServiceImpl.class);
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -82,7 +79,7 @@ public class SystemServiceImpl implements ISystemService {
             }
             //用户状态校验
             Integer status = user.getStatus();
-            if (status == UserConsts.USER_NORMAL.getStatus()) {
+            if (status == UserEnum.USER_NORMAL.getStatus()) {
                 TokenPayload tokenPayload = new TokenPayload();
                 tokenPayload.setUserId(user.getId());
                 tokenPayload.setUserAgent(request.getHeader("User-Agent"));
@@ -94,26 +91,25 @@ public class SystemServiceImpl implements ISystemService {
                 //不选择保持七天登录
                 if (null == userDTO.isKeepAlive() || !userDTO.isKeepAlive()) {
                     //生成有效期为15分钟的token
-                    token = JwtUtil.sign(encrypt, TokenConsts.TOKEN_EXPIRE_TIME_15MINUTE);
+                    token = JwtUtil.sign(encrypt, TokenConsts.TOKEN_EXPIRE_TIME_15_MINUTE);
                 } else {
                     //如果选择保持七天登录状态
                     //生成有效期为7天的token
-                    token = JwtUtil.sign(encrypt, TokenConsts.TOKEN_EXPIRE_TIME_7DAY);
+                    token = JwtUtil.sign(encrypt, TokenConsts.TOKEN_EXPIRE_TIME_7_DAY);
                 }
                 //将用户信息写入redis
                 Map<String, Object> redisUserInfoMap = MapUtil.objectToMap(user);
                 redisService.setMap(RedisConsts.REDIS_CURRENT_USER + user.getId(), redisUserInfoMap,
-                        RedisConsts.REDIS_EXPIRE_SECOND);
+                        RedisConsts.REDIS_EXPIRE_15_MINUTE);
                 response.setHeader("access-token", token);
                 return AppResultBuilder.success();
-            } else if (status == UserConsts.USER_ILLEGAL.getStatus()) {
+            } else if (status == UserEnum.USER_ILLEGAL.getStatus()) {
                 return AppResultBuilder.failure(ResultCode.USER_ACCOUNT_FORBIDDEN);
             } else {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("");
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR);
     }
@@ -154,7 +150,7 @@ public class SystemServiceImpl implements ISystemService {
                 return AppResultBuilder.success(newUser);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_CREATE_ERROR);
     }

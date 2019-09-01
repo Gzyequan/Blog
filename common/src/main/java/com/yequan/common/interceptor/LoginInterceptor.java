@@ -6,7 +6,7 @@ import com.yequan.common.application.constant.SecurityConsts;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
-import com.yequan.common.redis.RedisService;
+import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,6 +41,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         String accessToken = request.getHeader("access-token");
 
         if (StringUtils.isEmpty(accessToken)) {
+            Logger.error("token为空");
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_NOT_LOGGED_IN));
             return false;
         }
@@ -48,6 +49,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //获取加密的自定义载荷信息
         String infoEncrypt = JwtUtil.verify(accessToken);
         if (StringUtils.isEmpty(infoEncrypt)) {
+            Logger.error("加密的载荷信息为空");
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED));
             return false;
         }
@@ -55,6 +57,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //解密自定义载荷信息
         String infoDecrypt = AESUtil.decryptToStr(infoEncrypt, SecurityConsts.AES_KEY);
         if (StringUtils.isEmpty(infoDecrypt)) {
+            Logger.error("解密的载荷信息为空");
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR));
             return false;
         }
@@ -65,6 +68,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //校验载荷信息中用户id是否为空
         Integer userId = tokenPayload.getUserId();
         if (null == userId) {
+            Logger.error("载荷信息中用户id为空");
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_ERROR));
             return false;
         }
@@ -72,6 +76,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         //从redis中获取当前token携带的用户id锁所对应的用户信息
         Map redisUserInfoMap = redisService.getMap(RedisConsts.REDIS_CURRENT_USER + userId);
         if (MapUtils.isEmpty(redisUserInfoMap)) {
+            Logger.error("redis中获取当前登录用户的信息为空,redis键:{}",RedisConsts.REDIS_CURRENT_USER + userId);
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_EXPIRED));
             return false;
         }
@@ -81,6 +86,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         String ipAddress = IPUtil.getIpAddress(request);
         if (!tokenPayload.getUserAgent().equals(userAgent)
                 || !tokenPayload.getIp().equals(ipAddress)) {
+            Logger.error("远程登录");
             //TODO 远程登录逻辑有误
             renderMsg(response, AppResultBuilder.failure(ResultCode.USER_LOGIN_REMOTE));
             return false;
@@ -88,9 +94,9 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
 
         //校验通过,重置过期时间
         boolean redisSuccess = redisService.setExpire(RedisConsts.REDIS_CURRENT_USER + userId,
-                RedisConsts.REDIS_EXPIRE_SECOND);
+                RedisConsts.REDIS_EXPIRE_15_MINUTE);
         if (!redisSuccess) {
-            GlobalLogHandler.getInstance().setLoggerClass(LoginInterceptor.class).error("redis错误");
+            Logger.error("设置登录用户过期时间错误,redis键:{}",RedisConsts.REDIS_CURRENT_USER + userId);
             renderMsg(response, AppResultBuilder.failure(ResultCode.ERROR));
             return false;
         }

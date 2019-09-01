@@ -8,6 +8,7 @@ import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
+import com.yequan.common.util.Logger;
 import com.yequan.user.dao.SysPermissionDOMapper;
 import com.yequan.user.pojo.dbo.SysPermissionDO;
 import com.yequan.user.service.IAdminPermissionService;
@@ -38,14 +39,18 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
      */
     @Override
     public AppResult<List<SysPermissionDO>> listChildrenParallelPermissions(Integer pmnId) {
-        if (null == pmnId) {
-            return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+        try {
+            if (null == pmnId) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            }
+            List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
+            if (!CollectionUtils.isEmpty(sysPermissionDOList)) {
+                return AppResultBuilder.success(sysPermissionDOList);
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
-        List<SysPermissionDO> sysPermissionDOList = sysPermissionDOMapper.selectChildrenParallelPermission(pmnId);
-        if (CollectionUtils.isEmpty(sysPermissionDOList)) {
-            return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
-        }
-        return AppResultBuilder.success(sysPermissionDOList);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     /**
@@ -56,53 +61,62 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
      */
     @Override
     public AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnId) {
-        if (null == pmnId) {
-            return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+        try {
+            if (null == pmnId) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            }
+            HashSet<SysPermissionDO> sysPermissionSet = Sets.newHashSet();
+            listDeepChildrenPermission(sysPermissionSet, pmnId);
+            ArrayList<SysPermissionDO> sysPermissionDOList = Lists.newArrayList();
+            if (!CollectionUtils.isEmpty(sysPermissionSet)) {
+                sysPermissionDOList.addAll(sysPermissionSet);
+            }
+            return AppResultBuilder.success(sysPermissionDOList);
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
-        HashSet<SysPermissionDO> sysPermissionSet = Sets.newHashSet();
-        listDeepChildrenPermission(sysPermissionSet, pmnId);
-        ArrayList<SysPermissionDO> sysPermissionDOList = Lists.newArrayList();
-        if (!CollectionUtils.isEmpty(sysPermissionSet)) {
-            sysPermissionDOList.addAll(sysPermissionSet);
-        }
-        return AppResultBuilder.success(sysPermissionDOList);
+        return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
 
     @Override
     public AppResult<Void> insertOneSysPermission(SysPermissionDO sysPermissionDO) {
-        if (null == sysPermissionDO) {
-            return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
-        }
-        Integer parentId = sysPermissionDO.getParentId();
-        String type = sysPermissionDO.getType();
-        if (null == parentId || StringUtils.isEmpty(type) || StringUtils.isEmpty(sysPermissionDO.getPmnName())) {
-            return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
-        }
-
-        //parentId为0表示添加的是根节点,校验parentId有效性
-        if (parentId != 0) {
-            SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
-            if (null == sysPermissionDB) {
-                return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+        try {
+            if (null == sysPermissionDO) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-        }
-        //校验type有效性
-        if (!PermissionConsts.PERMISSION_TYPE_MODULE.equals(type)
-                && !PermissionConsts.PERMISSION_TYPE_PAGE.equals(type)) {
-            return AppResultBuilder.failure(ResultCode.PERMISSION_TYPE_ERROR);
-        }
+            Integer parentId = sysPermissionDO.getParentId();
+            String type = sysPermissionDO.getType();
+            if (null == parentId || StringUtils.isEmpty(type) || StringUtils.isEmpty(sysPermissionDO.getPmnName())) {
+                return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
+            }
 
-        //获取当前创建人
-        Integer currentUserId = CurrentUserLocal.getUserId();
-        if (currentUserId==null){
-            return AppResultBuilder.failure(ResultCode.ERROR);
-        }
-        sysPermissionDO.setCreatorId(currentUserId);
-        //设置创建时间
-        sysPermissionDO.setCreateTime(DateUtil.getCurrentDate());
-        int insert = sysPermissionDOMapper.insertSelective(sysPermissionDO);
-        if (insert > 0) {
-            return AppResultBuilder.success();
+            //parentId为0表示添加的是根节点,校验parentId有效性
+            if (parentId != 0) {
+                SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
+                if (null == sysPermissionDB) {
+                    return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+                }
+            }
+            //校验type有效性
+            if (!PermissionConsts.PERMISSION_TYPE_MODULE.equals(type)
+                    && !PermissionConsts.PERMISSION_TYPE_PAGE.equals(type)) {
+                return AppResultBuilder.failure(ResultCode.PERMISSION_TYPE_ERROR);
+            }
+
+            //获取当前创建人
+            Integer currentUserId = CurrentUserLocal.getUserId();
+            if (currentUserId == null) {
+                return AppResultBuilder.failure(ResultCode.ERROR);
+            }
+            sysPermissionDO.setCreatorId(currentUserId);
+            //设置创建时间
+            sysPermissionDO.setCreateTime(DateUtil.getCurrentDate());
+            int insert = sysPermissionDOMapper.insertSelective(sysPermissionDO);
+            if (insert > 0) {
+                return AppResultBuilder.success();
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.PERMISSION_CREATE_ERROR);
     }

@@ -1,6 +1,7 @@
 package com.yequan.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.yequan.common.util.Logger;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,7 @@ public class BaseInterceptor {
      * @param msg
      * @throws IOException
      */
-    void renderMsg(HttpServletResponse response, String msg) throws IOException {
+    void renderMsg(HttpServletResponse response, String msg) {
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream outputStream = null;
         try {
@@ -30,11 +31,15 @@ public class BaseInterceptor {
             if (null != outputStream)
                 outputStream.write(msg.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         } finally {
             if (null != outputStream) {
-                outputStream.flush();
-                outputStream.close();
+                try {
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (IOException e) {
+                    Logger.error(e.getMessage(), e);
+                }
             }
         }
     }
@@ -46,7 +51,7 @@ public class BaseInterceptor {
      * @param msgObj
      * @throws IOException
      */
-    void renderMsg(HttpServletResponse response, Object msgObj) throws IOException {
+    void renderMsg(HttpServletResponse response, Object msgObj) {
         String msg = JSON.toJSONString(msgObj);
         renderMsg(response, msg);
     }
@@ -62,7 +67,7 @@ public class BaseInterceptor {
         try {
             request.getRequestDispatcher(page).forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(), e);
         }
     }
 

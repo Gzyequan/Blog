@@ -1,5 +1,7 @@
 package com.yequan.common.util;
 
+import com.yequan.common.application.constant.OSEnum;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,19 +16,28 @@ import java.util.regex.Pattern;
 public class NetworkUtil {
 
     public static boolean ping(String host, int pingTimes, int timeout) {
+        Logger.debug("ping host :{},pingTimes :{},timeout :{}", host, pingTimes, timeout);
         BufferedReader in = null;
         try {
+            if (null == host || pingTimes <= 0 || timeout <= 0) {
+                return false;
+            }
             Runtime r = Runtime.getRuntime();
             String pingCommand = null;
-            if (OSUtil.getOSInfo() == OSUtil.OS_WIN) {
+            if (OSUtil.getOSInfo() == OSEnum.OS_WIN.getCode()) {
                 //windows格式的命令
                 pingCommand = "ping " + host + " -n " + pingTimes + " -w " + timeout;
-            } else if (OSUtil.getOSInfo() == OSUtil.OS_LINUX) {
+            } else if (OSUtil.getOSInfo() == OSEnum.OS_LINUX.getCode()) {
                 //linux格式的命令
                 pingCommand = "ping " + host + " -c " + pingTimes + " -w" + timeout;
+            } else {
+                Logger.error("ping : unsupported OS :{}", OSUtil.getOSInfo());
+                return false;
             }
+            Logger.debug("ping pingCommand :{}", pingCommand);
             Process p = r.exec(pingCommand);
             if (p == null) {
+                Logger.error("ping process is null");
                 return false;
             }
             in = new BufferedReader(new InputStreamReader(p.getInputStream()));   // 逐行检查输出,计算类似出现=23ms TTL=62字样的次数
@@ -37,16 +48,17 @@ public class NetworkUtil {
             }
             // 如果出现类似=23ms TTL=62这样的字样,出现的次数=测试次数则返回真
             return connectedCount == pingTimes;
-        } catch (Exception ex) {
-            ex.printStackTrace();   // 出现异常则返回假
-            return false;
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         } finally {
             try {
-                in.close();
+                if (null != in)
+                    in.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.error(e.getMessage(), e);
             }
         }
+        return false;
     }
 
     /**

@@ -18,6 +18,10 @@ public class MD5Util {
      * @return
      */
     public static String encrypt(String text, String salt) {
+        Logger.debug("encrypt text :{},salt :{}", text, salt);
+        if (null == text) {
+            return null;
+        }
         return DigestUtils.md5Hex(text + salt);
     }
 
@@ -40,6 +44,10 @@ public class MD5Util {
      * @return
      */
     public static boolean verify(String text, String salt, String md5) {
+        Logger.debug("verify text :{},salt :{},md5 :{}", text, salt, md5);
+        if (null == text || null == md5) {
+            return false;
+        }
         String md5Code = encrypt(text, salt);
         return md5Code.equalsIgnoreCase(md5);
     }

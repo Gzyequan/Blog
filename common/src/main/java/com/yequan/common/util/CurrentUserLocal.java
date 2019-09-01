@@ -15,6 +15,10 @@ public final class CurrentUserLocal {
      * @param userId
      */
     public static void setUserId(Integer userId) {
+        Logger.debug("setUserId userId :{}", userId);
+        if (null == userId) {
+            return;
+        }
         local.set(userId);
     }
 
@@ -24,6 +28,7 @@ public final class CurrentUserLocal {
      * @return
      */
     public static Integer getUserId() {
+        Logger.debug("getUserId userId:{}", local.get());
         return local.get();
     }
 
@@ -31,6 +36,7 @@ public final class CurrentUserLocal {
      * 移除userId
      */
     public static void removeUserId() {
+        Logger.debug("removeUserId userId:{}", local.get());
         local.remove();
     }
 

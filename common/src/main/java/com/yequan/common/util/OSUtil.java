@@ -1,17 +1,13 @@
 package com.yequan.common.util;
 
+import com.yequan.common.application.constant.OSEnum;
+
 /**
  * @Auther: yq
  * @Date: 2019/7/2 11:27
- * @Description:
+ * @Description: 获取操作系统信息工具类
  */
 public class OSUtil {
-
-    public static int OS_OTHER = -1;
-
-    public static int OS_WIN = 0;
-
-    public static int OS_LINUX = 1;
 
     /**
      * 获取当前操作系统信息
@@ -21,11 +17,11 @@ public class OSUtil {
     public static int getOSInfo() {
         String OS = System.getProperty("os.name").toLowerCase();
         if (OS.startsWith("win")) {
-            return OS_WIN;
+            return OSEnum.OS_WIN.getCode();
         } else if (OS.startsWith("linux")) {
-            return OS_LINUX;
+            return OSEnum.OS_LINUX.getCode();
         }
-        return OS_OTHER;
+        return OSEnum.OTHER.getCode();
     }
 
 }

@@ -1,15 +1,12 @@
 package com.yequan.user.service.impl;
 
 import com.yequan.common.application.constant.RedisConsts;
-import com.yequan.common.application.constant.UserConsts;
+import com.yequan.common.application.constant.UserEnum;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
-import com.yequan.common.redis.RedisService;
-import com.yequan.common.util.CurrentUserLocal;
-import com.yequan.common.util.DateUtil;
-import com.yequan.common.util.MD5Util;
-import com.yequan.common.util.MapUtil;
+import com.yequan.common.service.RedisService;
+import com.yequan.common.util.*;
 import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.pojo.dto.UserDTO;
@@ -71,7 +68,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success(currentUser);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(),e);
         }
         return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
@@ -133,7 +130,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success(updatedSysUserDO);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(),e);
         }
         return AppResultBuilder.failure(ResultCode.USER_UPDATE_ERROR);
     }
@@ -169,7 +166,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             }
             SysUserDO sysUserDO = new SysUserDO();
             sysUserDO.setId(id);
-            sysUserDO.setStatus(UserConsts.USER_DELETED.getStatus());
+            sysUserDO.setStatus(UserEnum.USER_DELETED.getStatus());
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 //注销用户后将该用户信息从redis中清除
@@ -177,7 +174,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.error(e.getMessage(),e);
         }
         return AppResultBuilder.failure(ResultCode.USER_UNREGISTER_ERROR);
     }

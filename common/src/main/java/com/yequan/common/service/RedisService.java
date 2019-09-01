@@ -1,4 +1,4 @@
-package com.yequan.common.redis;
+package com.yequan.common.service;
 
 import java.util.List;
 import java.util.Map;

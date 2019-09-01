@@ -7,7 +7,7 @@ import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
-import com.yequan.common.redis.RedisService;
+import com.yequan.common.service.RedisService;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.service.IOrdinaryUserService;
 import com.yequan.user.test.task.NetworkMonitor;
@@ -49,7 +49,7 @@ public class OrdinaryUserController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "{id}", produces = "application/json;charset=UTF-8")
     @CrossPermission(key = "id")
     public AppResult<SysUserDO> getCurrentUserById(@PathVariable("id") Integer id) {
         return iOrdinaryUserService.getUserById(id);

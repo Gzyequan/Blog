@@ -13,19 +13,22 @@ public final class TokenConsts {
     /**
      * 过期时间15分钟(15*60*1000毫秒)
      */
-    public static final long TOKEN_EXPIRE_TIME_15MINUTE = 15 * 60 * 1000;
+    public static final long TOKEN_EXPIRE_TIME_15_MINUTE = 15 * 60 * 1000;
 
     /**
-     * 过期时间7天(7*24*60*60*1000)
+     * 过期时间7天(7*24*60*60*1000毫秒)
      */
-    public static final long TOKEN_EXPIRE_TIME_7DAY = 15 * 60 * 1000;
-
-    public static final long TOKEN_EXPIRE_TIME_1 = 60 * 1000;
+    public static final long TOKEN_EXPIRE_TIME_7_DAY = 7 * 24 * 60 * 60 * 1000;
 
     /**
-     * 过期时间30分钟
+     * 超时时间1分钟(60*1000毫秒)
      */
-    public static final long TOKEN_EXPIRE_TIME_30 = 30 * 60 * 1000;
+    public static final long TOKEN_EXPIRE_TIME_1_MINUTE = 60 * 1000;
+
+    /**
+     * 过期时间30分钟(30*60*1000毫秒)
+     */
+    public static final long TOKEN_EXPIRE_TIME_30_MINUTE = 30 * 60 * 1000;
 
     /**
      * token私钥

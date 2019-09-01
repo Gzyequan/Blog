@@ -5,7 +5,7 @@ package com.yequan.common.application.constant;
  * @Date: 2019/7/29 12:55
  * @Description:
  */
-public enum UserConsts {
+public enum UserEnum {
 
     USER_DELETED(0, "注销"),
     USER_NORMAL(1, "正常"),
@@ -15,7 +15,7 @@ public enum UserConsts {
 
     private String msg;
 
-    UserConsts(int status, String msg) {
+    UserEnum(int status, String msg) {
         this.status = status;
         this.msg = msg;
     }

@@ -1,4 +1,4 @@
-package com.yequan.common.redis;
+package com.yequan.common.service.impl;
 
 /**
  * @Auther: yq
@@ -6,8 +6,8 @@ package com.yequan.common.redis;
  * @Description:
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.yequan.common.service.RedisService;
+import com.yequan.common.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Service("redisService")
 public class RedisServiceImpl implements RedisService {
 
-    private final Logger LOG = LoggerFactory.getLogger(RedisServiceImpl.class);
-
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-
-//    @Autowired
-//    private  StringRedisTemplate stringRedisTemplate;
 
     private String CACHE_PREFIX;
 
@@ -115,7 +110,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean close() {
-        LOG.debug(" cache closed ! ");
+        Logger.debug(" cache closed ! ");
         CACHE_CLOSED = true;
         return true;
     }
@@ -146,7 +141,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:存在 false:不存在
      */
     public boolean hasKey(String key) {
-        LOG.debug(" hasKey key :{}", key);
+        Logger.debug(" hasKey key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return false;
@@ -154,7 +149,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.hasKey(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -166,14 +161,14 @@ public class RedisServiceImpl implements RedisService {
      * @return key的集合
      */
     public Set<String> keys(String patternKey) {
-        LOG.debug(" keys key :{}", patternKey);
+        Logger.debug(" keys key :{}", patternKey);
         try {
             if (isClose() || isEmpty(patternKey)) {
                 return Collections.emptySet();
             }
             return redisTemplate.keys(patternKey);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return Collections.emptySet();
     }
@@ -185,7 +180,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean del(String... key) {
-        LOG.debug(" delete key :{}", key.toString());
+        Logger.debug(" delete key :{}", key.toString());
         try {
             if (isClose() || isEmpty(key)) {
                 return false;
@@ -197,7 +192,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.delete(keySet);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -209,7 +204,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean delPattern(String key) {
-        LOG.debug(" delete Pattern keys :{}", key);
+        Logger.debug(" delete Pattern keys :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return false;
@@ -218,7 +213,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.delete(redisTemplate.keys(key));
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -230,7 +225,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean del(Set<String> keys) {
-        LOG.debug(" delete keys :{}", keys.toString());
+        Logger.debug(" delete keys :{}", keys.toString());
         try {
             if (isClose() || isEmpty(keys)) {
                 return false;
@@ -242,7 +237,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.delete(keySet);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -255,7 +250,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean setExpire(String key, long seconds) {
-        LOG.debug(" setExpire key :{}, seconds: {}", key, seconds);
+        Logger.debug(" setExpire key :{}, seconds: {}", key, seconds);
         try {
             if (isClose() || isEmpty(key) || seconds < 0) {
                 return false;
@@ -263,7 +258,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -275,7 +270,7 @@ public class RedisServiceImpl implements RedisService {
      * @return 秒数
      */
     public Long getExpire(String key) {
-        LOG.debug(" getExpire key :{}", key);
+        Logger.debug(" getExpire key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return 0L;
@@ -283,7 +278,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.getExpire(key, TimeUnit.SECONDS);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return 0L;
     }
@@ -296,7 +291,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean setString(String key, String value) {
-        LOG.debug(" setString key :{}, value: {}", key, value);
+        Logger.debug(" setString key :{}, value: {}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -305,7 +300,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -319,7 +314,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean set(String key, Object value, long seconds) {
-        LOG.debug(" setString key :{}, value: {}, timeout:{}", key, value, seconds);
+        Logger.debug(" setString key :{}, value: {}, timeout:{}", key, value, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -328,7 +323,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForValue().set(key, value, seconds, TimeUnit.SECONDS);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -340,7 +335,7 @@ public class RedisServiceImpl implements RedisService {
      * @return String    缓存的String
      */
     public Object get(String key) {
-        LOG.debug(" getString key :{}", key);
+        Logger.debug(" getString key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -348,7 +343,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -360,7 +355,7 @@ public class RedisServiceImpl implements RedisService {
      * @return long    缓存中的最大值+1
      */
     public long incr(String key) {
-        LOG.debug(" incr key :{}", key);
+        Logger.debug(" incr key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return 0;
@@ -368,7 +363,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForValue().increment(key, 1);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return 0;
     }
@@ -381,7 +376,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean set(String key, Object obj) {
-        LOG.debug(" set key :{}, value:{}", key, obj);
+        Logger.debug(" set key :{}, value:{}", key, obj);
         try {
             if (isClose() || isEmpty(key) || isEmpty(obj)) {
                 return false;
@@ -389,7 +384,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             redisTemplate.opsForValue().set(key, obj);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -402,7 +397,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean setObj(String key, Object obj, long seconds) {
-        LOG.debug(" set key :{}, value:{}, seconds:{}", key, obj, seconds);
+        Logger.debug(" set key :{}, value:{}, seconds:{}", key, obj, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(obj)) {
                 return false;
@@ -414,7 +409,7 @@ public class RedisServiceImpl implements RedisService {
             }
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -427,7 +422,7 @@ public class RedisServiceImpl implements RedisService {
      * @return <T>	序列化对象
      */
     public <T> T getObj(String key, Class<T> clazz) {
-        LOG.debug(" get key :{}", key);
+        Logger.debug(" get key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -435,7 +430,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return (T) redisTemplate.opsForValue().get(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -457,7 +452,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForHash().putAll(key, map);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -470,7 +465,7 @@ public class RedisServiceImpl implements RedisService {
      */
     @SuppressWarnings("rawtypes")
     public Map getMap(String key) {
-        LOG.debug(" getMap key :{}", key);
+        Logger.debug(" getMap key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -478,7 +473,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForHash().entries(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -490,7 +485,7 @@ public class RedisServiceImpl implements RedisService {
      * @return int    缓存map的集合大小
      */
     public long getMapSize(String key) {
-        LOG.debug(" getMap key :{}", key);
+        Logger.debug(" getMap key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return 0;
@@ -498,7 +493,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForHash().size(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return 0;
     }
@@ -512,7 +507,7 @@ public class RedisServiceImpl implements RedisService {
      * @return object    map中的对象
      */
     public Object getMapKey(String key, String hashKey) {
-        LOG.debug(" getMapkey :{}, hashKey:{}", key, hashKey);
+        Logger.debug(" getMapkey :{}, hashKey:{}", key, hashKey);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey)) {
                 return null;
@@ -520,7 +515,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForHash().get(key, hashKey);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -532,7 +527,7 @@ public class RedisServiceImpl implements RedisService {
      * @return Set<String> map的key值合集
      */
     public Set<Object> getMapKeys(String key) {
-        LOG.debug(" getMapKeys key :{}", key);
+        Logger.debug(" getMapKeys key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -540,7 +535,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForHash().keys(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -553,7 +548,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean delMapKey(String key, String hashKey) {
-        LOG.debug(" delMapKey key :{}, hashKey:{}", key, hashKey);
+        Logger.debug(" delMapKey key :{}, hashKey:{}", key, hashKey);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey)) {
                 return false;
@@ -562,7 +557,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForHash().delete(key, hashKey);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -577,7 +572,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean setMap(String key, Map<String, T> map, long seconds) {
-        LOG.debug(" setMap key :{}, value: {}, seconds:{}", key, map, seconds);
+        Logger.debug(" setMap key :{}, value: {}, seconds:{}", key, map, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(map) || seconds < 0) {
                 return false;
@@ -587,7 +582,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -602,7 +597,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean addMap(String key, String hashKey, T value) {
-        LOG.debug(" addMap key :{}, hashKey: {}, value:{}", key, hashKey, value);
+        Logger.debug(" addMap key :{}, hashKey: {}, value:{}", key, hashKey, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(hashKey) || isEmpty(value)) {
                 return false;
@@ -611,7 +606,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForHash().put(key, hashKey, value);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -625,7 +620,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean setList(String key, List<T> list) {
-        LOG.debug(" setList key :{}, list: {}", key, list);
+        Logger.debug(" setList key :{}, list: {}", key, list);
         try {
             if (isClose() || isEmpty(key) || isEmpty(list)) {
                 return false;
@@ -633,7 +628,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             redisTemplate.opsForList().leftPushAll(key, list.toArray());
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -645,7 +640,7 @@ public class RedisServiceImpl implements RedisService {
      * @return List<Object> 缓存中对应的list合集
      */
     public <V> List<V> getList(String key) {
-        LOG.debug(" getList key :{}", key);
+        Logger.debug(" getList key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -653,7 +648,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return (List<V>) redisTemplate.opsForList().range(key, 0, -1);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -667,7 +662,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     public void trimList(String key, int start, int end) {
-        LOG.debug(" trimList key :{}", key);
+        Logger.debug(" trimList key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return;
@@ -675,7 +670,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             redisTemplate.opsForList().trim(key, start, end);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
     }
 
@@ -687,7 +682,7 @@ public class RedisServiceImpl implements RedisService {
      * @return Object    list指定索引位置的对象
      */
     public Object getIndexList(String key, int index) {
-        LOG.debug(" getIndexList key :{}, index:{}", key, index);
+        Logger.debug(" getIndexList key :{}, index:{}", key, index);
         try {
             if (isClose() || isEmpty(key) || index < 0) {
                 return null;
@@ -695,7 +690,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForList().index(key, index);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -708,7 +703,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean addList(String key, Object value) {
-        LOG.debug(" addList key :{}, value:{}", key, value);
+        Logger.debug(" addList key :{}, value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -717,7 +712,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForList().leftPush(key, value);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -732,7 +727,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean setList(String key, List<T> list, long seconds) {
-        LOG.debug(" setList key :{}, value:{}, seconds:{}", key, list, seconds);
+        Logger.debug(" setList key :{}, value:{}, seconds:{}", key, list, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(list)) {
                 return false;
@@ -744,7 +739,7 @@ public class RedisServiceImpl implements RedisService {
             }
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -758,7 +753,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean setSet(String key, Set<T> set) {
-        LOG.debug(" setSet key :{}, value:{}", key, set);
+        Logger.debug(" setSet key :{}, value:{}", key, set);
         try {
             if (isClose() || isEmpty(key) || isEmpty(set)) {
                 return false;
@@ -767,7 +762,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForSet().add(key, set.toArray());
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -780,7 +775,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public boolean addSet(String key, Object value) {
-        LOG.debug(" addSet key :{}, value:{}", key, value);
+        Logger.debug(" addSet key :{}, value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -789,7 +784,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForSet().add(key, value);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -804,7 +799,7 @@ public class RedisServiceImpl implements RedisService {
      * @return true:成功 false:失败
      */
     public <T> boolean setSet(String key, Set<T> set, long seconds) {
-        LOG.debug(" setSet key :{}, value:{}, seconds:{}", key, set, seconds);
+        Logger.debug(" setSet key :{}, value:{}, seconds:{}", key, set, seconds);
         try {
             if (isClose() || isEmpty(key) || isEmpty(set)) {
                 return false;
@@ -816,7 +811,7 @@ public class RedisServiceImpl implements RedisService {
             }
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -829,7 +824,7 @@ public class RedisServiceImpl implements RedisService {
      * @return Set<Object> 缓存中的set合集
      */
     public <T> Set<T> getSet(String key) {
-        LOG.debug(" getSet key :{}", key);
+        Logger.debug(" getSet key :{}", key);
         try {
             if (isClose() || isEmpty(key)) {
                 return null;
@@ -837,7 +832,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return (Set<T>) redisTemplate.opsForSet().members(key);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -851,7 +846,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     public boolean addZSet(String key, Object value, double score) {
-        LOG.debug(" addZSet key :{},value:{}, score:{}", key, value, score);
+        Logger.debug(" addZSet key :{},value:{}, score:{}", key, value, score);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -859,7 +854,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return redisTemplate.opsForZSet().add(key, value, score);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -872,7 +867,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     public boolean removeZSet(String key, Object value) {
-        LOG.debug(" removeZSet key :{},value:{}", key, value);
+        Logger.debug(" removeZSet key :{},value:{}", key, value);
         try {
             if (isClose() || isEmpty(key) || isEmpty(value)) {
                 return false;
@@ -881,7 +876,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForZSet().remove(key, value);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -895,7 +890,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     public boolean removeZSet(String key, long start, long end) {
-        LOG.debug(" removeZSet key :{},start:{}, end:{}", key, start, end);
+        Logger.debug(" removeZSet key :{},start:{}, end:{}", key, start, end);
         try {
             if (isClose() || isEmpty(key)) {
                 return false;
@@ -904,7 +899,7 @@ public class RedisServiceImpl implements RedisService {
             redisTemplate.opsForZSet().removeRange(key, start, end);
             return true;
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return false;
     }
@@ -918,7 +913,7 @@ public class RedisServiceImpl implements RedisService {
      * @return
      */
     public <T> Set<T> getZSet(String key, long start, long end) {
-        LOG.debug(" getZSet key :{},start:{}, end:{}", key, start, end);
+        Logger.debug(" getZSet key :{},start:{}, end:{}", key, start, end);
         try {
             if (isClose() || isEmpty(key)) {
                 return Collections.emptySet();
@@ -926,7 +921,7 @@ public class RedisServiceImpl implements RedisService {
             key = buildKey(key);
             return (Set<T>) redisTemplate.opsForZSet().range(key, start, end);
         } catch (Exception e) {
-            LOG.error(e.getMessage(), e);
+            Logger.error(e.getMessage(), e);
         }
         return Collections.emptySet();
     }
