@@ -2,17 +2,16 @@ package com.yequan.user.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.yequan.common.application.constant.PermissionConsts;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.Logger;
+import com.yequan.common.util.ValidationUtil;
 import com.yequan.user.dao.SysPermissionDOMapper;
 import com.yequan.user.pojo.dbo.SysPermissionDO;
 import com.yequan.user.service.IAdminPermissionService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -84,23 +83,22 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             if (null == sysPermissionDO) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            Integer parentId = sysPermissionDO.getParentId();
-            String type = sysPermissionDO.getType();
-            if (null == parentId || StringUtils.isEmpty(type) || StringUtils.isEmpty(sysPermissionDO.getPmnName())) {
-                return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
+
+            //校验数据合法性
+            ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(sysPermissionDO);
+            if (validResult.isHasErrors()) {
+                String errors = validResult.getErrors();
+                Logger.error(errors);
+                return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
             }
 
+            Integer parentId = sysPermissionDO.getParentId();
             //parentId为0表示添加的是根节点,校验parentId有效性
             if (parentId != 0) {
                 SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
                 if (null == sysPermissionDB) {
                     return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
                 }
-            }
-            //校验type有效性
-            if (!PermissionConsts.PERMISSION_TYPE_MODULE.equals(type)
-                    && !PermissionConsts.PERMISSION_TYPE_PAGE.equals(type)) {
-                return AppResultBuilder.failure(ResultCode.PERMISSION_TYPE_ERROR);
             }
 
             //获取当前创建人
@@ -110,7 +108,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             }
             sysPermissionDO.setCreatorId(currentUserId);
             //设置创建时间
-            sysPermissionDO.setCreateTime(DateUtil.getCurrentDate());
+            sysPermissionDO.setCreateTime(DateUtil.getCurrentDateStr());
             int insert = sysPermissionDOMapper.insertSelective(sysPermissionDO);
             if (insert > 0) {
                 return AppResultBuilder.success();

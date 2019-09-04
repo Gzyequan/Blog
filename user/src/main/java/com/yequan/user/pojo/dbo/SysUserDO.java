@@ -1,32 +1,52 @@
 package com.yequan.user.pojo.dbo;
 
-import java.util.Date;
+import com.yequan.common.annotation.validator.DateValidator;
+import com.yequan.common.application.constant.DateFormatConsts;
+import com.yequan.common.application.constant.RegexConsts;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class SysUserDO {
     private Integer id;
 
+    @Length(max = 100)
     private String nickname;
 
+    @NotNull
+    @Length(max = 100)
     private String realname;
 
+    @Min(0)
+    @Max(150)
     private Integer age;
 
+    @NotNull
+    @Pattern(regexp = RegexConsts.REGEX_MOBILE)
     private String mobilephone;
 
+    @Length(max = 300)
     private String address;
 
-    private Date birthday;
+    @DateValidator(dateFormat = DateFormatConsts.YYYY_MM_DD)
+    private String birthday;
 
+    @NotNull
     private String password;
 
     private Integer status;
 
-    private Date createTime;
+    @DateValidator
+    private String createTime;
 
-    private Date modifyTime;
+    @DateValidator
+    private String modifyTime;
 
     public SysUserDO(Integer id, String nickname, String realname, Integer age, String mobilephone, String address,
-                     Date birthday, String password, Integer status, Date createTime, Date modifyTime) {
+                     String birthday, String password, Integer status, String createTime, String modifyTime) {
         this.id = id;
         this.nickname = nickname;
         this.realname = realname;
@@ -92,11 +112,11 @@ public class SysUserDO {
         this.address = address == null ? null : address.trim();
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -116,19 +136,19 @@ public class SysUserDO {
         this.status = status;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 }

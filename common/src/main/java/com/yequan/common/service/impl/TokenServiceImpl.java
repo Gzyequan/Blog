@@ -1,5 +1,6 @@
 package com.yequan.common.service.impl;
 
+import com.yequan.common.application.constant.HttpHeaderConsts;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
@@ -8,6 +9,7 @@ import com.yequan.common.service.RedisService;
 import com.yequan.common.service.TokenService;
 import com.yequan.common.util.Logger;
 import com.yequan.common.util.RandomUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,16 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public boolean checkToken(HttpServletRequest request) {
-        return false;
+        String idempotentToken = request.getHeader(HttpHeaderConsts.IDEMPOTENT_TOKEN);
+        if (StringUtils.isEmpty(idempotentToken)) {
+            return false;
+        }
+        String tokenValue = redisService.get(idempotentToken).toString();
+        //校验是否存在该token
+        if (StringUtils.isEmpty(tokenValue)) {
+            return false;
+        }
+        return redisService.del(idempotentToken);
     }
+
 }

@@ -1,14 +1,22 @@
 package com.yequan.user.pojo.dbo;
 
-import java.util.Date;
+import com.yequan.common.annotation.validator.PermissionTypeValidator;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 
 public class SysPermissionDO {
     private Integer id;
 
+    @NotNull
     private Integer parentId;
 
+    @NotNull
+    @Length(max = 200)
     private String pmnName;
 
+    @NotNull
+    @PermissionTypeValidator
     private String type;
 
     private Byte status;
@@ -17,10 +25,11 @@ public class SysPermissionDO {
 
     private Integer updaterId;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date modifyTime;
+    private String modifyTime;
 
+    @Length(max = 200)
     private String detail;
 
     public Integer getId() {
@@ -79,19 +88,19 @@ public class SysPermissionDO {
         this.updaterId = updaterId;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

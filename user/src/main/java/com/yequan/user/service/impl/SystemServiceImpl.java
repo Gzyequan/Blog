@@ -1,10 +1,7 @@
 package com.yequan.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.yequan.common.application.constant.RedisConsts;
-import com.yequan.common.application.constant.SecurityConsts;
-import com.yequan.common.application.constant.TokenConsts;
-import com.yequan.common.application.constant.UserEnum;
+import com.yequan.common.application.constant.*;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -82,7 +79,7 @@ public class SystemServiceImpl implements ISystemService {
             if (status == UserEnum.USER_NORMAL.getStatus()) {
                 TokenPayload tokenPayload = new TokenPayload();
                 tokenPayload.setUserId(user.getId());
-                tokenPayload.setUserAgent(request.getHeader("User-Agent"));
+                tokenPayload.setUserAgent(request.getHeader(HttpHeaderConsts.USER_AGENT));
                 tokenPayload.setIp(IPUtil.getIpAddress(request));
                 String unEncrypt = JSON.toJSONString(tokenPayload);
                 //对载荷信息加密
@@ -101,7 +98,7 @@ public class SystemServiceImpl implements ISystemService {
                 Map<String, Object> redisUserInfoMap = MapUtil.objectToMap(user);
                 redisService.setMap(RedisConsts.REDIS_CURRENT_USER + user.getId(), redisUserInfoMap,
                         RedisConsts.REDIS_EXPIRE_15_MINUTE);
-                response.setHeader("access-token", token);
+                response.setHeader(HttpHeaderConsts.ACCESS_TOKEN, token);
                 return AppResultBuilder.success();
             } else if (status == UserEnum.USER_ILLEGAL.getStatus()) {
                 return AppResultBuilder.failure(ResultCode.USER_ACCOUNT_FORBIDDEN);
@@ -129,6 +126,15 @@ public class SystemServiceImpl implements ISystemService {
             if (null == sysUserDO) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
+
+            //数据格式校验
+            ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(sysUserDO);
+            if (validResult.isHasErrors()) {
+                String errors = validResult.getErrors();
+                Logger.error(errors);
+                return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
+            }
+
             UserDTO userDTO = new UserDTO();
             userDTO.setMobilephone(sysUserDO.getMobilephone());
             //判断手机号是否已被注册
@@ -138,12 +144,9 @@ public class SystemServiceImpl implements ISystemService {
             }
             //对密码进行加密
             String password = sysUserDO.getPassword();
-            if (null == password) {
-                return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
-            }
             String encryptPassword = MD5Util.encrypt(password);
             sysUserDO.setPassword(encryptPassword);
-            sysUserDO.setCreateTime(DateUtil.getCurrentDate());
+            sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
             int insert = sysUserMapper.insertSelective(sysUserDO);
             if (insert > 0) {
                 SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO);

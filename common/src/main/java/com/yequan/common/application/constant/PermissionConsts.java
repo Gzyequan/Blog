@@ -10,6 +10,8 @@ public final class PermissionConsts {
     private PermissionConsts() {
     }
 
+    public static final String PERMISSION_TYPES = "module,page";
+
     /**
      * 权限类型:模块
      */

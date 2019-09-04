@@ -1,5 +1,9 @@
 package com.yequan.user.pojo.dto;
 
+import com.yequan.common.application.constant.RegexConsts;
+
+import javax.validation.constraints.Pattern;
+
 /**
  * @Auther: yq
  * @Date: 2019/7/5 11:24
@@ -9,6 +13,7 @@ public class UserDTO {
 
     private Integer id;
 
+    @Pattern(regexp = RegexConsts.REGEX_MOBILE)
     private String mobilephone;
 
     private String password;

@@ -89,6 +89,17 @@
             <artifactId>spring-aspects</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!--数据校验-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>5.2.1.Final</version>
+        </dependency>
 
         <!--mybatis核心包-->
         <dependency>
@@ -139,15 +150,25 @@
 
         <!--日志管理-->
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.26</version>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.7</version>
+            <artifactId>slf4j-nop</artifactId>
+            <version>1.7.2</version>
         </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.slf4j</groupId>-->
+        <!--            <artifactId>slf4j-log4j12</artifactId>-->
+        <!--            <version>1.7.7</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -342,7 +363,7 @@
                     <exclude>*.jsp</exclude>
                     <exclude>*.md</exclude>
                     <exclude>dev/*</exclude><!--打包时排除src/main/resources/dev下所有-->
-<!--                    <exclude>local/*</exclude> &lt;!&ndash;打包时排除src/main/resources/local下所有&ndash;&gt;-->
+                    <!--                    <exclude>local/*</exclude> &lt;!&ndash;打包时排除src/main/resources/local下所有&ndash;&gt;-->
                 </excludes>
             </resource>
             <resource>

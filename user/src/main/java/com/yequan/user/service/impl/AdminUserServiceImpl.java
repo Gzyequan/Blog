@@ -97,7 +97,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.failure(ResultCode.USER_NOT_EXIST);
             }
             sysUserDO.setId(id);
-            sysUserDO.setModifyTime(DateUtil.getCurrentDate());
+            sysUserDO.setModifyTime(DateUtil.getCurrentDateStr());
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);

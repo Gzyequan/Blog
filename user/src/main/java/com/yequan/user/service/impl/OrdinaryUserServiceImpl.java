@@ -120,7 +120,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             sysUserDO.setPassword(null);
             //排除用户手机号
             sysUserDO.setMobilephone(null);
-            sysUserDO.setModifyTime(DateUtil.getCurrentDate());
+            sysUserDO.setModifyTime(DateUtil.getCurrentDateStr());
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);

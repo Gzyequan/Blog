@@ -1,6 +1,7 @@
 package com.yequan.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.yequan.common.application.constant.HttpHeaderConsts;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.constant.SecurityConsts;
 import com.yequan.common.application.response.AppResultBuilder;
@@ -38,7 +39,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         // 校验token
 
         //获取客户端传入的token
-        String accessToken = request.getHeader("access-token");
+        String accessToken = request.getHeader(HttpHeaderConsts.ACCESS_TOKEN);
 
         if (StringUtils.isEmpty(accessToken)) {
             Logger.error("token为空");
@@ -82,7 +83,7 @@ public class LoginInterceptor extends BaseInterceptor implements HandlerIntercep
         }
 
         //获取客户端信息,用于校验在token有效期内是否是同一个设备中登录
-        String userAgent = request.getHeader("User-Agent");
+        String userAgent = request.getHeader(HttpHeaderConsts.USER_AGENT);
         String ipAddress = IPUtil.getIpAddress(request);
         if (!tokenPayload.getUserAgent().equals(userAgent)
                 || !tokenPayload.getIp().equals(ipAddress)) {

@@ -7,7 +7,7 @@ package com.yequan.common.application.constant;
  */
 public class RegexConsts {
 
-    // 正则表达式: 验证手机号
+    // 验证手机号
     public static final String REGEX_MOBILE = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$";
     // 验证邮箱
     public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
@@ -20,7 +20,10 @@ public class RegexConsts {
     // 验证IP地址
     public static final String REGEX_IP_ADDR = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
 
+    // 校验密码规则:包含大小写字母,数字,至少8位
+    public static final String REGEX_PASSWORD = "[A-Za-z0-9]{8,}$";
 
+    // 匹配手机号码中间4位
     public static final String REGEX_MOBILE_CENTER_4 = "(\\d{3})\\d{4}(\\d{4})";
 
 }

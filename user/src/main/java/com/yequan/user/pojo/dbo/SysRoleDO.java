@@ -1,11 +1,16 @@
 package com.yequan.user.pojo.dbo;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class SysRoleDO {
 
     private Integer id;
 
+    @NotNull
+    @Length(max = 60)
     private String roleName;
 
     private Date createTime;

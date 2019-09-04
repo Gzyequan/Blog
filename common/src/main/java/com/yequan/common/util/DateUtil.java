@@ -1,5 +1,8 @@
 package com.yequan.common.util;
 
+import com.yequan.common.application.constant.DateFormatConsts;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -9,8 +12,34 @@ import java.util.Date;
  */
 public class DateUtil {
 
-    public static Date getCurrentDate(){
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    public static Date getCurrentDate() {
         return new Date();
     }
+
+    /**
+     * 获取指定格式为 {format} 的当前时间
+     *
+     * @param format
+     * @return
+     */
+    public static String getCurrentDateStr(String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return simpleDateFormat.format(new Date());
+    }
+
+    /**
+     * 获取格式为 yyyy-MM-dd HH:mm:ss 的当前时间
+     *
+     * @return
+     */
+    public static String getCurrentDateStr() {
+        return getCurrentDateStr(DateFormatConsts.YYYY_MM_DD_HH_MM_SS);
+    }
+
 
 }

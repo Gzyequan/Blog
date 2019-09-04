@@ -1,6 +1,7 @@
 package com.yequan.common.util;
 
 import com.yequan.common.application.constant.OSEnum;
+import org.slf4j.LoggerFactory;
 
 /**
  * @Auther: yq
@@ -22,6 +23,10 @@ public class OSUtil {
             return OSEnum.OS_LINUX.getCode();
         }
         return OSEnum.OTHER.getCode();
+    }
+
+    public static void main(String[] args) {
+        LoggerFactory.getLogger(OSUtil.class).debug("查看执行流程");
     }
 
 }
