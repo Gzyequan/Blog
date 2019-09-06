@@ -28,7 +28,7 @@ public @interface DateValidator {
      *
      * @return
      */
-    String message() default "日期格式不匹配{dateFormat}";
+    String message() default "日期格式不匹配,正确:{dateFormat}";
 
     /**
      * 校验规则

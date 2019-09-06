@@ -12,6 +12,7 @@ import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.pojo.dbo.SysUserDO;
 import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.ISystemService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -137,11 +138,6 @@ public class SystemServiceImpl implements ISystemService {
 
             UserDTO userDTO = new UserDTO();
             userDTO.setMobilephone(sysUserDO.getMobilephone());
-            //判断手机号是否已被注册
-            SysUserDO dbUser = sysUserMapper.selectByMobilephone(userDTO);
-            if (null != dbUser) {
-                return AppResultBuilder.failure(ResultCode.USER_MOBILE_EXISTED);
-            }
             //对密码进行加密
             String password = sysUserDO.getPassword();
             String encryptPassword = MD5Util.encrypt(password);
@@ -156,6 +152,30 @@ public class SystemServiceImpl implements ISystemService {
             Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_CREATE_ERROR);
+    }
+
+    /**
+     * 校验手机号是否注册
+     *
+     * @param mobilephone
+     * @return
+     */
+    public AppResult<Void> validateMobilephone(String mobilephone) {
+        if (StringUtils.isEmpty(mobilephone)) {
+            return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+        }
+        //手机号码格式校验
+        if (!mobilephone.matches(RegexConsts.REGEX_MOBILE)) {
+            return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+        }
+        UserDTO userDTO = new UserDTO();
+        userDTO.setMobilephone(mobilephone);
+        //判断手机号是否已被注册
+        SysUserDO dbUser = sysUserMapper.selectByMobilephone(userDTO);
+        if (null == dbUser) {
+            return AppResultBuilder.success();
+        }
+        return AppResultBuilder.failure(ResultCode.USER_MOBILE_EXISTED);
     }
 
     /**

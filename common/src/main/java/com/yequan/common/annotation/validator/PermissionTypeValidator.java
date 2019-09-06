@@ -21,7 +21,7 @@ import java.util.List;
 @Constraint(validatedBy = {PermissionTypeValidator.PermissionTypeValidatorInner.class})
 public @interface PermissionTypeValidator {
 
-    String message() default "权限类型错误{types}";
+    String message() default "权限类型错误,正确:{types}";
 
     String types() default PermissionConsts.PERMISSION_TYPES;
 

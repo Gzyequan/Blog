@@ -18,4 +18,5 @@ public interface ISystemService {
 
     AppResult<SysUserDO> register(SysUserDO sysUserDO);
 
+    AppResult<Void> validateMobilephone(String mobilephone);
 }

@@ -17,6 +17,9 @@ import java.lang.reflect.Method;
  * @Auther: Administrator
  * @Date: 2019/8/31 8:49
  * @Description: 接口幂等拦截器
+ *               原理说明:1.在需要幂等性校验的接口添加Idempotent注解
+ *               2.在请求目标接口前先获取一个token,该token会放入redis中,并设置过期时间
+ *               3.请求接口需再请求头中携带幂等性token进行校验,校验通过在redis中删除该token信息
  */
 public class IdempotentInterceptor extends BaseInterceptor implements HandlerInterceptor {
 
