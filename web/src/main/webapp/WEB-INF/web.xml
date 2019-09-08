@@ -14,7 +14,7 @@
         <param-name>webAppRootKey</param-name>
         <param-value>webApp.root</param-value>
     </context-param>
-    
+
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>classpath:local/log4j.properties</param-value>

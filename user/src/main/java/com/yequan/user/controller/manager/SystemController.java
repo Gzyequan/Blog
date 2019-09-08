@@ -20,22 +20,21 @@ import javax.validation.constraints.Pattern;
  * @Description:
  */
 @RestController
-@ApiVersion
-@RequestMapping("api/{version}")
+@RequestMapping("{version}")
 public class SystemController {
 
     @Autowired
     private ISystemService iSystemService;
 
     @PostMapping(value = "/login", produces = "application/json;charset=UTF-8")
-    @ApiVersion(3)
+    @ApiVersion(1)
     public AppResult<String> login(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) {
         return iSystemService.login(request, response, userDTO);
     }
 
     @PostMapping(value = "/login", produces = "application/json;charset=UTF-8")
     @ApiVersion(2)
-    public AppResult<String> login2(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) {
+    public AppResult<String> loginV2(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) {
         return iSystemService.login(request, response, userDTO);
     }
 

@@ -1,5 +1,7 @@
 package com.yequan.common.api;
 
+import com.yequan.common.util.Logger;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,71 +15,39 @@ import java.util.regex.Pattern;
  */
 public class ApiVersionRequestCondition implements RequestCondition<ApiVersionRequestCondition> {
 
-    //匹配request中的版本号 v1 v2 ...
-    private static final Pattern VERSION_PATTERN = Pattern.compile("/v(\\d+).*");
+    // 路径中版本的前缀， 这里用 /v[1-9]/的形式
+    private final static Pattern VERSION_PREFIX_PATTERN = Pattern.compile("v(\\d+)/");
 
-    //当前版本号
-    private int version;
+    private int apiVersion;
 
-    //最大版本号
-    private static int maxVersion = 1;
-
-    public ApiVersionRequestCondition(int version) {
-        this.version = version;
+    public ApiVersionRequestCondition(int apiVersion) {
+        this.apiVersion = apiVersion;
     }
 
-    /**
-     * 与另一个condition组合,例如方法和类都配置了@RequestMapping的url组合
-     *
-     * @param other
-     * @return
-     */
-    @Override
+    //将不同的筛选条件合并,这里采用的覆盖，即后来的规则生效
     public ApiVersionRequestCondition combine(ApiVersionRequestCondition other) {
-        //版本标签会在类或者方法中同时存在,优先整合方法上的版本信息
-        return new ApiVersionRequestCondition(other.version);
+        return new ApiVersionRequestCondition(other.getApiVersion());
     }
 
-    /**
-     * 检查request是否匹配，可能会返回新建的对象，例如，如果规则配置了多个模糊规则，可能当前请求
-     * 只满足其中几个，那么只会返回这几个条件构建的Condition
-     *
-     * @param request
-     * @return
-     */
-    @Override
+    //根据request查找匹配到的筛选条件
     public ApiVersionRequestCondition getMatchingCondition(HttpServletRequest request) {
-        //正则匹配请求uri中是否有版本号
-        Matcher matcher = VERSION_PATTERN.matcher(request.getRequestURI());
-        if (matcher.find()) {
-            String versionNo = matcher.group(1);
-            Integer version = Integer.valueOf(versionNo);
-            //排除大于最大版本号和小于最低版本号的
-            if (version <= maxVersion && version > this.version) {
+        Logger.debug(request.getRequestURI());
+        Matcher m = VERSION_PREFIX_PATTERN.matcher(request.getRequestURI());
+        if (m.find()) {
+            Integer version = Integer.valueOf(m.group(1));
+            if (version >= this.apiVersion) // 如果请求的版本号大于配置版本号， 则满足，即与请求的
                 return this;
-            }
         }
         return null;
     }
 
-    /**
-     * 同时满足多个Condition时,区分优先使用哪一个
-     *
-     * @param other
-     * @param request
-     * @return
-     */
-    @Override
+    //实现不同条件类的比较，从而实现优先级排序
     public int compareTo(ApiVersionRequestCondition other, HttpServletRequest request) {
-        //以版本号大小判定优先级,越高越优先
-        return other.version - this.version;
+        return other.getApiVersion() - this.apiVersion;
     }
 
-    public int getVersion() {
-        return version;
+    public int getApiVersion() {
+        return apiVersion;
     }
 
-    public static void setMaxVersion(int maxVersion) {
-        ApiVersionRequestCondition.maxVersion = maxVersion;
-    }
 }

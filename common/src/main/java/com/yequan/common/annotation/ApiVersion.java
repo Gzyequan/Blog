@@ -1,5 +1,7 @@
 package com.yequan.common.annotation;
 
+import org.springframework.web.bind.annotation.Mapping;
+
 import java.lang.annotation.*;
 
 /**
@@ -10,6 +12,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Mapping
 public @interface ApiVersion {
 
     //接口版本号

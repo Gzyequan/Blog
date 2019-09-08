@@ -1,5 +1,6 @@
 package com.yequan.user.service.impl;
 
+import com.yequan.common.annotation.CrossPermission;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.constant.UserEnum;
 import com.yequan.common.application.response.AppResult;
