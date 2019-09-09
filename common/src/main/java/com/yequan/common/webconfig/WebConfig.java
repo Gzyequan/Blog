@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 /**
  * @Auther: yq
  * @Date: 2019/9/6 15:08
- * @Description:
+ * @Description: SpringMvc全局配置
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {

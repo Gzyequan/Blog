@@ -11,11 +11,14 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
     <!--映射器适配器:这里指定的是SpringMVC自己的RequestMappingHandlerMapping,
-     如果使用自定义的且用WebMvcConfigurationSupport注入,需要将这个标签取消-->
+    如果使用自定义的且用WebMvcConfigurationSupport注入,需要将这个标签取消-->
     <!--    <mvc:annotation-driven/>-->
+
     <mvc:default-servlet-handler/>
 
     <context:component-scan base-package="com.yequan"/>
+
+    <context:component-scan base-package="com.yequan.common"/>
 
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="order" value="1"/>
@@ -70,6 +73,16 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean class="com.yequan.common.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
+        <!--横向越权拦截-->
+        <mvc:interceptor>
+            <mvc:mapping path="/user/**"/>
+            <bean class="com.yequan.common.interceptor.CrossPermissionInterceptor"/>
+        </mvc:interceptor>
+        <!--幂等性拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.yequan.common.interceptor.IdempotentInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

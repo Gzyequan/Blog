@@ -1,7 +1,6 @@
 package com.yequan.common.api;
 
 import com.yequan.common.util.Logger;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +23,22 @@ public class ApiVersionRequestCondition implements RequestCondition<ApiVersionRe
         this.apiVersion = apiVersion;
     }
 
-    //将不同的筛选条件合并,这里采用的覆盖，即后来的规则生效
+    /**
+     * 将不同的筛选条件合并,这里采用的覆盖，即后来的规则生效
+     *
+     * @param other
+     * @return
+     */
     public ApiVersionRequestCondition combine(ApiVersionRequestCondition other) {
         return new ApiVersionRequestCondition(other.getApiVersion());
     }
 
-    //根据request查找匹配到的筛选条件
+    /**
+     * 根据request查找匹配到的筛选条件
+     *
+     * @param request
+     * @return
+     */
     public ApiVersionRequestCondition getMatchingCondition(HttpServletRequest request) {
         Logger.debug(request.getRequestURI());
         Matcher m = VERSION_PREFIX_PATTERN.matcher(request.getRequestURI());
@@ -41,7 +50,13 @@ public class ApiVersionRequestCondition implements RequestCondition<ApiVersionRe
         return null;
     }
 
-    //实现不同条件类的比较，从而实现优先级排序
+    /**
+     * 实现不同条件类的比较，从而实现优先级排序
+     *
+     * @param other
+     * @param request
+     * @return
+     */
     public int compareTo(ApiVersionRequestCondition other, HttpServletRequest request) {
         return other.getApiVersion() - this.apiVersion;
     }
