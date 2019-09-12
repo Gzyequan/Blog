@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class ApiVersionRequestCondition implements RequestCondition<ApiVersionRequestCondition> {
 
-    // 路径中版本的前缀， 这里用 /v[1-9]/的形式
+    // 路径中版本号的前缀， 这里用 /v[1-9]/的形式
     private final static Pattern VERSION_PREFIX_PATTERN = Pattern.compile("v(\\d+)/");
 
     private int apiVersion;
