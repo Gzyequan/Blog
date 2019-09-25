@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>CommonWeb</artifactId>
@@ -9,12 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>web</artifactId>
-    <packaging>war</packaging>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <artifactId>message</artifactId>
 
     <dependencies>
         <dependency>
@@ -22,14 +17,6 @@
             <artifactId>user</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.yequan.commonweb</groupId>
-            <artifactId>message</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
-    <build>
-        <finalName>commonweb</finalName>
-    </build>
 </project>

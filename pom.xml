@@ -11,6 +11,7 @@
         <module>common</module>
         <module>user</module>
         <module>web</module>
+        <module>message</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -92,14 +93,13 @@
 
         <!--websocket依赖-->
         <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-websocket</artifactId>
+            <artifactId>spring-messaging</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
