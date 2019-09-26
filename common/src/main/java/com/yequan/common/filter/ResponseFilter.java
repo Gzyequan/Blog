@@ -23,8 +23,8 @@ import java.nio.charset.StandardCharsets;
 public class ResponseFilter extends BaseFilter implements Filter {
 
     private FilterHandlerContext filterHandlerContext;
-    private FilterRule passwordFilter;
-    private FilterRule mobilephoneFilter;
+    private FilterRule passwordFilterRule;
+    private FilterRule mobilephoneFilterRule;
     private final String[] filterType = {"simple", "regex", "encrypt"};
 
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,19 +38,19 @@ public class ResponseFilter extends BaseFilter implements Filter {
         /**
          * password过滤规则:SimpleFilterHandler
          */
-        passwordFilter = new FilterRule();
-        passwordFilter.setKey("password");
-        passwordFilter.setType(filterType[0]);
-        passwordFilter.setReplacement("");
+        passwordFilterRule = new FilterRule();
+        passwordFilterRule.setKey("password");
+        passwordFilterRule.setType(filterType[0]);
+        passwordFilterRule.setReplacement("");
 
         /**
          * mobilephone过滤规则:RegexFilterHandler
          */
-        mobilephoneFilter = new FilterRule();
-        mobilephoneFilter.setKey("mobilephone");
-        mobilephoneFilter.setType(filterType[1]);
-        mobilephoneFilter.setRegex(RegexConsts.REGEX_MOBILE_CENTER_4);
-        mobilephoneFilter.setReplacement("$1****$2");
+        mobilephoneFilterRule = new FilterRule();
+        mobilephoneFilterRule.setKey("mobilephone");
+        mobilephoneFilterRule.setType(filterType[1]);
+        mobilephoneFilterRule.setRegex(RegexConsts.REGEX_MOBILE_CENTER_4);
+        mobilephoneFilterRule.setReplacement("$1****$2");
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -79,14 +79,14 @@ public class ResponseFilter extends BaseFilter implements Filter {
             if (null != data) {
                 if (data instanceof JSONObject) {
                     JSONObject jsonObject = (JSONObject) data;
-                    filterHandlerContext.filterData(jsonObject, passwordFilter);
-                    filterHandlerContext.filterData(jsonObject, mobilephoneFilter);
+                    filterHandlerContext.filterData(jsonObject, passwordFilterRule);
+                    filterHandlerContext.filterData(jsonObject, mobilephoneFilterRule);
                 } else if (data instanceof JSONArray) {
                     JSONArray jsonArray = (JSONArray) data;
                     for (int i = 0; i < jsonArray.size(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        filterHandlerContext.filterData(jsonObject, passwordFilter);
-                        filterHandlerContext.filterData(jsonObject, mobilephoneFilter);
+                        filterHandlerContext.filterData(jsonObject, passwordFilterRule);
+                        filterHandlerContext.filterData(jsonObject, mobilephoneFilterRule);
                     }
                 }
             }
