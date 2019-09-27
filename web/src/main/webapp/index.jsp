@@ -11,12 +11,13 @@
 
 <script type="text/javascript">
     var websocket = null;
+    alert(document.location.host);
     if ('WebSocket' in window) {
-        websocket = new WebSocket("ws://127.0.0.1:8069/commonweb/websocket/webSocketIMServer");
+        websocket = new WebSocket("ws://127.0.0.1:8069/commonweb/socketServer?user=yequan");
     } else if ('MozWebSocket' in window) {
-        websocket = new MozWebSocket("ws://127.0.0.1:8069/commonweb/websocket/webSocketIMServer");
+        websocket = new MozWebSocket("ws://127.0.0.1:8069/commonweb/sockjs/socketServer?user=yequan");
     } else {
-        websocket = new SockJS("http://127.0.0.1:8069/commonweb/websocketjs/webSocketIMServer");
+        websocket = new SockJS("http://127.0.0.1:8069/commonweb/socketServer?user=yequan");
     }
     websocket.onopen = onOpen;
     websocket.onmessage = onMessage;

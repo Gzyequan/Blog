@@ -1,8 +1,11 @@
 package com.yequan.message.websocket.handler;
 
 import com.yequan.common.util.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.web.socket.*;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +17,7 @@ import java.util.Set;
  * @Date: 2019/9/25 15:31
  * @Description:
  */
-@Service
-public class SocketHandler implements WebSocketHandler {
+public class MessageWebSocketHandler extends TextWebSocketHandler {
 
     //存放在线用户
     private final static Map<String, WebSocketSession> userMap;
@@ -92,7 +94,7 @@ public class SocketHandler implements WebSocketHandler {
     }
 
     private String getUserId(WebSocketSession session) {
-        return session.getAttributes().get("userId").toString();
+        return session.getAttributes().get("user").toString();
     }
 
 }
