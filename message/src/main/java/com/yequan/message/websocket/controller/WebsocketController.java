@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @Auther: yq
  * @Date: 2019/9/24 15:10
- * @Description:
+ * @Description: 前端页面与后端异步通信WebSocketService测试类
  */
 @RestController
 @RequestMapping("websocket/")
@@ -24,11 +24,20 @@ public class WebsocketController {
 
     @GetMapping(value = "one/{userId}", produces = "application/json;charset=UTF-8")
     public void sendMsgToUser(@PathVariable("userId") Integer userId) {
-        try {
-            webSocketService.sendMsgToUser(userId, "当前时间: " + DateUtil.getCurrentDateStr());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    webSocketService.sendMsgToUser(userId, "耗时操作前时间: " + DateUtil.getCurrentDateStr());
+                    Thread.sleep(10000);
+                    webSocketService.sendMsgToUser(userId, "耗时操作完成时间: " + DateUtil.getCurrentDateStr());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @GetMapping(value = "all", produces = "application/json;charset=UTF-8")

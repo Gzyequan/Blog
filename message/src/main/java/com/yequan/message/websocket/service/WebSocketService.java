@@ -18,38 +18,50 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date: 2019/9/27 09:32
  * @Description: @ServerEndpoint 注解是一个类层次的注解，它的功能主要是将目前的类定义成一个websocket服务器端,
  * 注解的值将被用于监听用户连接的终端访问URL地址,客户端可以通过这个URL来连接到WebSocket服务器端
+ * <p>
+ * 本类作用:用于与前端页面异步通信
  */
 @Service("websocket")
 @ServerEndpoint("/websocket/{userId}")
 public class WebSocketService {
+
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
-    //concurrent包的线程安全Map，服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
-    private static ConcurrentHashMap<Integer, WebSocketService> webSocketMap = new ConcurrentHashMap<>();
+    //concurrent包的线程安全Map,key为userId,值为该用户下的所有连接对象
+    private static ConcurrentHashMap<Integer, WebSocketService> userWebSocketMap = new ConcurrentHashMap<>();
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
 
     /**
      * 连接建立成功调用的方法
+     *
+     * @param session
+     * @param userId
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") Integer userId) {
-        this.session=session;
-        //加入set中
-        webSocketMap.put(userId, this);
-        //在线数加1
-        addOnlineCount();
-        System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+        if (!userWebSocketMap.containsKey(userId)) {
+            this.session = session;
+            //加入Map中
+            userWebSocketMap.put(userId, this);
+            //在线数加1
+            addOnlineCount();
+            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+        }
     }
 
     /**
      * 连接关闭调用的方法
+     *
+     * @param userId
      */
     @OnClose
     public void onClose(@PathParam("userId") Integer userId) {
-        webSocketMap.remove(userId);  //从set中删除
-        subOnlineCount();           //在线数减1
-        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        if (userWebSocketMap.containsKey(userId)) {
+            userWebSocketMap.remove(userId);  //从map中删除
+            subOnlineCount();           //在线数减1
+            System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        }
     }
 
     /**
@@ -80,8 +92,8 @@ public class WebSocketService {
      * @param msg
      */
     public void sendMsgToUser(Integer userId, String msg) throws IOException {
-        if (webSocketMap.containsKey(userId)) {
-            WebSocketService webSocketService = webSocketMap.get(userId);
+        if (userWebSocketMap.containsKey(userId)) {
+            WebSocketService webSocketService = userWebSocketMap.get(userId);
             webSocketService.sendMessage(msg);
         } else {
             Logger.error("用户{}未建立连接", userId);
@@ -95,7 +107,7 @@ public class WebSocketService {
      * @throws IOException
      */
     public void sendMsgToAllUser(String msg) throws IOException {
-        Set<Map.Entry<Integer, WebSocketService>> allConnection = webSocketMap.entrySet();
+        Set<Map.Entry<Integer, WebSocketService>> allConnection = userWebSocketMap.entrySet();
         for (Map.Entry<Integer, WebSocketService> connection : allConnection) {
             WebSocketService webSocketService = connection.getValue();
             webSocketService.sendMessage(msg);
