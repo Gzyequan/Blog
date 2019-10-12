@@ -1,4 +1,4 @@
-package com.yequan.common.shiro.realm;
+package com.yequan.shiro.realm;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -9,20 +9,18 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 /**
  * @Auther: yq
- * @Date: 2019/7/15 11:08
+ * @Date: 2019/10/12 14:18
  * @Description:
  */
 public class UserRealm extends AuthorizingRealm {
 
-
-
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         return null;
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         return null;
     }
 }
