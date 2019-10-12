@@ -1,14 +1,14 @@
 package com.yequan.common.interceptor;
 
 import com.alibaba.fastjson.JSON;
-import com.yequan.common.application.constant.HttpHeaderConsts;
-import com.yequan.common.application.constant.RedisConsts;
-import com.yequan.common.application.constant.SecurityConsts;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
 import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
+import com.yequan.constant.HttpHeaderConsts;
+import com.yequan.constant.RedisConsts;
+import com.yequan.constant.SecurityConsts;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

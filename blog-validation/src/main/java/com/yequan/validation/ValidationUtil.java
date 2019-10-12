@@ -1,4 +1,4 @@
-package com.yequan.common.util;
+package com.yequan.validation;
 
 import org.hibernate.validator.HibernateValidator;
 

@@ -1,8 +1,8 @@
 package com.yequan.pojo.entity;
 
-import com.yequan.common.annotation.validator.DateValidator;
-import com.yequan.common.application.constant.DateFormatConsts;
-import com.yequan.common.application.constant.RegexConsts;
+import com.yequan.constant.DateFormatConsts;
+import com.yequan.constant.RegexConsts;
+import com.yequan.validation.annotation.DateValidator;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Max;

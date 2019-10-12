@@ -1,7 +1,5 @@
 package com.yequan.common.service.impl;
 
-import com.yequan.common.application.constant.HttpHeaderConsts;
-import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -9,6 +7,8 @@ import com.yequan.common.service.RedisService;
 import com.yequan.common.service.TokenService;
 import com.yequan.common.util.Logger;
 import com.yequan.common.util.RandomUtil;
+import com.yequan.constant.HttpHeaderConsts;
+import com.yequan.constant.RedisConsts;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

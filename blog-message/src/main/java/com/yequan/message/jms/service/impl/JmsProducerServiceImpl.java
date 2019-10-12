@@ -1,6 +1,6 @@
-package com.yequan.common.jms.service.impl;
+package com.yequan.message.jms.service.impl;
 
-import com.yequan.common.jms.service.JmsProducerService;
+import com.yequan.message.jms.service.JmsProducerService;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;

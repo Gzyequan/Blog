@@ -1,6 +1,6 @@
 package com.yequan.pojo.dto;
 
-import com.yequan.common.application.constant.RegexConsts;
+import com.yequan.constant.RegexConsts;
 
 import javax.validation.constraints.Pattern;
 

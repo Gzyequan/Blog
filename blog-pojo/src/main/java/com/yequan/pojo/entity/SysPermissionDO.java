@@ -1,6 +1,6 @@
 package com.yequan.pojo.entity;
 
-import com.yequan.common.annotation.validator.PermissionTypeValidator;
+import com.yequan.validation.annotation.PermissionTypeValidator;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;

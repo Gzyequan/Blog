@@ -1,6 +1,6 @@
 package com.yequan.common.util;
 
-import com.yequan.common.application.constant.SecurityConsts;
+import com.yequan.constant.SecurityConsts;
 import org.apache.commons.codec.digest.DigestUtils;
 
 /**

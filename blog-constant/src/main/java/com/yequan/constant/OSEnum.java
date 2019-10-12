@@ -1,4 +1,4 @@
-package com.yequan.common.application.constant;
+package com.yequan.constant;
 
 /**
  * @Auther: Administrator

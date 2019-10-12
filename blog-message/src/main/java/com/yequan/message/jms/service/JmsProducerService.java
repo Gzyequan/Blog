@@ -1,4 +1,4 @@
-package com.yequan.common.jms.service;
+package com.yequan.message.jms.service;
 
 import javax.jms.Destination;
 import java.util.Map;

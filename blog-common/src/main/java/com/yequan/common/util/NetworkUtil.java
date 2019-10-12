@@ -1,6 +1,6 @@
 package com.yequan.common.util;
 
-import com.yequan.common.application.constant.OSEnum;
+import com.yequan.constant.OSEnum;
 
 import java.io.BufferedReader;
 import java.io.IOException;

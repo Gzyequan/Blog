@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.yequan.blog</groupId>
-            <artifactId>blog-common</artifactId>
+            <artifactId>blog-validation</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

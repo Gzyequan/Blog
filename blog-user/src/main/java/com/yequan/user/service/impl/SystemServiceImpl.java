@@ -1,17 +1,18 @@
 package com.yequan.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.yequan.common.application.constant.*;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.bean.TokenPayload;
 import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
+import com.yequan.constant.*;
 import com.yequan.pojo.dto.UserDTO;
 import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.service.ISystemService;
+import com.yequan.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

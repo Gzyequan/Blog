@@ -1,6 +1,6 @@
 package com.yequan.common.util;
 
-import com.yequan.common.application.constant.RegexConsts;
+import com.yequan.constant.RegexConsts;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Pattern;

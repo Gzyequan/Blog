@@ -1,6 +1,6 @@
 package com.yequan.common.util;
 
-import com.yequan.common.application.constant.DateFormatConsts;
+import com.yequan.constant.DateFormatConsts;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

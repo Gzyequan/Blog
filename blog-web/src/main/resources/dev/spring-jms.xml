@@ -31,7 +31,7 @@
     </bean>
 
     <!--消息监听器-->
-    <bean id="consumerMessageListener" class="com.yequan.common.jms.listener.ConsumerMessageListener"/>
+    <bean id="consumerMessageListener" class="com.yequan.message.jms.listener.ConsumerMessageListener"/>
 
     <!--消息监听容器-->
     <bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">

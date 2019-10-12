@@ -13,6 +13,7 @@
         <module>blog-message</module>
         <module>blog-pojo</module>
         <module>blog-validation</module>
+        <module>blog-constant</module>
     </modules>
     <packaging>pom</packaging>
     <name>Blog</name>

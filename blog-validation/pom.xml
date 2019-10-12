@@ -11,5 +11,12 @@
 
     <artifactId>blog-validation</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.yequan.blog</groupId>
+            <artifactId>blog-constant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -1,6 +1,5 @@
 package com.yequan.message.websocket.service;
 
-
 import com.yequan.common.util.Logger;
 import org.springframework.stereotype.Service;
 

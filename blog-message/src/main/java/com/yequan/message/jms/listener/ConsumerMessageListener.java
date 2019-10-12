@@ -1,4 +1,4 @@
-package com.yequan.common.jms.listener;
+package com.yequan.message.jms.listener;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

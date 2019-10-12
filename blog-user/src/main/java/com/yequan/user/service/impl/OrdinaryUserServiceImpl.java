@@ -1,12 +1,12 @@
 package com.yequan.user.service.impl;
 
-import com.yequan.common.application.constant.RedisConsts;
-import com.yequan.common.application.constant.UserEnum;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
+import com.yequan.constant.RedisConsts;
+import com.yequan.constant.UserEnum;
 import com.yequan.pojo.dto.UserDTO;
 import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.dao.SysUserMapper;
