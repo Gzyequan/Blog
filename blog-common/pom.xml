@@ -3,20 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>CommonWeb</artifactId>
-        <groupId>com.yequan.commonweb</groupId>
+        <artifactId>Blog</artifactId>
+        <groupId>com.yequan.blog</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+    <artifactId>blog-common</artifactId>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>pojo</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.yequan.commonweb</groupId>
-            <artifactId>common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <packaging>jar</packaging>
+    <name>blog-common</name>
 
 </project>
