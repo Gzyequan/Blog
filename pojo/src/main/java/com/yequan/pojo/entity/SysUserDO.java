@@ -1,4 +1,4 @@
-package com.yequan.user.pojo.dbo;
+package com.yequan.pojo.entity;
 
 import com.yequan.common.annotation.validator.DateValidator;
 import com.yequan.common.application.constant.DateFormatConsts;

@@ -1,6 +1,6 @@
 package com.yequan.user.dao;
 
-import com.yequan.user.pojo.dbo.SysPermissionDO;
+import com.yequan.pojo.entity.SysPermissionDO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

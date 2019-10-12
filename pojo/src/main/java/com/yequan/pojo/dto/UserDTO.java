@@ -1,4 +1,4 @@
-package com.yequan.user.pojo.dto;
+package com.yequan.pojo.dto;
 
 import com.yequan.common.application.constant.RegexConsts;
 

@@ -9,8 +9,13 @@ package com.yequan.common.service.impl;
 import com.yequan.common.service.RedisService;
 import com.yequan.common.util.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -925,4 +930,37 @@ public class RedisServiceImpl implements RedisService {
         }
         return Collections.emptySet();
     }
+
+    /**
+     * 发布消息
+     *
+     * @param channel 频道
+     * @param message 要发布的消息
+     */
+    public synchronized void publish(String channel, String message) {
+        redisTemplate.execute(new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                ((Jedis) connection.getNativeConnection()).publish(channel, message);
+                return null;
+            }
+        });
+    }
+
+    /**
+     * 订阅消息
+     *
+     * @param jedisPubSub
+     * @param channels
+     */
+    public synchronized void subscribe(JedisPubSub jedisPubSub, String... channels) {
+        redisTemplate.execute(new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                ((Jedis) connection.getNativeConnection()).subscribe(jedisPubSub, channels);
+                return null;
+            }
+        });
+    }
+
 }

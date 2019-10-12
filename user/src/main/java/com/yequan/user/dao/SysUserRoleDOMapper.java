@@ -1,6 +1,6 @@
 package com.yequan.user.dao;
 
-import com.yequan.user.pojo.dbo.SysUserRoleDO;
+import com.yequan.pojo.entity.SysUserRoleDO;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,7 +1,7 @@
 package com.yequan.user.dao;
 
-import com.yequan.user.pojo.dbo.SysUserDO;
-import com.yequan.user.pojo.dto.UserDTO;
+import com.yequan.pojo.dto.UserDTO;
+import com.yequan.pojo.entity.SysUserDO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

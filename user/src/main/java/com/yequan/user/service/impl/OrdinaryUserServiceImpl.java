@@ -1,6 +1,5 @@
 package com.yequan.user.service.impl;
 
-import com.yequan.common.annotation.CrossPermission;
 import com.yequan.common.application.constant.RedisConsts;
 import com.yequan.common.application.constant.UserEnum;
 import com.yequan.common.application.response.AppResult;
@@ -8,9 +7,9 @@ import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
+import com.yequan.pojo.dto.UserDTO;
+import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.dao.SysUserMapper;
-import com.yequan.user.pojo.dbo.SysUserDO;
-import com.yequan.user.pojo.dto.UserDTO;
 import com.yequan.user.service.IOrdinaryUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.yequan.user.controller.manager;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.dbo.SysUserDO;
+import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.service.IAdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

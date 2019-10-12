@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yequan.user.dao.SysRoleDOMapper">
-    <resultMap id="BaseResultMap" type="com.yequan.user.pojo.dbo.SysRoleDO">
+    <resultMap id="BaseResultMap" type="com.yequan.pojo.entity.SysRoleDO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -21,13 +21,13 @@
     delete from sys_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.yequan.user.pojo.dbo.SysRoleDO">
+    <insert id="insert" parameterType="com.yequan.pojo.entity.SysRoleDO">
     insert into sys_role (id, role_name, create_time, 
       modify_time, detail)
     values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{detail,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.yequan.user.pojo.dbo.SysRoleDO">
+    <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysRoleDO">
         insert into sys_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -64,7 +64,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.user.pojo.dbo.SysRoleDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.pojo.entity.SysRoleDO">
         update sys_role
         <set>
             <if test="roleName != null">
@@ -82,7 +82,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.yequan.user.pojo.dbo.SysRoleDO">
+    <update id="updateByPrimaryKey" parameterType="com.yequan.pojo.entity.SysRoleDO">
     update sys_role
     set role_name = #{roleName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

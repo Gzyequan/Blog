@@ -1,5 +1,7 @@
 package com.yequan.common.service;
 
+import redis.clients.jedis.JedisPubSub;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -92,4 +94,9 @@ public interface RedisService {
     boolean removeZSet(String key, long start, long end);
 
     <T> Set<T> getZSet(String key, long start, long end);
+
+    void publish(String channel, String message);
+
+    void subscribe(JedisPubSub jedisPubSub, String... channels);
+
 }

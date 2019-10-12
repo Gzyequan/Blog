@@ -1,7 +1,7 @@
 package com.yequan.user.controller.manager;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.dbo.SysPermissionDO;
+import com.yequan.pojo.entity.SysPermissionDO;
 import com.yequan.user.service.IAdminPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.yequan.user.pojo.dbo;
+package com.yequan.pojo.entity;
 
 import com.yequan.common.annotation.validator.PermissionTypeValidator;
 import org.hibernate.validator.constraints.Length;

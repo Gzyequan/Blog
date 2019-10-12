@@ -1,4 +1,4 @@
-package com.yequan.user.pojo.dbo;
+package com.yequan.pojo.entity;
 
 public class SysURolePermissionDO {
     private Integer roleId;

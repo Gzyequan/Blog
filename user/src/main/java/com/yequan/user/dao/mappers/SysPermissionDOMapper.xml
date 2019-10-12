@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.yequan.user.dao.SysPermissionDOMapper">
-    <resultMap id="BaseResultMap" type="com.yequan.user.pojo.dbo.SysPermissionDO">
+    <resultMap id="BaseResultMap" type="com.yequan.pojo.entity.SysPermissionDO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="parent_code" property="parentId" jdbcType="INTEGER"/>
         <result column="pmn_name" property="pmnName" jdbcType="VARCHAR"/>
@@ -27,7 +27,7 @@
     delete from sys_permission
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.yequan.user.pojo.dbo.SysPermissionDO">
+    <insert id="insert" parameterType="com.yequan.pojo.entity.SysPermissionDO">
     insert into sys_permission (id, parent_id,
       pmn_name, type, status, 
       creator_id, updater_id, create_time, 
@@ -37,7 +37,7 @@
       #{updaterId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP},
       #{detail,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.yequan.user.pojo.dbo.SysPermissionDO">
+    <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysPermissionDO">
         insert into sys_permission
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -104,7 +104,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.user.pojo.dbo.SysPermissionDO">
+    <update id="updateByPrimaryKeySelective" parameterType="com.yequan.pojo.entity.SysPermissionDO">
         update sys_permission
         <set>
             <if test="parentId != null">
@@ -137,7 +137,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.yequan.user.pojo.dbo.SysPermissionDO">
+    <update id="updateByPrimaryKey" parameterType="com.yequan.pojo.entity.SysPermissionDO">
     update sys_permission
     set parent_id = #{parentId,jdbcType=INTEGER},
       pmn_name = #{pmnName,jdbcType=VARCHAR},

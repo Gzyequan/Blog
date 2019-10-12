@@ -1,8 +1,8 @@
 package com.yequan.user.service;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.dbo.SysUserDO;
-import com.yequan.user.pojo.dto.UserDTO;
+import com.yequan.pojo.dto.UserDTO;
+import com.yequan.pojo.entity.SysUserDO;
 
 /**
  * @Auther: yq

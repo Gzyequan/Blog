@@ -8,7 +8,7 @@ import com.yequan.common.jms.service.JmsProducerService;
 import com.yequan.common.quartz.SchedulerService;
 import com.yequan.common.quartz.proxy.AsyncJobProxy;
 import com.yequan.common.service.RedisService;
-import com.yequan.user.pojo.dbo.SysUserDO;
+import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.service.IOrdinaryUserService;
 import com.yequan.user.test.task.NetworkMonitor;
 import com.yequan.user.test.task.NetworkMonitorListener;

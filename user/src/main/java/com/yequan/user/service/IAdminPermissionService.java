@@ -1,7 +1,7 @@
 package com.yequan.user.service;
 
 import com.yequan.common.application.response.AppResult;
-import com.yequan.user.pojo.dbo.SysPermissionDO;
+import com.yequan.pojo.entity.SysPermissionDO;
 
 import java.util.List;
 
