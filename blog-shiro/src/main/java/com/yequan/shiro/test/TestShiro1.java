@@ -1,4 +1,4 @@
-package com.yequan.shiro.realm.test;
+package com.yequan.shiro.test;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;

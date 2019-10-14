@@ -1,17 +1,16 @@
-package com.yequan.shiro.realm.test;
+package com.yequan.shiro.test;
 
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 
 /**
  * @Auther: yq
  * @Date: 2019/10/12 15:47
  * @Description:
  */
-public class CustomRealm2 extends AuthorizingRealm {
+public class CustomRealm1 extends AuthorizingRealm {
 
     @Override
     public String getName() {
@@ -33,11 +32,9 @@ public class CustomRealm2 extends AuthorizingRealm {
         }
 
         //获取用户密码
-        String password = "202CB962AC59075B964B07152D234B70";
-        //盐值
-        String salt = "";
+        String password = "123";
         //返回认证信息
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, password, ByteSource.Util.bytes(salt), getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, password, getName());
         return info;
     }
 
