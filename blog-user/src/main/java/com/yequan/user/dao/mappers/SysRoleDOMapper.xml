@@ -4,12 +4,15 @@
     <resultMap id="BaseResultMap" type="com.yequan.pojo.entity.SysRoleDO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/>
         <result column="detail" property="detail" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, role_name, create_time, modify_time, detail
+  </sql>
+    <sql id="Base_Column_Alias_List">
+    sr.id, sr.role_name, sr.create_time, sr.modify_time, sr.detail
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -24,8 +27,8 @@
     <insert id="insert" parameterType="com.yequan.pojo.entity.SysRoleDO">
     insert into sys_role (id, role_name, create_time, 
       modify_time, detail)
-    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{detail,jdbcType=VARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
+      #{modifyTime,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysRoleDO">
         insert into sys_role
@@ -54,10 +57,10 @@
                 #{roleName,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                #{createTime,jdbcType=VARCHAR},
             </if>
             <if test="modifyTime != null">
-                #{modifyTime,jdbcType=TIMESTAMP},
+                #{modifyTime,jdbcType=VARCHAR},
             </if>
             <if test="detail != null">
                 #{detail,jdbcType=VARCHAR},
@@ -71,10 +74,10 @@
                 role_name = #{roleName,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
+                create_time = #{createTime,jdbcType=VARCHAR},
             </if>
             <if test="modifyTime != null">
-                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+                modify_time = #{modifyTime,jdbcType=VARCHAR},
             </if>
             <if test="detail != null">
                 detail = #{detail,jdbcType=VARCHAR},
@@ -85,9 +88,22 @@
     <update id="updateByPrimaryKey" parameterType="com.yequan.pojo.entity.SysRoleDO">
     update sys_role
     set role_name = #{roleName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+    <select id="getRoleByUserId" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_Alias_List"/>
+        from sys_role sr
+        left join sys_user_role sur
+        on sr.id = sur.role_id
+        where
+        sur.user_id = #{userId}
+    </select>
+
+
+
 </mapper>

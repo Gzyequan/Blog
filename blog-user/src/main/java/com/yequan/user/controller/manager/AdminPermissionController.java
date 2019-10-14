@@ -21,7 +21,7 @@ public class AdminPermissionController {
     private IAdminPermissionService iAdminPermissionService;
 
     /**
-     * 获取parentCode下一级(不做递归查所有)的所有权限
+     * 获取pmnId下一级(不做递归查所有)的所有权限
      *
      * @return
      */
@@ -36,14 +36,25 @@ public class AdminPermissionController {
      * @param pmnId
      * @return
      */
-    @GetMapping(value = "listdeep/{pmnId}",produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "listdeep/{pmnId}", produces = "application/json;charset=UTF-8")
     public AppResult<List<SysPermissionDO>> listDeepSysPermissions(@PathVariable("pmnId") Integer pmnId) {
         return iAdminPermissionService.listDeepSysPermissions(pmnId);
     }
 
     @PostMapping(produces = "application/json;charset=UTF-8")
-    public AppResult<Void> addOneSysPermission(@RequestBody SysPermissionDO sysPermissionDO){
+    public AppResult<Void> addOneSysPermission(@RequestBody SysPermissionDO sysPermissionDO) {
         return iAdminPermissionService.insertOneSysPermission(sysPermissionDO);
+    }
+
+    /**
+     * 删除权限资源
+     *
+     * @param pmnId
+     * @return
+     */
+    @DeleteMapping(value = "{pmnId}", produces = "application/json;charset=UTF-8")
+    public AppResult<Void> deleteSysPermissionById(@PathVariable("pmnId") Integer pmnId) {
+        return iAdminPermissionService.deleteSysPermissionById(pmnId);
     }
 
 }

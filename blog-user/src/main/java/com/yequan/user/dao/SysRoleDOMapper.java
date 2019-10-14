@@ -17,4 +17,8 @@ public interface SysRoleDOMapper {
     int updateByPrimaryKeySelective(SysRoleDO record);
 
     int updateByPrimaryKey(SysRoleDO record);
+
+    SysRoleDO getRoleByUserId(Integer userId);
+
+
 }

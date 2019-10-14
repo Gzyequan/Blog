@@ -9,13 +9,13 @@ import org.apache.shiro.util.ByteSource;
 /**
  * @Auther: yq
  * @Date: 2019/10/12 15:47
- * @Description:
+ * @Description: 基于角色授权
  */
 public class CustomRealm2 extends AuthorizingRealm {
 
     @Override
     public String getName() {
-        return "CustomRealm1";
+        return "CustomRealm2";
     }
 
     @Override

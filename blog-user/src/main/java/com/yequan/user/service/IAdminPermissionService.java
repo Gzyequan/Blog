@@ -17,4 +17,12 @@ public interface IAdminPermissionService {
     AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnId);
 
     AppResult<Void> insertOneSysPermission(SysPermissionDO sysPermissionDO);
+
+    /**
+     * 根据id删除资源
+     *
+     * @param pmnId
+     * @return
+     */
+    public AppResult<Void> deleteSysPermissionById(Integer pmnId);
 }

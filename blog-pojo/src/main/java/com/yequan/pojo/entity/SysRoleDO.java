@@ -1,9 +1,9 @@
 package com.yequan.pojo.entity;
 
+import com.yequan.validation.annotation.DateValidator;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 public class SysRoleDO {
 
@@ -13,9 +13,11 @@ public class SysRoleDO {
     @Length(max = 60)
     private String roleName;
 
-    private Date createTime;
+    @DateValidator
+    private String createTime;
 
-    private Date modifyTime;
+    @DateValidator
+    private String modifyTime;
 
     private String detail;
 
@@ -35,19 +37,19 @@ public class SysRoleDO {
         this.roleName = roleName == null ? null : roleName.trim();
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

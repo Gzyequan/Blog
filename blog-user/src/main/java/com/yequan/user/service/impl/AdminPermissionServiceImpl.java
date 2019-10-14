@@ -120,6 +120,27 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
     }
 
     /**
+     * 根据id删除资源
+     *
+     * @param pmnId
+     * @return
+     */
+    public AppResult<Void> deleteSysPermissionById(Integer pmnId) {
+        try {
+            if (null == pmnId) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            }
+            int delete = sysPermissionDOMapper.deleteByPrimaryKey(pmnId);
+            if (delete > 0) {
+                return AppResultBuilder.success();
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+        return AppResultBuilder.failure(ResultCode.PERMISSION_DELETE_FAILURE);
+    }
+
+    /**
      * 递归查询出pmnCode所有子权限
      *
      * @param sysPermissionSet

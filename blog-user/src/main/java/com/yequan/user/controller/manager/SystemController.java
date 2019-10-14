@@ -1,7 +1,8 @@
 package com.yequan.user.controller.manager;
 
-import com.yequan.common.annotation.ApiVersion;
 import com.yequan.common.application.response.AppResult;
+import com.yequan.common.application.response.AppResultBuilder;
+import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.pojo.dto.UserDTO;
 import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.service.ISystemService;
@@ -23,21 +24,20 @@ public class SystemController {
     @Autowired
     private ISystemService iSystemService;
 
-    @PostMapping(value = "/{version}/login", produces = "application/json;charset=UTF-8")
-    @ApiVersion(1)
+    @PostMapping(value = "/login", produces = "application/json;charset=UTF-8")
     public AppResult<String> login(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) {
-        return iSystemService.login(request, response, userDTO);
-    }
-
-    @PostMapping(value = "/{version}/login", produces = "application/json;charset=UTF-8")
-    @ApiVersion(2)
-    public AppResult<String> loginV2(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) {
         return iSystemService.login(request, response, userDTO);
     }
 
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
     public AppResult<SysUserDO> register(@RequestBody SysUserDO sysUserDO) {
         return iSystemService.register(sysUserDO);
+    }
+
+    @GetMapping(value = "/logout", produces = "application/json;charset=UTF-8")
+    public AppResult<String> logout() {
+        Integer currentUserId = CurrentUserLocal.getUserId();
+        return AppResultBuilder.success("当前用户" + currentUserId + "退出成功");
     }
 
     @GetMapping(value = "/validation/{mobilephone}", produces = "application/json;charset=UTF-8")
