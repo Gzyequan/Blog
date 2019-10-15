@@ -13,6 +13,10 @@ public class SysPermissionDO {
 
     @NotNull
     @Length(max = 200)
+    private String pmnCode;
+
+    @NotNull
+    @Length(max = 200)
     private String pmnName;
 
     @NotNull
@@ -46,6 +50,14 @@ public class SysPermissionDO {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    public String getPmnCode() {
+        return pmnCode;
+    }
+
+    public void setPmnCode(String pmnCode) {
+        this.pmnCode = pmnCode;
     }
 
     public String getPmnName() {

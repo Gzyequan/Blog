@@ -6,12 +6,15 @@ import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.Logger;
 import com.yequan.pojo.entity.SysRoleDO;
+import com.yequan.pojo.entity.SysRolePermissionDO;
 import com.yequan.user.dao.SysRoleDOMapper;
+import com.yequan.user.dao.SysRolePermissionDOMapper;
 import com.yequan.user.service.IAdminRoleService;
 import com.yequan.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +28,9 @@ public class AdminRoleServiceImpl implements IAdminRoleService {
 
     @Autowired
     private SysRoleDOMapper sysRoleDOMapper;
+
+    @Autowired
+    private SysRolePermissionDOMapper sysRolePermissionDOMapper;
 
     @Override
     public AppResult<SysRoleDO> getSysRoleById(Integer roleId) {
@@ -124,17 +130,30 @@ public class AdminRoleServiceImpl implements IAdminRoleService {
     }
 
     @Override
-    public AppResult<Void> grantAuthorityToRole(Integer roleId,String permissions){
+    public AppResult<Void> grantAuthorityToRole(Integer roleId, String permissionIds) {
         try {
-            if (null==permissions){
-                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            if (null == roleId || null == permissionIds) {
+                return AppResultBuilder.failure(ResultCode.PARAM_NOT_COMPLETE);
             }
-            String[] permissionArray = permissions.split(",");
-            List<String> permissionList = Arrays.asList(permissionArray);
-
-
-        }catch (Exception e){
-            Logger.error(e.getMessage(),e);
+            //清空该角色的权限
+            int delete = sysRolePermissionDOMapper.clearRolePermission(roleId);
+            if (delete > 0) {
+                String[] permissionIdArray = permissionIds.split(",");
+                List<String> permissionIdList = Arrays.asList(permissionIdArray);
+                List<SysRolePermissionDO> sysRolePermissionList = new ArrayList<>();
+                for (String permissionId : permissionIdList) {
+                    SysRolePermissionDO sysRolePermissionDO = new SysRolePermissionDO();
+                    sysRolePermissionDO.setRoleId(roleId);
+                    sysRolePermissionDO.setPmnId(Integer.parseInt(permissionId));
+                    sysRolePermissionList.add(sysRolePermissionDO);
+                }
+                int grant = sysRolePermissionDOMapper.insertBatch(sysRolePermissionList);
+                if (grant > 0) {
+                    return AppResultBuilder.success();
+                }
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.ROLE_GRANT_PERMISSION_FAILURE);
     }

@@ -38,4 +38,10 @@ public class AdminRoleController {
         return iAdminRoleService.updateSysRole(roleId, sysRoleDO);
     }
 
+    @PostMapping(value = "{roleId}", produces = "application/json;charset=UTF-8")
+    public AppResult<Void> grantAuthorityToRole(@PathVariable("roleId") Integer roleId,
+                                                @RequestBody String permissionIds) {
+        return iAdminRoleService.grantAuthorityToRole(roleId, permissionIds);
+    }
+
 }

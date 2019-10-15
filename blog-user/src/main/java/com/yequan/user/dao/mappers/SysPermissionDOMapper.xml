@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.yequan.pojo.entity.SysPermissionDO">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="pmn_code" property="pmnCode" jdbcType="VARCHAR"/>
         <result column="pmn_name" property="pmnName" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
@@ -14,7 +15,7 @@
         <result column="detail" property="detail" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, parent_id, pmn_name, type, status, creator_id, updater_id, create_time,
+    id, parent_id, pmn_code, pmn_name, type, status, creator_id, updater_id, create_time,
     modify_time, detail
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -29,13 +30,13 @@
   </delete>
     <insert id="insert" parameterType="com.yequan.pojo.entity.SysPermissionDO">
     insert into sys_permission (id, parent_id,
-      pmn_name, type, status, 
+      pmn_name,pmn_code, type, status,
       creator_id, updater_id, create_time, 
       modify_time, detail)
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{pmnName,jdbcType=VARCHAR},
-      #{type,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{creatorId,jdbcType=INTEGER},
-      #{updaterId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, #{modifyTime,jdbcType=VARCHAR},
-      #{detail,jdbcType=VARCHAR})
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{pmnCode,jdbcType=VARCHAR},
+     #{pmnName,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT},
+     #{creatorId,jdbcType=INTEGER},#{updaterId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR},
+     #{modifyTime,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysPermissionDO">
         insert into sys_permission
@@ -45,6 +46,9 @@
             </if>
             <if test="parentId != null">
                 parent_id,
+            </if>
+            <if test="pmnCode != null">
+                pmn_code,
             </if>
             <if test="pmnName != null">
                 pmn_name,
@@ -78,6 +82,9 @@
             <if test="parentId != null">
                 #{parentId,jdbcType=INTEGER},
             </if>
+            <if test="pmnCode != null">
+                #{pmnCode,jdbcType=VARCHAR},
+            </if>
             <if test="pmnName != null">
                 #{pmnName,jdbcType=VARCHAR},
             </if>
@@ -110,6 +117,9 @@
             <if test="parentId != null">
                 parent_id = #{parentId,jdbcType=INTEGER},
             </if>
+            <if test="pmnCode != null">
+                pmn_code = #{pmnCode,jdbcType=VARCHAR},
+            </if>
             <if test="pmnName != null">
                 pmn_name = #{pmnName,jdbcType=VARCHAR},
             </if>
@@ -140,6 +150,7 @@
     <update id="updateByPrimaryKey" parameterType="com.yequan.pojo.entity.SysPermissionDO">
     update sys_permission
     set parent_id = #{parentId,jdbcType=INTEGER},
+      pmn_code = #{pmnCode,jdbcType=VARCHAR},
       pmn_name = #{pmnName,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},

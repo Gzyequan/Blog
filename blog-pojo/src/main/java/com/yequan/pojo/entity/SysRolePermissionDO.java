@@ -1,6 +1,6 @@
 package com.yequan.pojo.entity;
 
-public class SysURolePermissionDO {
+public class SysRolePermissionDO {
     private Integer roleId;
 
     private Integer pmnId;
