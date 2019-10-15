@@ -16,7 +16,9 @@ public interface IAdminPermissionService {
 
     AppResult<List<SysPermissionDO>> listDeepSysPermissions(Integer pmnId);
 
-    AppResult<Void> insertOneSysPermission(SysPermissionDO sysPermissionDO);
+    AppResult<Void> createOneSysPermission(SysPermissionDO sysPermissionDO);
+
+    AppResult<Void> createSysPermissionBatch(List<SysPermissionDO> sysPermissions);
 
     /**
      * 根据id删除资源

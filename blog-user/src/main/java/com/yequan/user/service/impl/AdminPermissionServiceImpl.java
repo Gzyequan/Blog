@@ -12,13 +12,14 @@ import com.yequan.pojo.entity.SysPermissionDO;
 import com.yequan.user.dao.SysPermissionDOMapper;
 import com.yequan.user.service.IAdminPermissionService;
 import com.yequan.validation.ValidationUtil;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Auther: yq
@@ -64,7 +65,13 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             if (null == pmnId) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            HashSet<SysPermissionDO> sysPermissionSet = Sets.newHashSet();
+            TreeSet<SysPermissionDO> sysPermissionSet = Sets.newTreeSet(new Comparator<SysPermissionDO>() {
+                //treeSet使用Comparator比较器进行自然排序
+                @Override
+                public int compare(SysPermissionDO o1, SysPermissionDO o2) {
+                    return o1.getId() - o2.getId();
+                }
+            });
             listDeepChildrenPermission(sysPermissionSet, pmnId);
             ArrayList<SysPermissionDO> sysPermissionDOList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(sysPermissionSet)) {
@@ -78,7 +85,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
     }
 
     @Override
-    public AppResult<Void> insertOneSysPermission(SysPermissionDO sysPermissionDO) {
+    public AppResult<Void> createOneSysPermission(SysPermissionDO sysPermissionDO) {
         try {
             if (null == sysPermissionDO) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
@@ -119,6 +126,49 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         return AppResultBuilder.failure(ResultCode.PERMISSION_CREATE_ERROR);
     }
 
+    @Override
+    public AppResult<Void> createSysPermissionBatch(List<SysPermissionDO> sysPermissions) {
+        try {
+            if (CollectionUtils.isEmpty(sysPermissions)) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            }
+
+            for (SysPermissionDO sysPermission : sysPermissions) {
+                //校验数据合法性
+                ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(sysPermission);
+                if (validResult.isHasErrors()) {
+                    String errors = validResult.getErrors();
+                    Logger.error(errors);
+                    return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
+                }
+                Integer parentId = sysPermission.getParentId();
+                //parentId为0表示添加的是根节点,校验parentId有效性
+                if (parentId != 0) {
+                    SysPermissionDO sysPermissionDB = sysPermissionDOMapper.selectByPrimaryKey(parentId);
+                    if (null == sysPermissionDB) {
+                        return AppResultBuilder.failure(ResultCode.PARAM_IS_INVALID);
+                    }
+                }
+                //获取当前创建人
+                Integer currentUserId = CurrentUserLocal.getUserId();
+                if (currentUserId == null) {
+                    return AppResultBuilder.failure(ResultCode.ERROR);
+                }
+                sysPermission.setCreatorId(currentUserId);
+                //设置创建时间
+                sysPermission.setCreateTime(DateUtil.getCurrentDateStr());
+            }
+
+            int insert = sysPermissionDOMapper.insertBatch(sysPermissions);
+            if (sysPermissions.size() == insert) {
+                return AppResultBuilder.success();
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+        return AppResultBuilder.failure(ResultCode.PERMISSION_CREATE_ERROR);
+    }
+
     /**
      * 根据id删除资源
      *
@@ -146,7 +196,7 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
      * @param sysPermissionSet
      * @param pmnId
      */
-    private void listDeepChildrenPermission(HashSet<SysPermissionDO> sysPermissionSet, Integer pmnId) {
+    private void listDeepChildrenPermission(TreeSet<SysPermissionDO> sysPermissionSet, Integer pmnId) {
         SysPermissionDO sysPermissionDO = sysPermissionDOMapper.selectByPrimaryKey(pmnId);
         if (null != sysPermissionDO) {
             sysPermissionSet.add(sysPermissionDO);

@@ -111,6 +111,27 @@
             </if>
         </trim>
     </insert>
+    <insert id="insertBatch">
+        insert into sys_permission
+        (id, parent_id,pmn_code,
+        pmn_name, type, status,
+        creator_id, updater_id, create_time,
+        modify_time, detail)
+        values
+        <foreach collection="sysPermissionList" item="permission" separator=",">
+            (#{permission.id,jdbcType=INTEGER},
+            #{permission.parentId,jdbcType=INTEGER},
+            #{permission.pmnCode,jdbcType=VARCHAR},
+            #{permission.pmnName,jdbcType=VARCHAR},
+            #{permission.type,jdbcType=VARCHAR},
+            #{permission.status,jdbcType=TINYINT},
+            #{permission.creatorId,jdbcType=INTEGER},
+            #{permission.updaterId,jdbcType=INTEGER},
+            #{permission.createTime,jdbcType=VARCHAR},
+            #{permission.modifyTime,jdbcType=VARCHAR},
+            #{permission.detail,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.yequan.pojo.entity.SysPermissionDO">
         update sys_permission
         <set>
@@ -168,6 +189,7 @@
         from sys_permission
         where
         parent_id = #{parentId}
+
     </select>
 
 </mapper>

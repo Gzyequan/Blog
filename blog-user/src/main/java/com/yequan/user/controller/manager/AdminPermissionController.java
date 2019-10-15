@@ -41,9 +41,26 @@ public class AdminPermissionController {
         return iAdminPermissionService.listDeepSysPermissions(pmnId);
     }
 
+    /**
+     * 新增一个权限
+     *
+     * @param sysPermission
+     * @return
+     */
     @PostMapping(produces = "application/json;charset=UTF-8")
-    public AppResult<Void> addOneSysPermission(@RequestBody SysPermissionDO sysPermissionDO) {
-        return iAdminPermissionService.insertOneSysPermission(sysPermissionDO);
+    public AppResult<Void> addOneSysPermission(@RequestBody SysPermissionDO sysPermission) {
+        return iAdminPermissionService.createOneSysPermission(sysPermission);
+    }
+
+    /**
+     * 批量新增权限
+     *
+     * @param sysPermissions
+     * @return
+     */
+    @PostMapping(value = "batch", produces = "application/json;charset=UTF-8")
+    public AppResult<Void> addBatchSysPermission(@RequestBody List<SysPermissionDO> sysPermissions) {
+        return iAdminPermissionService.createSysPermissionBatch(sysPermissions);
     }
 
     /**

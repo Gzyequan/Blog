@@ -1,6 +1,7 @@
 package com.yequan.user.dao;
 
 import com.yequan.pojo.entity.SysPermissionDO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public interface SysPermissionDOMapper {
     int insert(SysPermissionDO record);
 
     int insertSelective(SysPermissionDO record);
+
+    int insertBatch(@Param("sysPermissionList") List<SysPermissionDO> sysPermissionList);
 
     SysPermissionDO selectByPrimaryKey(Integer id);
 
