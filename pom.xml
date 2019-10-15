@@ -349,9 +349,6 @@
             <properties>
                 <environment>local</environment>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
         <!--        测试环境-->
         <profile>
@@ -359,6 +356,9 @@
             <properties>
                 <environment>dev</environment>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
     </profiles>
 

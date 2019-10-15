@@ -26,4 +26,5 @@ hs_err_pid*
 
 target/
 .idea/
-web/src/main/resources/local
+blog-web/src/main/resources/local
+*.iml

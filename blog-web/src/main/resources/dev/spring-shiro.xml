@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--loginUrl认证提交地址,如果没有认证则会请求次地址进行认证,请求地址将由formAuthenticationFilter进行表单认证-->
+        <property name="loginUrl" value="/login"/>
+        <property name="unauthorizedUrl" value="register"/>
+        <!--过滤器链定义,从上向下顺序执行,一般将/**放在最下面-->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--退出拦截,请求logout-->
+                logout=logout
+
+                <!-- 对静态资源设置允许匿名访问 -->
+                /images/** = anon
+                /js/** = anon
+                /css/** = anon
+
+                <!-- 可匿名访问路径，例如：验证码、登录连接、退出连接等 -->
+                /login = anon
+                /register= anon
+
+                <!-- 剩余其他路径，必须认证通过才可以访问 -->
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+    <!--配置安全管理器securityManager-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+    </bean>
+
+    <!-- 取出用户安全数据-->
+    <bean id="userRealm" class="com.yequan.shiro.realm.UserRealm"/>
+
+
+</beans>

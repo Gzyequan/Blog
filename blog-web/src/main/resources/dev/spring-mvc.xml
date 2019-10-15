@@ -19,8 +19,6 @@
     <!--配置Spring扫描路径-->
     <context:component-scan base-package="com.yequan"/>
 
-<!--    <context:component-scan base-package="com.yequan.common"/>-->
-
     <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
         <property name="order" value="1"/>
         <property name="defaultViews">
