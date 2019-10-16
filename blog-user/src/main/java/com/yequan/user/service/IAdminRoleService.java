@@ -3,6 +3,8 @@ package com.yequan.user.service;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.pojo.entity.SysRoleDO;
 
+import java.util.List;
+
 /**
  * @Auther: yq
  * @Date: 2019/10/14 14:52
@@ -18,7 +20,7 @@ public interface IAdminRoleService {
 
     AppResult<Void> updateSysRole(Integer roleId,SysRoleDO sysRoleDO);
 
-    AppResult<SysRoleDO> getRoleByUserId(Integer userId);
+    List<SysRoleDO> getRoleByUserId(Integer userId);
 
-    AppResult<Void> grantAuthorityToRole(Integer roleId,String permissions);
+    AppResult<Void> grantAuthorityToRole(Integer roleId,List<Integer> permissions);
 }

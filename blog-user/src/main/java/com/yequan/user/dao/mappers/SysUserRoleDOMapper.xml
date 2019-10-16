@@ -15,7 +15,7 @@
             <if test="userId != null">
                 user_id,
             </if>
-            <if test="roleId != null">
+            <if test="id != null">
                 role_id,
             </if>
         </trim>

@@ -1,6 +1,7 @@
 package com.yequan.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.yequan.common.application.config.Global;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -10,7 +11,9 @@ import com.yequan.common.util.*;
 import com.yequan.constant.*;
 import com.yequan.pojo.dto.UserDTO;
 import com.yequan.pojo.entity.SysUserDO;
+import com.yequan.pojo.entity.SysUserRoleDO;
 import com.yequan.user.dao.SysUserMapper;
+import com.yequan.user.dao.SysUserRoleDOMapper;
 import com.yequan.user.service.ISystemService;
 import com.yequan.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +34,8 @@ public class SystemServiceImpl implements ISystemService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    private SysUserRoleDOMapper sysUserRoleDOMapper;
 
     @Autowired
     private RedisService redisService;
@@ -118,7 +123,8 @@ public class SystemServiceImpl implements ISystemService {
      * 注册逻辑说明
      * 1.校验手机号是否被注册
      * 2.校验成功对密码进行md5加密
-     * 3.注册成功
+     * 3.设置普通用户角色
+     * 4.注册成功
      *
      * @param sysUserDO
      * @return
@@ -146,7 +152,12 @@ public class SystemServiceImpl implements ISystemService {
             sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
             int insert = sysUserMapper.insertSelective(sysUserDO);
             if (insert > 0) {
-                SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO);
+                SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO.getMobilephone());
+                SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+                sysUserRoleDO.setUserId(newUser.getId());
+                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());
+                //设置注册用户为普通用户角色
+                sysUserRoleDOMapper.insert(sysUserRoleDO);
                 return AppResultBuilder.success(newUser);
             }
         } catch (Exception e) {
@@ -172,7 +183,7 @@ public class SystemServiceImpl implements ISystemService {
         UserDTO userDTO = new UserDTO();
         userDTO.setMobilephone(mobilephone);
         //判断手机号是否已被注册
-        SysUserDO dbUser = sysUserMapper.selectByMobilephone(userDTO);
+        SysUserDO dbUser = sysUserMapper.selectByMobilephone(userDTO.getMobilephone());
         if (null == dbUser) {
             return AppResultBuilder.success();
         }

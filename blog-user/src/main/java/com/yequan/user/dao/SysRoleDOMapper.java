@@ -1,12 +1,17 @@
 package com.yequan.user.dao;
 
+import com.yequan.pojo.dto.SysRoleDto;
 import com.yequan.pojo.entity.SysRoleDO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface SysRoleDOMapper {
 
     int deleteByPrimaryKey(Integer id);
+
+    int setSysRoleStatus(SysRoleDto sysRoleDto);
 
     int insert(SysRoleDO record);
 
@@ -18,7 +23,7 @@ public interface SysRoleDOMapper {
 
     int updateByPrimaryKey(SysRoleDO record);
 
-    SysRoleDO getRoleByUserId(Integer userId);
+    List<SysRoleDO> getRoleByUserId(Integer userId);
 
 
 }

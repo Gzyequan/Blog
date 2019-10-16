@@ -1,17 +1,23 @@
-package com.yequan.pojo.entity;
+package com.yequan.pojo.dto;
 
-import com.yequan.constant.DateFormatConsts;
 import com.yequan.constant.RegexConsts;
 import com.yequan.validation.annotation.DateValidator;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-public class SysUserDO {
+/**
+ * @Auther: yq
+ * @Date: 2019/10/16 16:07
+ * @Description: 用于管理员创建管理员用户时传输对象
+ */
+public class SysUserDto {
+
     private Integer id;
+
+    @NotNull
+    private Integer roleId;
 
     @Length(max = 100)
     private String nickname;
@@ -20,19 +26,9 @@ public class SysUserDO {
     @Length(max = 100)
     private String realname;
 
-    @Min(0)
-    @Max(150)
-    private Integer age;
-
     @NotNull
     @Pattern(regexp = RegexConsts.REGEX_MOBILE)
     private String mobilephone;
-
-    @Length(max = 300)
-    private String address;
-
-    @DateValidator(dateFormat = DateFormatConsts.YYYY_MM_DD)
-    private String birthday;
 
     @NotNull
     private String password;
@@ -49,11 +45,6 @@ public class SysUserDO {
 
     private Integer updaterId;
 
-
-    public SysUserDO() {
-        super();
-    }
-
     public Integer getId() {
         return id;
     }
@@ -62,60 +53,44 @@ public class SysUserDO {
         this.id = id;
     }
 
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
     public String getNickname() {
-        return nickname == null ? null : nickname.trim();
+        return nickname;
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
+        this.nickname = nickname;
     }
 
     public String getRealname() {
-        return realname == null ? null : realname.trim();
+        return realname;
     }
 
     public void setRealname(String realname) {
-        this.realname = realname == null ? null : realname.trim();
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
+        this.realname = realname;
     }
 
     public String getMobilephone() {
-        return mobilephone == null ? null : mobilephone.trim();
+        return mobilephone;
     }
 
     public void setMobilephone(String mobilephone) {
-        this.mobilephone = mobilephone == null ? null : mobilephone.trim();
-    }
-
-    public String getAddress() {
-        return address == null ? null : address.trim();
-    }
-
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.mobilephone = mobilephone;
     }
 
     public String getPassword() {
-        return password == null ? null : password.trim();
+        return password;
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public Integer getStatus() {

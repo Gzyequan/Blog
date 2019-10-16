@@ -68,7 +68,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success(currentUser);
             }
         } catch (Exception e) {
-            Logger.error(e.getMessage(),e);
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.RESULT_DATA_NONE);
     }
@@ -121,6 +121,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
             //排除用户手机号
             sysUserDO.setMobilephone(null);
             sysUserDO.setModifyTime(DateUtil.getCurrentDateStr());
+            sysUserDO.setUpdaterId(CurrentUserLocal.getUserId());
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);
@@ -130,7 +131,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success(updatedSysUserDO);
             }
         } catch (Exception e) {
-            Logger.error(e.getMessage(),e);
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_UPDATE_ERROR);
     }
@@ -138,13 +139,14 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
     /**
      * 根据手机号查询用户
      *
-     * @param userDTO
+     * @param mobilephone
      * @return
      */
-    public SysUserDO selectByMobilephone(UserDTO userDTO) {
+    @Override
+    public SysUserDO selectByMobilephone(String mobilephone) {
         SysUserDO sysUserDO = null;
-        if (null != userDTO) {
-            sysUserDO = sysUserMapper.selectByMobilephone(userDTO);
+        if (null != mobilephone) {
+            sysUserDO = sysUserMapper.selectByMobilephone(mobilephone);
         }
         return sysUserDO;
     }
@@ -174,7 +176,7 @@ public class OrdinaryUserServiceImpl implements IOrdinaryUserService {
                 return AppResultBuilder.success();
             }
         } catch (Exception e) {
-            Logger.error(e.getMessage(),e);
+            Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.USER_UNREGISTER_ERROR);
     }

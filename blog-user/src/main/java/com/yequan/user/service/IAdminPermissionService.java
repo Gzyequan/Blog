@@ -26,5 +26,7 @@ public interface IAdminPermissionService {
      * @param pmnId
      * @return
      */
-    public AppResult<Void> deleteSysPermissionById(Integer pmnId);
+    AppResult<Void> deleteSysPermissionById(Integer pmnId);
+
+    List<SysPermissionDO> getSysPermissionByRoleId(Integer roleId);
 }

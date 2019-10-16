@@ -8,6 +8,8 @@ import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.Logger;
+import com.yequan.constant.StatusEnum;
+import com.yequan.pojo.dto.SysPermissionDto;
 import com.yequan.pojo.entity.SysPermissionDO;
 import com.yequan.user.dao.SysPermissionDOMapper;
 import com.yequan.user.service.IAdminPermissionService;
@@ -16,6 +18,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -180,7 +183,10 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             if (null == pmnId) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
             }
-            int delete = sysPermissionDOMapper.deleteByPrimaryKey(pmnId);
+            SysPermissionDto sysPermissionDto = new SysPermissionDto();
+            sysPermissionDto.setId(pmnId);
+            sysPermissionDto.setStatus(StatusEnum.STATUS_ILLEGAL.getStatus());
+            int delete = sysPermissionDOMapper.setPermissionStatus(sysPermissionDto);
             if (delete > 0) {
                 return AppResultBuilder.success();
             }
@@ -188,6 +194,22 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
             Logger.error(e.getMessage(), e);
         }
         return AppResultBuilder.failure(ResultCode.PERMISSION_DELETE_FAILURE);
+    }
+
+    @Override
+    public List<SysPermissionDO> getSysPermissionByRoleId(Integer roleId) {
+        try {
+            if (null == roleId) {
+                return null;
+            }
+            List<SysPermissionDO> sysPermissionList = sysPermissionDOMapper.getSysPermissionByRoleId(roleId);
+            if (!CollectionUtils.isEmpty(sysPermissionList)) {
+                return sysPermissionList;
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     /**

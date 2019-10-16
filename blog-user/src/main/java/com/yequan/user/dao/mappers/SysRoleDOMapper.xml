@@ -3,16 +3,22 @@
 <mapper namespace="com.yequan.user.dao.SysRoleDOMapper">
     <resultMap id="BaseResultMap" type="com.yequan.pojo.entity.SysRoleDO">
         <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="role_code" property="roleCode" jdbcType="VARCHAR"/>
         <result column="role_name" property="roleName" jdbcType="VARCHAR"/>
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER"/>
+        <result column="updater_id" property="updaterId" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
         <result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/>
         <result column="detail" property="detail" jdbcType="VARCHAR"/>
+        <result column="reserved" property="reserved" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, role_name, create_time, modify_time, detail
+    id, role_code, role_name, creator_id, updater_id, create_time, modify_time, detail, reserved, status
   </sql>
     <sql id="Base_Column_Alias_List">
-    sr.id, sr.role_name, sr.create_time, sr.modify_time, sr.detail
+    sr.id, sr.role_code, sr.role_name, sr.creator_id, sr.updater_id, sr.create_time, sr.modify_time,
+     sr.detail, sr.reserved, sr.status
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -22,13 +28,16 @@
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_role
-    where id = #{id,jdbcType=INTEGER}
+    where
+     id = #{id,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="com.yequan.pojo.entity.SysRoleDO">
-    insert into sys_role (id, role_name, create_time, 
-      modify_time, detail)
-    values (#{id,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR},
-      #{modifyTime,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR})
+    insert into sys_role (id, role_code, role_name, creator_id, updater_id, create_time,
+      modify_time, detail, reserved, status)
+    values (#{id,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+    #{creatorId,jdbcType=INTEGER},#{updaterId,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR},
+    #{modifyTime,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR},#{reserved,jdbcType=INTEGER},
+    #{status,jdbcType=TINYINT})
   </insert>
     <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysRoleDO">
         insert into sys_role
@@ -36,8 +45,17 @@
             <if test="id != null">
                 id,
             </if>
+            <if test="roleCode != null">
+                role_code,
+            </if>
             <if test="roleName != null">
                 role_name,
+            </if>
+            <if test="creatorId != null">
+                creator_id,
+            </if>
+            <if test="updaterId != null">
+                updater_id,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -48,13 +66,28 @@
             <if test="detail != null">
                 detail,
             </if>
+            <if test="reserved != null">
+                reserved,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 #{id,jdbcType=INTEGER},
             </if>
+            <if test="roleCode != null">
+                #{roleCode,jdbcType=VARCHAR},
+            </if>
             <if test="roleName != null">
                 #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatorId != null">
+                #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="updaterId != null">
+                #{updaterId,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=VARCHAR},
@@ -65,13 +98,28 @@
             <if test="detail != null">
                 #{detail,jdbcType=VARCHAR},
             </if>
+            <if test="reserved != null">
+                #{reserved,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.yequan.pojo.entity.SysRoleDO">
         update sys_role
         <set>
+            <if test="roleCode != null">
+                role_code = #{roleCode,jdbcType=VARCHAR},
+            </if>
             <if test="roleName != null">
                 role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="creatorId != null">
+                creator_id = #{creatorId,jdbcType=INTEGER},
+            </if>
+            <if test="updaterId != null">
+                updater_id = #{updaterId,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=VARCHAR},
@@ -82,17 +130,34 @@
             <if test="detail != null">
                 detail = #{detail,jdbcType=VARCHAR},
             </if>
+            <if test="reserved != null">
+                reserved = #{reserved,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.yequan.pojo.entity.SysRoleDO">
     update sys_role
-    set role_name = #{roleName,jdbcType=VARCHAR},
+    set role_code = #{roleCode,jdbcType=VARCHAR},
+      role_name = #{roleName,jdbcType=VARCHAR},
+      creator_id = #{creatorId,jdbcType=INTEGER},
+      updater_id = #{updaterId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=VARCHAR},
-      detail = #{detail,jdbcType=VARCHAR}
+      detail = #{detail,jdbcType=VARCHAR},
+      reserved = #{reserved,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="setSysRoleStatus" parameterType="com.yequan.pojo.dto.SysRoleDto">
+        update sys_role
+        set status = #{status,jdbcType=TINYINT}
+        where reserved = 0
+        and id = #{id,jdbcType=INTEGER}
+    </update>
 
     <select id="getRoleByUserId" parameterType="integer" resultMap="BaseResultMap">
         select
@@ -103,7 +168,5 @@
         where
         sur.user_id = #{userId}
     </select>
-
-
 
 </mapper>

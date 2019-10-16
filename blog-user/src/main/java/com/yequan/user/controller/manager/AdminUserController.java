@@ -1,6 +1,7 @@
 package com.yequan.user.controller.manager;
 
 import com.yequan.common.application.response.AppResult;
+import com.yequan.pojo.dto.SysUserDto;
 import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.service.IAdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class AdminUserController {
 
     @Autowired
     private IAdminUserService iAdminUserService;
+
+    @PostMapping(produces = "application/json;charset=UTF-8")
+    public AppResult<Void> createOneUser(@RequestBody SysUserDto sysUserDto){
+        return iAdminUserService.createOneUser(sysUserDto);
+    }
 
     @GetMapping(value = "list/{pageNum}/{pageSize}", produces = "application/json;charset=UTF-8")
     public AppResult<List<SysUserDO>> listUsers(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {

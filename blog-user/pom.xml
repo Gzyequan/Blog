@@ -23,11 +23,6 @@
             <artifactId>blog-message</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.yequan.blog</groupId>
-            <artifactId>blog-shiro</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

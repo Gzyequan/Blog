@@ -11,5 +11,12 @@
 
     <artifactId>blog-shiro</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.yequan.blog</groupId>
+            <artifactId>blog-user</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

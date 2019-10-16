@@ -1,5 +1,6 @@
 package com.yequan.pojo.entity;
 
+import com.yequan.validation.annotation.DateValidator;
 import com.yequan.validation.annotation.PermissionTypeValidator;
 import org.hibernate.validator.constraints.Length;
 
@@ -29,8 +30,10 @@ public class SysPermissionDO {
 
     private Integer updaterId;
 
+    @DateValidator
     private String createTime;
 
+    @DateValidator
     private String modifyTime;
 
     @Length(max = 200)

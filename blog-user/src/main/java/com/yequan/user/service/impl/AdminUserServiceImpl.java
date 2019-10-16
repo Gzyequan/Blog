@@ -6,11 +6,17 @@ import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.service.RedisService;
+import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.Logger;
+import com.yequan.common.util.MD5Util;
+import com.yequan.pojo.dto.SysUserDto;
 import com.yequan.pojo.entity.SysUserDO;
+import com.yequan.pojo.entity.SysUserRoleDO;
 import com.yequan.user.dao.SysUserMapper;
+import com.yequan.user.dao.SysUserRoleDOMapper;
 import com.yequan.user.service.IAdminUserService;
+import com.yequan.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +34,46 @@ public class AdminUserServiceImpl implements IAdminUserService {
     private SysUserMapper sysUserMapper;
 
     @Autowired
+    private SysUserRoleDOMapper sysUserRoleDOMapper;
+
+    @Autowired
     private RedisService redisService;
+
+    @Override
+    public AppResult<Void> createOneUser(SysUserDto sysUserDto) {
+        try {
+            if (null == sysUserDto) {
+                return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
+            }
+            ValidationUtil.ValidResult validResult = ValidationUtil.validateBean(sysUserDto);
+            if (validResult.isHasErrors()) {
+                return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
+            }
+
+            SysUserDO sysUserDO = new SysUserDO();
+            sysUserDO.setNickname(sysUserDto.getNickname());
+            sysUserDO.setRealname(sysUserDto.getRealname());
+            sysUserDO.setMobilephone(sysUserDto.getMobilephone());
+            sysUserDO.setPassword(MD5Util.encrypt(sysUserDto.getPassword()));
+            sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
+            sysUserDO.setCreatorId(CurrentUserLocal.getUserId());
+
+            int insert = sysUserMapper.insertSelective(sysUserDO);
+            if (insert > 0) {
+                SysUserDO newSysUser = sysUserMapper.selectByMobilephone(sysUserDO.getMobilephone());
+                SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
+                sysUserRoleDO.setUserId(newSysUser.getId());
+                sysUserRoleDO.setRoleId(sysUserDto.getRoleId());
+                int setUserRole = sysUserRoleDOMapper.insert(sysUserRoleDO);
+                if (setUserRole > 0) {
+                    return AppResultBuilder.success();
+                }
+            }
+        } catch (Exception e) {
+            Logger.error(e.getMessage(), e);
+        }
+        return AppResultBuilder.failure(ResultCode.USER_CREATE_ERROR);
+    }
 
     /**
      * 获取用户集合
@@ -98,6 +143,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
             }
             sysUserDO.setId(id);
             sysUserDO.setModifyTime(DateUtil.getCurrentDateStr());
+            sysUserDO.setUpdaterId(CurrentUserLocal.getUserId());
             int update = sysUserMapper.updateByPrimaryKeySelective(sysUserDO);
             if (update > 0) {
                 SysUserDO updatedSysUserDO = sysUserMapper.selectByPrimaryKey(id);

@@ -14,5 +14,7 @@ public interface SysRolePermissionDOMapper {
 
     int clearRolePermission(Integer roleId);
 
-    int insertBatch(@Param("rolePermissionList")List<SysRolePermissionDO> rolePermissionList);
+    int insertBatch(@Param("rolePermissionList") List<SysRolePermissionDO> rolePermissionList);
+
+    List<SysRolePermissionDO> selectPermissionsByRoleId(Integer roleId);
 }

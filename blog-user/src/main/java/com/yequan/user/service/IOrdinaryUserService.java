@@ -20,10 +20,10 @@ public interface IOrdinaryUserService {
     /**
      * 根据手机号查询用户
      *
-     * @param userDTO
+     * @param mobilephone
      * @return
      */
-    SysUserDO selectByMobilephone(UserDTO userDTO);
+    SysUserDO selectByMobilephone(String mobilephone);
 
     /**
      * 注销用户

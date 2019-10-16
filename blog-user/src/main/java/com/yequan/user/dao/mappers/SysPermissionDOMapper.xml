@@ -18,6 +18,10 @@
     id, parent_id, pmn_code, pmn_name, type, status, creator_id, updater_id, create_time,
     modify_time, detail
   </sql>
+    <sql id="Base_Column_Alias_List">
+    sp.id, sp.parent_id, sp.pmn_code, sp.pmn_name, sp.type, sp.status, sp.creator_id, sp.updater_id,
+    sp.create_time,sp.modify_time, sp.detail
+  </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
@@ -28,6 +32,11 @@
     delete from sys_permission
     where id = #{id,jdbcType=INTEGER}
   </delete>
+    <update id="setPermissionStatus" parameterType="com.yequan.pojo.dto.SysPermissionDto">
+        update sys_permission
+        set status = #{status,jdbcType=TINYINT}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <insert id="insert" parameterType="com.yequan.pojo.entity.SysPermissionDO">
     insert into sys_permission (id, parent_id,
       pmn_name,pmn_code, type, status,
@@ -188,8 +197,16 @@
         <include refid="Base_Column_List"/>
         from sys_permission
         where
-        parent_id = #{parentId}
+        parent_id = #{parentId,jdbcType=INTEGER}
+    </select>
 
+    <select id="getSysPermissionByRoleId" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_Alias_List"/>
+        from sys_permission sp
+        left join sys_role_permission srp
+        on sp.id = srp.role_id
+        where srp.role_id = #{id,jdbcType=INTEGER}
     </select>
 
 </mapper>

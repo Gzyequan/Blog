@@ -6,6 +6,8 @@ import com.yequan.user.service.IAdminRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Auther: yq
  * @Date: 2019/10/14 16:12
@@ -24,7 +26,7 @@ public class AdminRoleController {
     }
 
     @PostMapping(produces = "application/json;charset=UTF-8")
-    public AppResult<Void> insertOneSysRole(@RequestBody SysRoleDO sysRoleDO) {
+    public AppResult<Void> createOneSysRole(@RequestBody SysRoleDO sysRoleDO) {
         return iAdminRoleService.insertOneSysRole(sysRoleDO);
     }
 
@@ -40,7 +42,7 @@ public class AdminRoleController {
 
     @PostMapping(value = "{roleId}", produces = "application/json;charset=UTF-8")
     public AppResult<Void> grantAuthorityToRole(@PathVariable("roleId") Integer roleId,
-                                                @RequestBody String permissionIds) {
+                                                @RequestBody List<Integer> permissionIds) {
         return iAdminRoleService.grantAuthorityToRole(roleId, permissionIds);
     }
 

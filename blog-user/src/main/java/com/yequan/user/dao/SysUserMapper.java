@@ -22,7 +22,7 @@ public interface SysUserMapper {
 
     List<SysUserDO> selectUserList();
 
-    SysUserDO selectByMobilephone(UserDTO userDTO);
+    SysUserDO selectByMobilephone(String mobilephone);
 
     SysUserDO loginCheck(UserDTO userDTO);
 }
