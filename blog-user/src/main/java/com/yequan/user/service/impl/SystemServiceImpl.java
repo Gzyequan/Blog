@@ -19,6 +19,7 @@ import com.yequan.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,7 @@ public class SystemServiceImpl implements ISystemService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
     private SysUserRoleDOMapper sysUserRoleDOMapper;
 
     @Autowired
@@ -129,7 +131,9 @@ public class SystemServiceImpl implements ISystemService {
      * @param sysUserDO
      * @return
      */
-    public AppResult<SysUserDO> register(SysUserDO sysUserDO) {
+    @Transactional
+    @Override
+    public AppResult<SysUserDO> register(SysUserDO sysUserDO) throws RuntimeException {
         try {
             if (null == sysUserDO) {
                 return AppResultBuilder.failure(ResultCode.PARAM_IS_BLANK);
@@ -155,7 +159,9 @@ public class SystemServiceImpl implements ISystemService {
                 SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO.getMobilephone());
                 SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
                 sysUserRoleDO.setUserId(newUser.getId());
-                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());
+//                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());
+                //TODO 替换成上边的
+                sysUserRoleDO.setRoleId(1);
                 //设置注册用户为普通用户角色
                 sysUserRoleDOMapper.insert(sysUserRoleDO);
                 return AppResultBuilder.success(newUser);

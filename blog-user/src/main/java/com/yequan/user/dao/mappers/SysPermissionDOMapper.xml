@@ -209,4 +209,16 @@
         where srp.role_id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="getSysPermissionByUserId" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_Alias_List"/>
+        from sys_permission sp
+        left join sys_role_permission srp
+        on srp.pmn_id = sp.id
+        left join sys_user_role sur
+        on sur.role_id = srp.role_id
+        where sp.status = 1
+        and sur.user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
 </mapper>

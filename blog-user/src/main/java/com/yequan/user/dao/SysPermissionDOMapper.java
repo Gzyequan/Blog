@@ -28,4 +28,6 @@ public interface SysPermissionDOMapper {
     List<SysPermissionDO> selectChildrenParallelPermission(Integer parentId);
 
     List<SysPermissionDO> getSysPermissionByRoleId(Integer roleId);
+
+    List<SysPermissionDO> getSysPermissionByUserId(Integer userId);
 }

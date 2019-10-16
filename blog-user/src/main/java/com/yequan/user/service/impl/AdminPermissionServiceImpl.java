@@ -212,6 +212,14 @@ public class AdminPermissionServiceImpl implements IAdminPermissionService {
         return null;
     }
 
+    @Override
+    public List<SysPermissionDO> getSysPermissionByUserId(Integer userId) {
+        if (null == userId) {
+            return null;
+        }
+        return sysPermissionDOMapper.getSysPermissionByUserId(userId);
+    }
+
     /**
      * 递归查询出pmnCode所有子权限
      *

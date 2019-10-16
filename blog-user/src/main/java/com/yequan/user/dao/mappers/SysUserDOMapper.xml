@@ -17,7 +17,7 @@
         <result column="updater_id" property="updaterId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, nickname, realname, age, mobilephone, address, birthday,password,status,create_time,modify_time,
+    id, nickname, realname, age, mobilephone, address, birthday, password, status, create_time, modify_time,
     creator_id, updater_id
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">

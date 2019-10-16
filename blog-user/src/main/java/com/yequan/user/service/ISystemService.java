@@ -16,7 +16,7 @@ public interface ISystemService {
 
     AppResult<String> login(HttpServletRequest request, HttpServletResponse response, UserDTO userDTO);
 
-    AppResult<SysUserDO> register(SysUserDO sysUserDO);
+    AppResult<SysUserDO> register(SysUserDO sysUserDO) throws RuntimeException;
 
     AppResult<Void> validateMobilephone(String mobilephone);
 }

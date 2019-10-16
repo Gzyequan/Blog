@@ -12,6 +12,8 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +59,18 @@ public class UserRealm extends AuthorizingRealm {
         Integer userId = sysUser.getId();
         List<SysRoleDO> sysRoleList = adminRoleService.getRoleByUserId(userId);
 
-//        List<SysPermissionDO> sysPermissionList = adminPermissionService.getSysPermissionByRoleId(sysRole.getId());
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        //设置角色
+        for (SysRoleDO sysRole : sysRoleList) {
+            authorizationInfo.addRole(sysRole.getRoleCode());
+        }
 
-        return null;
+        List<SysPermissionDO> sysPermissionList = adminPermissionService.getSysPermissionByUserId(userId);
+        //设置权限
+        for (SysPermissionDO sysPermission : sysPermissionList) {
+            authorizationInfo.addStringPermission(sysPermission.getPmnCode());
+        }
+        return authorizationInfo;
     }
 
     /**

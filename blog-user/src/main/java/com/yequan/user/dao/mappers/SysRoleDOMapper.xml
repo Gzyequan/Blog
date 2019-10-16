@@ -166,6 +166,8 @@
         left join sys_user_role sur
         on sr.id = sur.role_id
         where
+        sr.status = 1
+        and
         sur.user_id = #{userId}
     </select>
 
