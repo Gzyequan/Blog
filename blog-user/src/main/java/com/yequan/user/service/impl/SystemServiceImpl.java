@@ -1,7 +1,6 @@
 package com.yequan.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.yequan.common.application.config.Global;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;

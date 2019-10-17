@@ -36,4 +36,6 @@ public class SysPermissionDto {
     public void setStatus(Byte status) {
         this.status = status;
     }
+
+
 }

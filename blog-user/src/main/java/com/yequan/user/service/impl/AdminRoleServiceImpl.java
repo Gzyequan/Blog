@@ -6,7 +6,6 @@ import com.yequan.common.application.response.ResultCode;
 import com.yequan.common.util.CurrentUserLocal;
 import com.yequan.common.util.DateUtil;
 import com.yequan.common.util.Logger;
-import com.yequan.common.util.MD5Util;
 import com.yequan.constant.StatusEnum;
 import com.yequan.pojo.dto.SysRoleDto;
 import com.yequan.pojo.entity.SysRoleDO;

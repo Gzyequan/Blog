@@ -1,6 +1,5 @@
 package com.yequan.shiro.realm;
 
-import com.yequan.common.application.response.AppResult;
 import com.yequan.pojo.entity.SysPermissionDO;
 import com.yequan.pojo.entity.SysRoleDO;
 import com.yequan.pojo.entity.SysUserDO;
@@ -13,7 +12,6 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;

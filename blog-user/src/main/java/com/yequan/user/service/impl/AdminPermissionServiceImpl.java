@@ -14,13 +14,9 @@ import com.yequan.pojo.entity.SysPermissionDO;
 import com.yequan.user.dao.SysPermissionDOMapper;
 import com.yequan.user.service.IAdminPermissionService;
 import com.yequan.validation.ValidationUtil;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 

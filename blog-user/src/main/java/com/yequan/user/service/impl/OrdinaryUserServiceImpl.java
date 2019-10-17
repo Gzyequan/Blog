@@ -7,7 +7,6 @@ import com.yequan.common.service.RedisService;
 import com.yequan.common.util.*;
 import com.yequan.constant.RedisConsts;
 import com.yequan.constant.UserEnum;
-import com.yequan.pojo.dto.UserDTO;
 import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.dao.SysUserMapper;
 import com.yequan.user.service.IOrdinaryUserService;

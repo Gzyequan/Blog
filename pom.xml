@@ -15,6 +15,7 @@
         <module>blog-validation</module>
         <module>blog-constant</module>
         <module>blog-shiro</module>
+        <module>blog-base</module>
     </modules>
     <packaging>pom</packaging>
     <name>Blog</name>
@@ -337,6 +338,13 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>20.0</version>
+        </dependency>
+        <!--lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
