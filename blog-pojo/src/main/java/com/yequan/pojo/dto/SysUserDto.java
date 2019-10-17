@@ -1,8 +1,11 @@
 package com.yequan.pojo.dto;
 
+import com.google.common.base.Converter;
+import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.constant.RegexConsts;
 import com.yequan.validation.annotation.DateValidator;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -132,4 +135,25 @@ public class SysUserDto {
     public void setUpdaterId(Integer updaterId) {
         this.updaterId = updaterId;
     }
+
+    public SysUserDO convertToSysUserDO() {
+        SysUserDtoConverter sysUserDtoConverter = new SysUserDtoConverter();
+        return sysUserDtoConverter.convert(this);
+    }
+
+    private static class SysUserDtoConverter extends Converter<SysUserDto, SysUserDO> {
+
+        @Override
+        protected SysUserDO doForward(SysUserDto sysUserDto) {
+            SysUserDO sysUserDO = new SysUserDO();
+            BeanUtils.copyProperties(sysUserDto, sysUserDO);
+            return sysUserDO;
+        }
+
+        @Override
+        protected SysUserDto doBackward(SysUserDO sysUserDO) {
+            throw new AssertionError("不支持逆向转换");
+        }
+    }
+
 }

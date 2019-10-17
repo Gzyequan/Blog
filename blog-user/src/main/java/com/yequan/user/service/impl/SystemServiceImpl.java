@@ -146,8 +146,6 @@ public class SystemServiceImpl implements ISystemService {
                 return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
             }
 
-            UserDTO userDTO = new UserDTO();
-            userDTO.setMobilephone(sysUserDO.getMobilephone());
             //对密码进行加密
             String password = sysUserDO.getPassword();
             String encryptPassword = MD5Util.encrypt(password);
@@ -155,7 +153,7 @@ public class SystemServiceImpl implements ISystemService {
             sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
             int insert = sysUserMapper.insertSelective(sysUserDO);
             if (insert > 0) {
-                SysUserDO newUser = sysUserMapper.selectByMobilephone(userDTO.getMobilephone());
+                SysUserDO newUser = sysUserMapper.selectByMobilephone(sysUserDO.getMobilephone());
                 SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
                 sysUserRoleDO.setUserId(newUser.getId());
 //                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());

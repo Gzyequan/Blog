@@ -50,11 +50,7 @@ public class AdminUserServiceImpl implements IAdminUserService {
                 return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
             }
 
-            SysUserDO sysUserDO = new SysUserDO();
-            sysUserDO.setNickname(sysUserDto.getNickname());
-            sysUserDO.setRealname(sysUserDto.getRealname());
-            sysUserDO.setMobilephone(sysUserDto.getMobilephone());
-            sysUserDO.setPassword(MD5Util.encrypt(sysUserDto.getPassword()));
+            SysUserDO sysUserDO = sysUserDto.convertToSysUserDO();
             sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
             sysUserDO.setCreatorId(CurrentUserLocal.getUserId());
 

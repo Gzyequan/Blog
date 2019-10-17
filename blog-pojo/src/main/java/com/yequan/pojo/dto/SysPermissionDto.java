@@ -1,5 +1,9 @@
 package com.yequan.pojo.dto;
 
+import com.google.common.base.Converter;
+import com.yequan.pojo.entity.SysPermissionDO;
+import org.springframework.beans.BeanUtils;
+
 /**
  * @Auther: yq
  * @Date: 2019/10/16 14:30
@@ -37,7 +41,30 @@ public class SysPermissionDto {
         this.status = status;
     }
 
-    //https://gitbook.cn/books/5d9054898e7d0276851ea85f/index.html#dto-1
-    //http://lrwinx.github.io/2016/04/28/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E8%AE%BE%E8%AE%A1java%E5%BC%82%E5%B8%B8/
+    public SysPermissionDO convertToSysPermissionDO() {
+        SysPermissionDtoConvert sysPermissionDtoConvert = new SysPermissionDtoConvert();
+        return sysPermissionDtoConvert.convert(this);
+    }
+
+    private static class SysPermissionDtoConvert extends Converter<SysPermissionDto, SysPermissionDO> {
+
+        /**
+         * SysPermissionDto转成SysPermissionDO
+         *
+         * @param sysPermissionDto
+         * @return
+         */
+        @Override
+        protected SysPermissionDO doForward(SysPermissionDto sysPermissionDto) {
+            SysPermissionDO sysPermissionDO = new SysPermissionDO();
+            BeanUtils.copyProperties(sysPermissionDto, sysPermissionDO);
+            return sysPermissionDO;
+        }
+
+        @Override
+        protected SysPermissionDto doBackward(SysPermissionDO sysPermissionDO) {
+            throw new AssertionError("不支持逆向转换");
+        }
+    }
 
 }
