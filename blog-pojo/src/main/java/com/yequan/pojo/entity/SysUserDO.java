@@ -37,6 +37,8 @@ public class SysUserDO {
     @NotNull
     private String password;
 
+    private String salt;
+
     private Integer status;
 
     @DateValidator
@@ -118,6 +120,14 @@ public class SysUserDO {
         this.password = password == null ? null : password.trim();
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -157,4 +167,5 @@ public class SysUserDO {
     public void setUpdaterId(Integer updaterId) {
         this.updaterId = updaterId;
     }
+
 }

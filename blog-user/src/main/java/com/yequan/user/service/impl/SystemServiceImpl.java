@@ -1,6 +1,7 @@
 package com.yequan.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.yequan.common.application.config.Global;
 import com.yequan.common.application.response.AppResult;
 import com.yequan.common.application.response.AppResultBuilder;
 import com.yequan.common.application.response.ResultCode;
@@ -146,19 +147,21 @@ public class SystemServiceImpl implements ISystemService {
                 return AppResultBuilder.failure(ResultCode.DATA_VALIDATION_ERROR);
             }
 
+            //生成密码加密盐值
+            String salt = RandomUtil.generateStr(10);
+
             //对密码进行加密
             String password = sysUserDO.getPassword();
-            String encryptPassword = MD5Util.encrypt(password);
+            String encryptPassword = MD5Util.encrypt(password,salt);
             sysUserDO.setPassword(encryptPassword);
+            sysUserDO.setSalt(salt);
             sysUserDO.setCreateTime(DateUtil.getCurrentDateStr());
             int insert = sysUserMapper.insertSelective(sysUserDO);
             if (insert > 0) {
                 SysUserDO newUser = sysUserMapper.selectByMobilephone(sysUserDO.getMobilephone());
                 SysUserRoleDO sysUserRoleDO = new SysUserRoleDO();
                 sysUserRoleDO.setUserId(newUser.getId());
-//                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());
-                //TODO 替换成上边的
-                sysUserRoleDO.setRoleId(1);
+                sysUserRoleDO.setRoleId(Global.getCustomerRoleId());
                 //设置注册用户为普通用户角色
                 sysUserRoleDOMapper.insert(sysUserRoleDO);
                 return AppResultBuilder.success(newUser);

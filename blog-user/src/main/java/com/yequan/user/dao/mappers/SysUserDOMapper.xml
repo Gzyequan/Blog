@@ -10,6 +10,7 @@
         <result column="address" property="address" jdbcType="VARCHAR"/>
         <result column="birthday" property="birthday" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="column" property="salt" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
         <result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/>
@@ -17,7 +18,7 @@
         <result column="updater_id" property="updaterId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, nickname, realname, age, mobilephone, address, birthday, password, status, create_time, modify_time,
+    id, nickname, realname, age, mobilephone, address, birthday, password, salt, status, create_time, modify_time,
     creator_id, updater_id
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -31,6 +32,8 @@
         <include refid="Base_Column_List"/>
         from sys_user
         where
+        status = 1
+        and
         mobilephone = #{mobilephone,jdbcType=VARCHAR}
     </select>
     <select id="loginCheck" resultMap="BaseResultMap" parameterType="com.yequan.pojo.dto.UserDTO">
@@ -54,13 +57,14 @@
   </delete>
     <insert id="insert" parameterType="com.yequan.pojo.entity.SysUserDO">
     insert into sys_user
-    (id, nickname, realname, age, mobilephone, address, birthday, password, create_time, modify_time,
+    (id, nickname, realname, age, mobilephone, address, birthday, password, salt, create_time, modify_time,
     creator_id, updater_id)
     values
     (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR},
       #{age,jdbcType=INTEGER}, #{mobilephone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
-      #{birthday,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
-      #{modifyTime,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER}, #{updaterId,jdbcType=INTEGER})
+      #{birthday,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR},
+      #{createTime,jdbcType=VARCHAR},#{modifyTime,jdbcType=VARCHAR}, #{creatorId,jdbcType=INTEGER},
+      #{updaterId,jdbcType=INTEGER})
   </insert>
     <insert id="insertSelective" parameterType="com.yequan.pojo.entity.SysUserDO">
         insert into sys_user
@@ -88,6 +92,9 @@
             </if>
             <if test="password != null">
                 password,
+            </if>
+            <if test="salt != null">
+                salt,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -127,6 +134,9 @@
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
             </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=VARCHAR},
             </if>
@@ -165,6 +175,9 @@
             <if test="password != null">
                 password = #{password,jdbcType=VARCHAR},
             </if>
+            <if test="salt != null">
+                salt = #{salt,jdbcType=VARCHAR},
+            </if>
             <if test="status != null">
                 status = #{status,jdbcType=INTEGER},
             </if>
@@ -192,6 +205,7 @@
       address = #{address,jdbcType=VARCHAR},
       birthday = #{birthday,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=VARCHAR},

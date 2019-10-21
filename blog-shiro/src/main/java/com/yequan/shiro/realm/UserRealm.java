@@ -6,10 +6,7 @@ import com.yequan.pojo.entity.SysUserDO;
 import com.yequan.user.service.IAdminPermissionService;
 import com.yequan.user.service.IAdminRoleService;
 import com.yequan.user.service.IOrdinaryUserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -80,7 +77,12 @@ public class UserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-
-        return null;
+        String mobilephone = (String) authenticationToken.getPrincipal();
+        SysUserDO sysUserDO = ordinaryUserService.selectByMobilephone(mobilephone);
+        if (null == sysUserDO) {
+            return null;
+        }
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(mobilephone, sysUserDO.getPassword(), "");
+        return authenticationInfo;
     }
 }

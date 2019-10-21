@@ -44,7 +44,7 @@ public class Global {
     /**
      * 属性文件加载对象
      */
-    private static PropertiesLoader loader = new PropertiesLoader("classpath:dev/application.properties");
+    private static PropertiesLoader loader = new PropertiesLoader("dev/application.properties");
 
     /**
      * 获取配置
@@ -79,15 +79,6 @@ public class Global {
     public static Integer getSuperAdminRoleId() {
         String customerRoleId = getConfig("system.role.superadmin");
         return Integer.valueOf(customerRoleId);
-    }
-
-    public static void main(String[] args) {
-        String path = Global.class.getResource("/").getPath();
-        System.out.println(path);
-//        Integer integer = loader.getInteger("system.role.customer");
-//        System.out.println(integer);
-        String config = getConfig("system.role.customer");
-        System.out.println(config);
     }
 
 }
